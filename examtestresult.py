@@ -1,24 +1,91 @@
-import unittest
 import traceback
-from unittest import TextTestRunner
+import re
 from unittest.runner import TextTestResult
+from unittest import TestCase
+from unittest.case import _Outcome
 
+class ExamTestCase(TestCase):
+    def run(self, result=None):
+        orig_result = result
+        if result is None:
+            result = self.defaultTestResult()
+            startTestRun = getattr(result, 'startTestRun', None)
+            if startTestRun is not None:
+                startTestRun()
+        result.startTest(self)
 
-"""
-https://stackoverflow.com/questions/26044977/python-3-unittest-how-to-extract-results-of-tests
-https://github.com/python/cpython/tree/master/Lib/unittest
-"""
+        testMethod = getattr(self, self._testMethodName)
+        if (getattr(self.__class__, "__unittest_skip__", False) or
+            getattr(testMethod, "__unittest_skip__", False)):
+            # If the class or method was skipped.
+            try:
+                skip_why = (getattr(self.__class__, '__unittest_skip_why__', '')
+                            or getattr(testMethod, '__unittest_skip_why__', ''))
+                self._addSkip(result, self, skip_why)
+            finally:
+                result.stopTest(self)
+            return
+        expecting_failure_method = getattr(testMethod,
+                                           "__unittest_expecting_failure__", False)
+        expecting_failure_class = getattr(self,
+                                          "__unittest_expecting_failure__", False)
+        expecting_failure = expecting_failure_class or expecting_failure_method
+        outcome = _Outcome(result)
+        
+        try:
+            self._outcome = outcome
 
+            with outcome.testPartExecutor(self):
+                self._callSetUp()
+            if outcome.success:
+                outcome.expecting_failure = expecting_failure
+                with outcome.testPartExecutor(self, isTest=True):
+                    self._callTestMethod(testMethod)
+                outcome.expecting_failure = False
+                with outcome.testPartExecutor(self):
+                    self._callTearDown()
 
+            self.doCleanups()
+            for test, reason in outcome.skipped:
+                self._addSkip(result, test, reason)
+            self._feedErrorsToResult(result, outcome.errors)
+            if outcome.success:
+                if expecting_failure:
+                    if outcome.expectedFailure:
+                        self._addExpectedFailure(result, outcome.expectedFailure)
+                    else:
+                        self._addUnexpectedSuccess(result)
+                else:
+                    result.addSuccess(self)
+            return result
+        finally:
+            result.stopTest(self)
+            if orig_result is None:
+                stopTestRun = getattr(result, 'stopTestRun', None)
+                if stopTestRun is not None:
+                    stopTestRun()
 
-class MyTextTestResult(TextTestResult):
+            # explicitly break reference cycles:
+            # outcome.errors -> frame -> outcome -> outcome.errors
+            # outcome.expectedFailure -> frame -> outcome -> outcome.expectedFailure
+            outcome.errors.clear()
+            outcome.expectedFailure = None
+
+            # clear the outcome, no more needed
+            self._outcome = None
+            
+class ExamTestResult(TextTestResult):
     """
     Implementation of TextTestResult to use MyTestResult to create custom output for tests.
     """
+
+    ASSIGNMENT_REGEXP = r"\(__main__.Test(.+)\)"
+    TEST_NAME_REGEXP = r"test_[a-z]_(\w+) "
+    ASSIGNEMTS_STARTED = []
+
     def _exc_info_to_string(self, err, test):
         """Converts a sys.exc_info()-style tuple of values into a string."""
         exctype, value, tb = err
-        # print(exctype, value, tb)
         # Skip test runner traceback levels
         while tb and self._is_relevant_tb_level(tb):
             tb = tb.tb_next
@@ -60,7 +127,7 @@ class MyTextTestResult(TextTestResult):
     def printErrors(self):
         if self.dots or self.showAll:
             self.stream.writeln()
-        # self.printErrorList('ERROR', self.errors)
+        self.printErrorList('ERROR', self.errors)
         self.printErrorList('FAIL', self.failures)
 
     def printErrorList(self, flavour, errors):
@@ -73,6 +140,26 @@ class MyTextTestResult(TextTestResult):
             self.stream.writeln(self.separator2)
             self.stream.writeln("%s" % err)
 
+
+    def startTest(self, test):
+        """
+        Group output by Assignment
+        """
+        super(TextTestResult, self).startTest(test)
+        if self.showAll:
+            desc = self.getDescription(test)
+            assignment = re.search(self.ASSIGNMENT_REGEXP, desc).group(1)
+            test_name = re.search(self.TEST_NAME_REGEXP, desc).group(1).replace("_", " ")
+            test.assignment = assignment
+            test.test_name = test_name
+            if not assignment in self.ASSIGNEMTS_STARTED:
+                self.ASSIGNEMTS_STARTED.append(assignment)
+                self.stream.write(assignment + "\n")
+            indent = " " * 4
+            self.stream.write(indent + test_name)
+            self.stream.write(" ... ")
+            self.stream.flush()
+        
     def run(self, test):
         "Run the given test case or test suite."
         result = self._makeResult()
@@ -144,25 +231,3 @@ class MyTextTestResult(TextTestResult):
         else:
             self.stream.write("\n")
         return
-
-class TestFunc(unittest.TestCase):
-
-    def test_a_pass(self):
-            self.assertEqual(1, 1)
-
-    
-    def test_b_error(self):
-        h = 1
-        "hej" - h
-        self.assertIsNotNone(1)
-
-    
-    def test_c_uppgift_3(self):
-        """
-        Du har fel på uppgift 3 i testet som kollar att input 2 till funktionen ger output 0.
-        """
-        self.assertTrue(0)
-
-if __name__ == '__main__':
-    runner = TextTestRunner(resultclass=MyTextTestResult, verbosity=3)
-    unittest.main(testRunner=runner)
