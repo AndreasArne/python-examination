@@ -5,6 +5,8 @@ from unittest.mock import patch
 from importlib import util
 from io import StringIO
 import unittest
+from unittest import TestCase
+
 import os
 import sys
 
@@ -13,7 +15,7 @@ if proj_path not in sys.path:
     sys.path.insert(0, proj_path)
 #pylint: disable=wrong-import-position
 import exam
-from examtestresult import ExamTestResult, ExamTestCase
+from examtestresult import ExamTestResult, ExamTestLoader
 #pylint: enable=wrong-import-position
 
 """
@@ -21,23 +23,64 @@ https://stackoverflow.com/questions/26044977/python-3-unittest-how-to-extract-re
 https://github.com/python/cpython/tree/master/Lib/unittest
 """
 
+unittest.util._MAX_LENGTH=2000
 
+class TestFunc(unittest.TestCase):
 
-class TestAssignment1(ExamTestCase):
+    def test_a_module(self):
+        """
+        Testar
+        """
+        try:
+            # self.assertEqual(0, 1)
+            hej = 4
+            "hej" - 4
+        except Exception as e:
+            # pass
+            # print(e.__class__)
+            # print(e.args)
+            # print(e.__dict__)
+            raise
+    # 
+    # def test_b_module(self):
+    #     """
+    #     hej pa er
+    #     """
+    #     # try:
+    #     # hej = 4
+    #     # "hej" - 4
+    #     self.assertIsNotNone(None)
+
+    # def test_c_module(self):
+    #     # try:
+    #     self.assertTrue(0)
+        # except Exception as e:
+            # pass
+            # print(e.__class__)
+            # print(e.args)
+            # print(e.__dict__)
+
+            # raise
+
+class TestAssignment1(TestCase):
     """
     Assignment 1
     """
-
+# 
     def test_a_text_repetition(self):
         """
         Din funktion skriver inte ut texten i rätt format.
+        Förväntat resultat: {correct}
+        Fick som resultat:  {student}
         """
+        # hej = 4
+        # "hej" - 4
         with patch('sys.stdout', new=StringIO()) as fake_out:
             exam.text_repetition()
             str_data = fake_out.getvalue().strip("\n")
             list_data = str_data.split("\n")
             self.assertEqual(list_data, [
-                "Ap på en gata, Apa på en gata, Apa på en gata.",
+                "Apa på en gata, Apa på en gata, Apa på en gata.",
                 "Jag har en fin dag, Jag har en fin dag, Jag har en fin dag, Jag har en fin dag.",
                 "Solen skiner idag, Solen skiner idag, Solen skiner idag.",
                 "Vem är du, Vem är du, Vem är du, Vem är du, Vem är du.",
@@ -54,18 +97,22 @@ class TestAssignment1(ExamTestCase):
                 "Ap på en gata, Apa på en gata, Apa på en gata.",
                 "Jag har en fin dag, Jag har en fin dag, Jag har en fin dag, Jag har en fin dag.",
                 "Solen skiner idag, Solen skiner idag, Solen skiner idag.",
-                "Vem är du, Vem är du, Vem är du, Vem är du, Vem är du.",
+                "V  em är du, Vem är du, Vem är du, Vem är du, Vem är du.",
             ])
 
-class TestAssignment2(ExamTestCase):
+class TestAssignment2(TestCase):
     """
     Assignment 2
     """
     def test_a_convert_to_hex(self):
         """
         Du kan inte konvertera färger
+        input: "255, 255, 255"
+        föväntad output: "#fffff1"
         """
-        self.assertEqual(exam.convert_to_hex((255, 255, 255)), "#ffffff")
+        # hej = 4
+        # "hej" - 4
+        self.assertEqual(exam.convert_to_hex((255, 255, 255)), "#fffff1")
         self.assertEqual(exam.convert_to_hex((255, 0, 0)), "#ff0000")
         self.assertEqual(exam.convert_to_hex((0, 255, 255)), "#00ffff")
         self.assertEqual(exam.convert_to_hex((230, 230, 250)), "#e6e6fa")
@@ -120,4 +167,5 @@ class TestAssignment2(ExamTestCase):
 
 if __name__ == '__main__':
     runner = TextTestRunner(resultclass=ExamTestResult, verbosity=2)
-    unittest.main(testRunner=runner)
+    unittest.main(testRunner=runner)#, testLoader=ExamTestLoader())
+    # unittest.main(testRunner=runner, testLoader=ExamTestLoader())    
