@@ -10,12 +10,12 @@ from unittest import TestCase
 import os
 import sys
 
-proj_path = os.path.dirname(os.path.realpath(__file__ + "/../.."))
+proj_path = os.path.dirname(os.path.realpath(__file__ + "/../../../lib"))
 if proj_path not in sys.path:
     sys.path.insert(0, proj_path)
 #pylint: disable=wrong-import-position
 import exam
-from examtestresult import ExamTestResult, ExamTestLoader
+from lib.exam_test_result import ExamTestResult
 #pylint: enable=wrong-import-position
 
 """
