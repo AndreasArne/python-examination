@@ -95,7 +95,7 @@ test-unit: clean
 	@$(ECHO) "$(ACTION)---> Running all tests in tests/unit" "$(NO_COLOR)"
 	@${py} \
 		-m coverage run --rcfile=.coveragerc \
-		-m test.test_exam_text_resultgs
+		-m test.test_exam_text_result
 	$(MAKE) clean-py
 
 
