@@ -2,7 +2,8 @@ import traceback
 import re
 from unittest.runner import TextTestResult
 
-
+# import pprint
+# pp = pprint.PrettyPrinter(indent=4)
 
 class ExamTestResult(TextTestResult):
     """
@@ -24,7 +25,7 @@ class ExamTestResult(TextTestResult):
     CONTACT_ERROR_MSG = (
         "\n*********\n"
         "Något gick fel i rättningsprogrammet. "
-        "Kontakta Andreas eller Emil med ovanstående felmeddelandet!"
+        "Kontakta Andreas med ovanstående felmeddelandet!"
         "\n*********"
     )
 
@@ -52,16 +53,25 @@ class ExamTestResult(TextTestResult):
             exctype, value, tb, limit=length, capture_locals=self.tb_locals)
         msgLines = list(tb_e.format())
 
+        # here starts the interesting code, which we changed
         if exctype is test.failureException:
             try:
                 student_ans, correct_ans = self.extract_answers(value, msgLines)
-                msgLines = self.create_fail_msg(student_ans, correct_ans, test)
+                function_args = self.extract_function_args(msgLines)
+                msgLines = self.create_fail_msg(
+                    student_ans,
+                    correct_ans,
+                    function_args,
+                    test
+                )
             except Exception as e:
+                # Something went wrong in our code
                 import sys
                 raise type(e)(str(e) + self.CONTACT_ERROR_MSG)\
                     .with_traceback(sys.exc_info()[2])
-                
+
         if self.buffer:
+            # Dont care about this code
             output = sys.stdout.getvalue()
             error = sys.stderr.getvalue()
             if output:
@@ -74,6 +84,23 @@ class ExamTestResult(TextTestResult):
                 msgLines.append(STDERR_LINE % error)
         return ''.join(msgLines)
 
+
+
+    def extract_function_args(self, msgLines):
+        """
+        Asserts are done with a function call or a variable, with the students answer.
+        Try to get the value that was used as argument for the students function, that is tested.
+        TODO:
+            - Testa med funktion som tar två arg
+            - Testa med funktion som tar två arg, där båda är tupler
+        """
+        whole_line = msgLines[1]
+        try:
+            res = re.search("self.assert[A-z]+\(exam.[A-z0-9_]+\((.+)\), ", whole_line)
+            return res.group(1)
+        except AttributeError:
+            # print("No match for function argument!")
+            return None
 
 
     def extract_answers(self, value, msgLines):
@@ -89,19 +116,20 @@ class ExamTestResult(TextTestResult):
             diff_group = re.search(self.ASSERT_ANSWERS_REGEX[assert_type], value.args[0].split("\n")[0])
             student_ans = diff_group.group(1)
             correct_ans = diff_group.group(2)
-                
+
         # print(student_ans)
         # print(correct_ans)
         return student_ans, correct_ans
 
 
 
-    def create_fail_msg(self, student_ans, correct_ans, test):
+    def create_fail_msg(self, student_ans, correct_ans, function_args, test):
         """
-        Create formated fail msg using test functions docstring
+        Create formated fail msg using docstring from test function
         """
         docstring = re.sub("\n +","\n",test._testMethodDoc)
         return [docstring.format(
+            arguments=function_args,
             correct=correct_ans,
             student=student_ans
         )]
@@ -111,12 +139,14 @@ class ExamTestResult(TextTestResult):
     def printErrors(self):
         if self.dots or self.showAll:
             self.stream.writeln()
-        self.printErrorList("Error", self.errors)
-        self.printErrorList("Fail", self.failures)
+        if self.errors:
+            self.printErrorList("Error", self.errors, "Your code crasched!")
+        if self.failures:
+            self.printErrorList("Fail", self.failures, "Your code produced wrong result!")
 
 
 
-    def printErrorList(self, flavour, errors):
+    def printErrorList(self, flavour, errors, explenation):
         """
         Print errors grouped by assignment (TestCase object)
         TO-DO:
@@ -125,7 +155,7 @@ class ExamTestResult(TextTestResult):
         printed_assignments = []
 
         self.stream.writeln(self.separator1)
-        self.stream.writeln("{} section:".format(flavour.upper()))
+        self.stream.writeln("{} section: {}".format(flavour.upper(), explenation))
         self.stream.writeln(self.separator1)
         for test, err in errors:
             if not test._assignment in printed_assignments:
@@ -149,7 +179,8 @@ class ExamTestResult(TextTestResult):
 
     def startTest(self, test):
         """
-        Group output by Assignment
+        Summary print at beginning of output.
+        Group output by Assignment.
         """
         super(TextTestResult, self).startTest(test)
         MAX_TEST_FUNCNAME_LEN = 20
@@ -159,85 +190,10 @@ class ExamTestResult(TextTestResult):
             self.set_test_name_and_assignment(test)
             if not test._assignment in self.ASSIGNEMTS_STARTED:
                 self.ASSIGNEMTS_STARTED.append(test._assignment)
-                self.stream.write(test._assignment + "\n--")
+                self.stream.write(test._assignment + "\n")
 
             indent = " " * TEST_INDENT
             whitespace = "." * (MAX_TEST_FUNCNAME_LEN - len(test._test_name))
             self.stream.write(indent + test._test_name + whitespace)
             self.stream.write("... ")
             self.stream.flush()
-
-
-
-    # def run(self, test):
-    #     "Run the given test case or test suite."
-    #     exit()
-    #     result = self._makeResult()
-    #     registerResult(result)
-    #     result.failfast = self.failfast
-    #     result.buffer = self.buffer
-    #     result.tb_locals = self.tb_locals
-    #     with warnings.catch_warnings():
-    #         if self.warnings:
-    #             # if self.warnings is set, use it to filter all the warnings
-    #             warnings.simplefilter(self.warnings)
-    #             # if the filter is 'default' or 'always', special-case the
-    #             # warnings from the deprecated unittest methods to show them
-    #             # no more than once per module, because they can be fairly
-    #             # noisy.  The -Wd and -Wa flags can be used to bypass this
-    #             # only when self.warnings is None.
-    #             if self.warnings in ['default', 'always']:
-    #                 warnings.filterwarnings('module',
-    #                         category=DeprecationWarning,
-    #                         message=r'Please use assert\w+ instead.')
-    #         startTime = time.perf_counter()
-    #         startTestRun = getattr(result, 'startTestRun', None)
-    #         if startTestRun is not None:
-    #             startTestRun()
-    #         try:
-    #             test(result)
-    #         finally:
-    #             stopTestRun = getattr(result, 'stopTestRun', None)
-    #             if stopTestRun is not None:
-    #                 stopTestRun()
-    #         stopTime = time.perf_counter()
-    #     timeTaken = stopTime - startTime
-    #     result.printErrors()
-    #     if hasattr(result, 'separator1'):
-    #         self.stream.writeln(result.separator1)
-    #     run = result.testsRun
-    #     self.stream.writeln("Ran %d test%s in %.3fs" %
-    #                         (run, run != 1 and "s" or "", timeTaken))
-    #     self.stream.writeln()
-    # 
-    #     expectedFails = unexpectedSuccesses = skipped = 0
-    #     try:
-    #         results = map(len, (result.expectedFailures,
-    #                             result.unexpectedSuccesses,
-    #                             result.skipped))
-    #     except AttributeError:
-    #         pass
-    #     else:
-    #         expectedFails, unexpectedSuccesses, skipped = results
-    # 
-    #     infos = []
-    #     if not result.wasSuccessful():
-    #         self.stream.write("FAILED")
-    #         failed, errored = len(result.failures), len(result.errors)
-    #         if failed:
-    #             infos.append("failures=%d" % failed)
-    #         if errored:
-    #             infos.append("errors=%d" % errored)
-    #     else:
-    #         self.stream.write("OK")
-    #     if skipped:
-    #         infos.append("skipped=%d" % skipped)
-    #     if expectedFails:
-    #         infos.append("expected failures=%d" % expectedFails)
-    #     if unexpectedSuccesses:
-    #         infos.append("unexpected successes=%d" % unexpectedSuccesses)
-    #     if infos:
-    #         self.stream.writeln(" (%s)" % (", ".join(infos),))
-    #     else:
-    #         self.stream.write("\n")
-    #     return
