@@ -174,7 +174,7 @@ class ExamTestResult(TextTestResult):
                 printed_assignments.append(test._assignment)
             for line in err.strip().split("\n"):
                 self.stream.writeln("    |" + line)
-            self.stream.writeln("    "  + Fore.CYAN + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
+            self.stream.writeln("    "  + Fore.YELLOW + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
 
 
 
