@@ -1,7 +1,9 @@
 import traceback
 import re
 from unittest.runner import TextTestResult
-
+from colorama import init
+init()
+from colorama import Fore, Back, Style
 # import pprint
 # pp = pprint.PrettyPrinter(indent=4)
 
@@ -128,7 +130,11 @@ class ExamTestResult(TextTestResult):
         Create formated fail msg using docstring from test function
         """
         docstring = re.sub("\n +","\n",test._testMethodDoc)
-        return [docstring.format(
+        msg_list = docstring.split("\n")
+        msg_list[-2] = Style.BRIGHT + Back.RED +  msg_list[-2] + Style.RESET_ALL
+        msg = "\n".join(msg_list)
+        # print(msg_list[-1])
+        return [msg.format(
             arguments=function_args,
             correct=correct_ans,
             student=student_ans
@@ -159,11 +165,16 @@ class ExamTestResult(TextTestResult):
         self.stream.writeln(self.separator1)
         for test, err in errors:
             if not test._assignment in printed_assignments:
-                self.stream.writeln("{}s for {}".format(flavour, test._assignment))
+                self.stream.writeln("{}{}s for {}{}".format(
+                    Back.MAGENTA + Style.BRIGHT,
+                    flavour,
+                    test._assignment,
+                    Style.RESET_ALL
+                ))
                 printed_assignments.append(test._assignment)
             for line in err.strip().split("\n"):
                 self.stream.writeln("    |" + line)
-            self.stream.writeln("    " + self.separator2)
+            self.stream.writeln("    "  + Fore.CYAN + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
 
 
 

@@ -6,3 +6,4 @@ This repository contain code for examining students on College level in an intro
 # TODO:
 - Write tests
 - Test it for multiple python versions (Tox?)
+- Package so students also get colorama module
