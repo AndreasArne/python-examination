@@ -96,6 +96,8 @@ test-unit: clean
 	@${py} \
 		-m coverage run --rcfile=.coveragerc \
 		-m test.test_exam_text_result
+		# -m test.test_copy_of_unittest
+
 	$(MAKE) clean-py
 
 
