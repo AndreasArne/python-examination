@@ -1,7 +1,7 @@
 # .coveragerc to control coverage.py
 [run]
 branch = True
-source = lib/
+source = app/
 omit =
    *__init__.py
 
