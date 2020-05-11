@@ -131,7 +131,7 @@ class ExamTestResult(TextTestResult):
         """
         docstring = re.sub("\n +","\n",test._testMethodDoc)
         msg_list = docstring.split("\n")
-        msg_list[-2] = Style.BRIGHT + Back.RED +  msg_list[-2] + Style.RESET_ALL
+        msg_list[-2] = Back.RED + Style.BRIGHT + msg_list[-2] + Style.RESET_ALL
         msg = "\n".join(msg_list)
         # print(msg_list[-1])
         return [msg.format(
@@ -180,11 +180,21 @@ class ExamTestResult(TextTestResult):
 
     def set_test_name_and_assignment(self, test):
         """
-        Set formated testname and assignment text
+        Extract Assignment from TestCase name.
+        Extract test name from test function name.
+        Format testname and assignment text and assign to test object.
         """
         test_string = str(test)
-        test._assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
-        test._test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
+        try:
+            test._assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
+        except AttributeError:
+            raise ValueError("Class name for TestCase should the follow structure 'TestAssignment<number>'")
+
+        try:
+            test._test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
+        except AttributeError:
+            raise ValueError("Test function name should follow the structure 'test_<letter>_<name>'")
+
 
 
 
