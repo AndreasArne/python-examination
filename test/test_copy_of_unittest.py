@@ -14,6 +14,7 @@ import textwrap
 import traceback
 import unittest
 
+from unittest import mock
 from unittest.runner import _WritelnDecorator
 from app.exam_test_result import ExamTestResult
 
@@ -86,295 +87,309 @@ class Test_TestResult(unittest.TestCase):
         self.assertEqual(result.shouldStop, False)
 
         result.stopTest(test)
-#
-#     # "Called after the test case test has been executed, regardless of
-#     # the outcome. The default implementation does nothing."
-#     def test_stopTest(self):
-#         class Foo(unittest.TestCase):
-#             def test_1(self):
-#                 pass
-#
-#         test = Foo('test_1')
-#
-#         result = unittest.TestResult()
-#
-#         result.startTest(test)
-#
-#         self.assertTrue(result.wasSuccessful())
-#         self.assertEqual(len(result.errors), 0)
-#         self.assertEqual(len(result.failures), 0)
-#         self.assertEqual(result.testsRun, 1)
-#         self.assertEqual(result.shouldStop, False)
-#
-#         result.stopTest(test)
-#
-#         # Same tests as above; make sure nothing has changed
-#         self.assertTrue(result.wasSuccessful())
-#         self.assertEqual(len(result.errors), 0)
-#         self.assertEqual(len(result.failures), 0)
-#         self.assertEqual(result.testsRun, 1)
-#         self.assertEqual(result.shouldStop, False)
-#
-#     # "Called before and after tests are run. The default implementation does nothing."
-#     def test_startTestRun_stopTestRun(self):
-#         result = unittest.TestResult()
-#         result.startTestRun()
-#         result.stopTestRun()
-#
-#     # "addSuccess(test)"
-#     # ...
-#     # "Called when the test case test succeeds"
-#     # ...
-#     # "wasSuccessful() - Returns True if all tests run so far have passed,
-#     # otherwise returns False"
-#     # ...
-#     # "testsRun - The total number of tests run so far."
-#     # ...
-#     # "errors - A list containing 2-tuples of TestCase instances and
-#     # formatted tracebacks. Each tuple represents a test which raised an
-#     # unexpected exception. Contains formatted
-#     # tracebacks instead of sys.exc_info() results."
-#     # ...
-#     # "failures - A list containing 2-tuples of TestCase instances and
-#     # formatted tracebacks. Each tuple represents a test where a failure was
-#     # explicitly signalled using the TestCase.fail*() or TestCase.assert*()
-#     # methods. Contains formatted tracebacks instead
-#     # of sys.exc_info() results."
-#     def test_addSuccess(self):
-#         class Foo(unittest.TestCase):
-#             def test_1(self):
-#                 pass
-#
-#         test = Foo('test_1')
-#
-#         result = unittest.TestResult()
-#
-#         result.startTest(test)
-#         result.addSuccess(test)
-#         result.stopTest(test)
-#
-#         self.assertTrue(result.wasSuccessful())
-#         self.assertEqual(len(result.errors), 0)
-#         self.assertEqual(len(result.failures), 0)
-#         self.assertEqual(result.testsRun, 1)
-#         self.assertEqual(result.shouldStop, False)
-#
-#     # "addFailure(test, err)"
-#     # ...
-#     # "Called when the test case test signals a failure. err is a tuple of
-#     # the form returned by sys.exc_info(): (type, value, traceback)"
-#     # ...
-#     # "wasSuccessful() - Returns True if all tests run so far have passed,
-#     # otherwise returns False"
-#     # ...
-#     # "testsRun - The total number of tests run so far."
-#     # ...
-#     # "errors - A list containing 2-tuples of TestCase instances and
-#     # formatted tracebacks. Each tuple represents a test which raised an
-#     # unexpected exception. Contains formatted
-#     # tracebacks instead of sys.exc_info() results."
-#     # ...
-#     # "failures - A list containing 2-tuples of TestCase instances and
-#     # formatted tracebacks. Each tuple represents a test where a failure was
-#     # explicitly signalled using the TestCase.fail*() or TestCase.assert*()
-#     # methods. Contains formatted tracebacks instead
-#     # of sys.exc_info() results."
-#     def test_addFailure(self):
-#         class Foo(unittest.TestCase):
-#             def test_1(self):
-#                 pass
-#
-#         test = Foo('test_1')
-#         try:
-#             test.fail("foo")
-#         except:
-#             exc_info_tuple = sys.exc_info()
-#
-#         result = unittest.TestResult()
-#
-#         result.startTest(test)
-#         result.addFailure(test, exc_info_tuple)
-#         result.stopTest(test)
-#
-#         self.assertFalse(result.wasSuccessful())
-#         self.assertEqual(len(result.errors), 0)
-#         self.assertEqual(len(result.failures), 1)
-#         self.assertEqual(result.testsRun, 1)
-#         self.assertEqual(result.shouldStop, False)
-#
-#         test_case, formatted_exc = result.failures[0]
-#         self.assertIs(test_case, test)
-#         self.assertIsInstance(formatted_exc, str)
-#
-#     # "addError(test, err)"
-#     # ...
-#     # "Called when the test case test raises an unexpected exception err
-#     # is a tuple of the form returned by sys.exc_info():
-#     # (type, value, traceback)"
-#     # ...
-#     # "wasSuccessful() - Returns True if all tests run so far have passed,
-#     # otherwise returns False"
-#     # ...
-#     # "testsRun - The total number of tests run so far."
-#     # ...
-#     # "errors - A list containing 2-tuples of TestCase instances and
-#     # formatted tracebacks. Each tuple represents a test which raised an
-#     # unexpected exception. Contains formatted
-#     # tracebacks instead of sys.exc_info() results."
-#     # ...
-#     # "failures - A list containing 2-tuples of TestCase instances and
-#     # formatted tracebacks. Each tuple represents a test where a failure was
-#     # explicitly signalled using the TestCase.fail*() or TestCase.assert*()
-#     # methods. Contains formatted tracebacks instead
-#     # of sys.exc_info() results."
-#     def test_addError(self):
-#         class Foo(unittest.TestCase):
-#             def test_1(self):
-#                 pass
-#
-#         test = Foo('test_1')
-#         try:
-#             raise TypeError()
-#         except:
-#             exc_info_tuple = sys.exc_info()
-#
-#         result = unittest.TestResult()
-#
-#         result.startTest(test)
-#         result.addError(test, exc_info_tuple)
-#         result.stopTest(test)
-#
-#         self.assertFalse(result.wasSuccessful())
-#         self.assertEqual(len(result.errors), 1)
-#         self.assertEqual(len(result.failures), 0)
-#         self.assertEqual(result.testsRun, 1)
-#         self.assertEqual(result.shouldStop, False)
-#
-#         test_case, formatted_exc = result.errors[0]
-#         self.assertIs(test_case, test)
-#         self.assertIsInstance(formatted_exc, str)
-#
-#     def test_addError_locals(self):
-#         class Foo(unittest.TestCase):
-#             def test_1(self):
-#                 1/0
-#
-#         test = Foo('test_1')
-#         result = unittest.TestResult()
-#         result.tb_locals = True
-#
-#         unittest.result.traceback = MockTraceback
-#         self.addCleanup(restore_traceback)
-#         result.startTestRun()
-#         test.run(result)
-#         result.stopTestRun()
-#
-#         self.assertEqual(len(result.errors), 1)
-#         test_case, formatted_exc = result.errors[0]
-#         self.assertEqual('A tracebacklocals', formatted_exc)
-#
-#     def test_addSubTest(self):
-#         class Foo(unittest.TestCase):
-#             def test_1(self):
-#                 nonlocal subtest
-#                 with self.subTest(foo=1):
-#                     subtest = self._subtest
-#                     try:
-#                         1/0
-#                     except ZeroDivisionError:
-#                         exc_info_tuple = sys.exc_info()
-#                     # Register an error by hand (to check the API)
-#                     result.addSubTest(test, subtest, exc_info_tuple)
-#                     # Now trigger a failure
-#                     self.fail("some recognizable failure")
-#
-#         subtest = None
-#         test = Foo('test_1')
-#         result = unittest.TestResult()
-#
-#         test.run(result)
-#
-#         self.assertFalse(result.wasSuccessful())
-#         self.assertEqual(len(result.errors), 1)
-#         self.assertEqual(len(result.failures), 1)
-#         self.assertEqual(result.testsRun, 1)
-#         self.assertEqual(result.shouldStop, False)
-#
-#         test_case, formatted_exc = result.errors[0]
-#         self.assertIs(test_case, subtest)
-#         self.assertIn("ZeroDivisionError", formatted_exc)
-#         test_case, formatted_exc = result.failures[0]
-#         self.assertIs(test_case, subtest)
-#         self.assertIn("some recognizable failure", formatted_exc)
-#
-#     def testGetDescriptionWithoutDocstring(self):
-#         result = unittest.TextTestResult(None, True, 1)
-#         self.assertEqual(
-#                 result.getDescription(self),
-#                 'testGetDescriptionWithoutDocstring (' + __name__ +
-#                 '.Test_TestResult)')
-#
-#     def testGetSubTestDescriptionWithoutDocstring(self):
-#         with self.subTest(foo=1, bar=2):
-#             result = unittest.TextTestResult(None, True, 1)
-#             self.assertEqual(
-#                     result.getDescription(self._subtest),
-#                     'testGetSubTestDescriptionWithoutDocstring (' + __name__ +
-#                     '.Test_TestResult) (foo=1, bar=2)')
-#         with self.subTest('some message'):
-#             result = unittest.TextTestResult(None, True, 1)
-#             self.assertEqual(
-#                     result.getDescription(self._subtest),
-#                     'testGetSubTestDescriptionWithoutDocstring (' + __name__ +
-#                     '.Test_TestResult) [some message]')
-#
-#     def testGetSubTestDescriptionWithoutDocstringAndParams(self):
-#         with self.subTest():
-#             result = unittest.TextTestResult(None, True, 1)
-#             self.assertEqual(
-#                     result.getDescription(self._subtest),
-#                     'testGetSubTestDescriptionWithoutDocstringAndParams '
-#                     '(' + __name__ + '.Test_TestResult) (<subtest>)')
-#
-#     def testGetSubTestDescriptionForFalsyValues(self):
-#         expected = 'testGetSubTestDescriptionForFalsyValues (%s.Test_TestResult) [%s]'
-#         result = unittest.TextTestResult(None, True, 1)
-#         for arg in [0, None, []]:
-#             with self.subTest(arg):
-#                 self.assertEqual(
-#                     result.getDescription(self._subtest),
-#                     expected % (__name__, arg)
-#                 )
-#
-#     def testGetNestedSubTestDescriptionWithoutDocstring(self):
-#         with self.subTest(foo=1):
-#             with self.subTest(baz=2, bar=3):
-#                 result = unittest.TextTestResult(None, True, 1)
-#                 self.assertEqual(
-#                         result.getDescription(self._subtest),
-#                         'testGetNestedSubTestDescriptionWithoutDocstring '
-#                         '(' + __name__ + '.Test_TestResult) (baz=2, bar=3, foo=1)')
-#
-#     def testGetDuplicatedNestedSubTestDescriptionWithoutDocstring(self):
-#         with self.subTest(foo=1, bar=2):
-#             with self.subTest(baz=3, bar=4):
-#                 result = unittest.TextTestResult(None, True, 1)
-#                 self.assertEqual(
-#                         result.getDescription(self._subtest),
-#                         'testGetDuplicatedNestedSubTestDescriptionWithoutDocstring '
-#                         '(' + __name__ + '.Test_TestResult) (baz=3, bar=4, foo=1)')
-#
-#     @unittest.skipIf(sys.flags.optimize >= 2,
-#                      "Docstrings are omitted with -O2 and above")
-#     def testGetDescriptionWithOneLineDocstring(self):
-#         """Tests getDescription() for a method with a docstring."""
-#         result = unittest.TextTestResult(None, True, 1)
-#         self.assertEqual(
-#                 result.getDescription(self),
-#                ('testGetDescriptionWithOneLineDocstring '
-#                 '(' + __name__ + '.Test_TestResult)\n'
-#                 'Tests getDescription() for a method with a docstring.'))
-#
+
+    # "Called after the test case test has been executed, regardless of
+    # the outcome. The default implementation does nothing."
+    def test_stopTest(self):
+        class Foo(unittest.TestCase):
+            def test_a_foo(self):
+                pass
+
+        test = Foo('test_a_foo')
+
+        result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
+
+
+        result.startTest(test)
+
+        self.assertTrue(result.wasSuccessful())
+        self.assertEqual(len(result.errors), 0)
+        self.assertEqual(len(result.failures), 0)
+        self.assertEqual(result.testsRun, 1)
+        self.assertEqual(result.shouldStop, False)
+
+        result.stopTest(test)
+
+        # Same tests as above; make sure nothing has changed
+        self.assertTrue(result.wasSuccessful())
+        self.assertEqual(len(result.errors), 0)
+        self.assertEqual(len(result.failures), 0)
+        self.assertEqual(result.testsRun, 1)
+        self.assertEqual(result.shouldStop, False)
+
+    # "Called before and after tests are run. The default implementation does nothing."
+    def test_startTestRun_stopTestRun(self):
+        result = unittest.TestResult()
+        result.startTestRun()
+        result.stopTestRun()
+
+    # "addSuccess(test)"
+    # ...
+    # "Called when the test case test succeeds"
+    # ...
+    # "wasSuccessful() - Returns True if all tests run so far have passed,
+    # otherwise returns False"
+    # ...
+    # "testsRun - The total number of tests run so far."
+    # ...
+    # "errors - A list containing 2-tuples of TestCase instances and
+    # formatted tracebacks. Each tuple represents a test which raised an
+    # unexpected exception. Contains formatted
+    # tracebacks instead of sys.exc_info() results."
+    # ...
+    # "failures - A list containing 2-tuples of TestCase instances and
+    # formatted tracebacks. Each tuple represents a test where a failure was
+    # explicitly signalled using the TestCase.fail*() or TestCase.assert*()
+    # methods. Contains formatted tracebacks instead
+    # of sys.exc_info() results."
+    def test_addSuccess(self):
+        class Foo(unittest.TestCase):
+            def test_a_foo(self):
+                pass
+
+        test = Foo('test_a_foo')
+
+        result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
+
+
+        result.startTest(test)
+        result.addSuccess(test)
+        result.stopTest(test)
+
+        self.assertTrue(result.wasSuccessful())
+        self.assertEqual(len(result.errors), 0)
+        self.assertEqual(len(result.failures), 0)
+        self.assertEqual(result.testsRun, 1)
+        self.assertEqual(result.shouldStop, False)
+
+    # "addFailure(test, err)"
+    # ...
+    # "Called when the test case test signals a failure. err is a tuple of
+    # the form returned by sys.exc_info(): (type, value, traceback)"
+    # ...
+    # "wasSuccessful() - Returns True if all tests run so far have passed,
+    # otherwise returns False"
+    # ...
+    # "testsRun - The total number of tests run so far."
+    # ...
+    # "errors - A list containing 2-tuples of TestCase instances and
+    # formatted tracebacks. Each tuple represents a test which raised an
+    # unexpected exception. Contains formatted
+    # tracebacks instead of sys.exc_info() results."
+    # ...
+    # "failures - A list containing 2-tuples of TestCase instances and
+    # formatted tracebacks. Each tuple represents a test where a failure was
+    # explicitly signalled using the TestCase.fail*() or TestCase.assert*()
+    # methods. Contains formatted tracebacks instead
+    # of sys.exc_info() results."
+    def test_addFailure(self):
+        class Foo(unittest.TestCase):
+            def test_a_foo(self):
+                """
+                A simple test that is supposed to fail.
+                """
+                pass
+
+        test = Foo('test_a_foo')
+        try:
+            test.fail("foo")
+        except:
+            exc_info_tuple = sys.exc_info()
+
+        result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
+
+        result.startTest(test)
+        result.addFailure(test, exc_info_tuple)
+        result.stopTest(test)
+
+        self.assertFalse(result.wasSuccessful())
+        self.assertEqual(len(result.errors), 0)
+        self.assertEqual(len(result.failures), 1)
+        self.assertEqual(result.testsRun, 1)
+        self.assertEqual(result.shouldStop, False)
+
+        test_case, formatted_exc = result.failures[0]
+        self.assertIs(test_case, test)
+        self.assertIsInstance(formatted_exc, str)
+
+    # "addError(test, err)"
+    # ...
+    # "Called when the test case test raises an unexpected exception err
+    # is a tuple of the form returned by sys.exc_info():
+    # (type, value, traceback)"
+    # ...
+    # "wasSuccessful() - Returns True if all tests run so far have passed,
+    # otherwise returns False"
+    # ...
+    # "testsRun - The total number of tests run so far."
+    # ...
+    # "errors - A list containing 2-tuples of TestCase instances and
+    # formatted tracebacks. Each tuple represents a test which raised an
+    # unexpected exception. Contains formatted
+    # tracebacks instead of sys.exc_info() results."
+    # ...
+    # "failures - A list containing 2-tuples of TestCase instances and
+    # formatted tracebacks. Each tuple represents a test where a failure was
+    # explicitly signalled using the TestCase.fail*() or TestCase.assert*()
+    # methods. Contains formatted tracebacks instead
+    # of sys.exc_info() results."
+    def test_addError(self):
+        class Foo(unittest.TestCase):
+            def test_a_foo(self):
+                pass
+
+        test = Foo('test_a_foo')
+        try:
+            raise TypeError()
+        except:
+            exc_info_tuple = sys.exc_info()
+
+        result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
+
+        result.startTest(test)
+        result.addError(test, exc_info_tuple)
+        result.stopTest(test)
+
+        self.assertFalse(result.wasSuccessful())
+        self.assertEqual(len(result.errors), 1)
+        self.assertEqual(len(result.failures), 0)
+        self.assertEqual(result.testsRun, 1)
+        self.assertEqual(result.shouldStop, False)
+
+        test_case, formatted_exc = result.errors[0]
+        self.assertIs(test_case, test)
+        self.assertIsInstance(formatted_exc, str)
+
+    def test_addError_locals(self):
+        class Foo(unittest.TestCase):
+            def test_a_foo(self):
+                1/0
+
+        test = Foo('test_a_foo')
+        result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
+
+        result.tb_locals = True
+        with mock.patch('app.exam_test_result.traceback') as m_tb:
+            m_tb.TracebackException = MockTraceback.TracebackException
+
+            self.addCleanup(restore_traceback)
+            result.startTestRun()
+            test.run(result)
+            result.stopTestRun()
+
+        self.assertEqual(len(result.errors), 1)
+        test_case, formatted_exc = result.errors[0]
+        self.assertEqual('A tracebacklocals', formatted_exc)
+
+    def test_addSubTest(self):
+        class Foo(unittest.TestCase):
+            def test_a_foo(self):
+                """
+                A simple test that is supposed to fail.
+                """
+                nonlocal subtest
+                with self.subTest(foo=1):
+                    subtest = self._subtest
+                    try:
+                        1/0
+                    except ZeroDivisionError:
+                        exc_info_tuple = sys.exc_info()
+                    # Register an error by hand (to check the API)
+                    result.addSubTest(test, subtest, exc_info_tuple)
+                    # Now trigger a failure
+                    self.fail("some recognizable failure")
+
+        subtest = None
+        test = Foo('test_a_foo')
+        result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
+
+        test.run(result)
+
+        self.assertFalse(result.wasSuccessful())
+        self.assertEqual(len(result.errors), 1)
+        self.assertEqual(len(result.failures), 1)
+        self.assertEqual(result.testsRun, 1)
+        self.assertEqual(result.shouldStop, False)
+
+        test_case, formatted_exc = result.errors[0]
+        self.assertIs(test_case, subtest)
+        self.assertIn("ZeroDivisionError", formatted_exc)
+        test_case, formatted_exc = result.failures[0]
+        self.assertIs(test_case, subtest)
+        self.assertIn("\n\x1b[41m\x1b[1mA simple test that is supposed to fail.\x1b[0m\n", formatted_exc)
+
+    def testGetDescriptionWithoutDocstring(self):
+        result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
+        # result = unittest.TextTestResult(None, True, 1)
+        self.assertEqual(
+                result.getDescription(self),
+                'testGetDescriptionWithoutDocstring (' + __name__ +
+                '.Test_TestResult)')
+
+    def testGetSubTestDescriptionWithoutDocstring(self):
+        with self.subTest(foo=1, bar=2):
+            # result = unittest.TextTestResult(None, True, 1)
+            result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 1)
+            self.assertEqual(
+                    result.getDescription(self._subtest),
+                    'testGetSubTestDescriptionWithoutDocstring (' + __name__ +
+                    '.Test_TestResult) (bar=2, foo=1)')
+        with self.subTest('some message'):
+            # result = unittest.TextTestResult(None, True, 1)
+            result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 1)
+            self.assertEqual(
+                    result.getDescription(self._subtest),
+                    'testGetSubTestDescriptionWithoutDocstring (' + __name__ +
+                    '.Test_TestResult) [some message]')
+
+    def testGetSubTestDescriptionWithoutDocstringAndParams(self):
+        with self.subTest():
+            result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 1)
+            self.assertEqual(
+                    result.getDescription(self._subtest),
+                    'testGetSubTestDescriptionWithoutDocstringAndParams '
+                    '(' + __name__ + '.Test_TestResult) (<subtest>)')
+
+    def testGetSubTestDescriptionForFalsyValues(self):
+        expected = 'testGetSubTestDescriptionForFalsyValues (%s.Test_TestResult) [%s]'
+        result = unittest.TextTestResult(None, True, 1)
+
+        for arg in [0, None, []]:
+            with self.subTest(arg):
+                self.assertEqual(
+                    result.getDescription(self._subtest),
+                    expected % (__name__, arg)
+                )
+
+    def testGetNestedSubTestDescriptionWithoutDocstring(self):
+        with self.subTest(foo=1):
+            with self.subTest(baz=2, bar=3):
+                result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 1)
+                self.assertEqual(
+                        result.getDescription(self._subtest),
+                        'testGetNestedSubTestDescriptionWithoutDocstring '
+                        '(' + __name__ + '.Test_TestResult) (bar=3, baz=2, foo=1)')
+
+    def testGetDuplicatedNestedSubTestDescriptionWithoutDocstring(self):
+        with self.subTest(foo=1, bar=2):
+            with self.subTest(bar=3, baz=4):
+                result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 1)
+                self.assertEqual(
+                        result.getDescription(self._subtest),
+                        'testGetDuplicatedNestedSubTestDescriptionWithoutDocstring '
+                        '(' + __name__ + '.Test_TestResult) (bar=3, baz=4, foo=1)')
+
+    @unittest.skipIf(sys.flags.optimize >= 2,
+                     "Docstrings are omitted with -O2 and above")
+    def testGetDescriptionWithOneLineDocstring(self):
+        """Tests getDescription() for a method with a docstring."""
+        result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 1)
+        self.assertEqual(
+                result.getDescription(self),
+               ('testGetDescriptionWithOneLineDocstring '
+                '(' + __name__ + '.Test_TestResult)\n'
+                'Tests getDescription() for a method with a docstring.'))
+
 #     @unittest.skipIf(sys.flags.optimize >= 2,
 #                      "Docstrings are omitted with -O2 and above")
 #     def testGetSubTestDescriptionWithOneLineDocstring(self):
