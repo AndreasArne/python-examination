@@ -101,7 +101,7 @@ class TestAssignment2(TestCase):
     """
     Assignment 2
     """
-    def test_convert_to_hex(self):
+    def test_a_convert_to_hex(self):
         """
         Du kan inte konvertera färger
         Argument till funktionen: {arguments}
@@ -116,7 +116,7 @@ class TestAssignment2(TestCase):
         self.assertEqual(exam.convert_to_hex((34, 139, 34)), "#228b22")
         self.assertEqual(exam.convert_to_hex((255, 170, 00)), "#ffaa00")
 
-    def test_b_convert_to_hex(self):
+    def test_b_convert_to_hex2(self):
         """
         Du kan inte konvertera färger
         Argument till funktionen: {arguments}
