@@ -109,16 +109,19 @@ class ExamTestResult(TextTestResult):
         """
         Try to extract the students answer and the correct answer from fail error.
         """
-        if "AssertionError: Lists differ:" in msgLines[2]:
-            list_diff_group = re.search(self.ASSERT_ANSWERS_REGEX["Lists differ"], msgLines[2])
-            student_ans = list_diff_group.group(1)
-            correct_ans = list_diff_group.group(2)
-        else:
-            assert_type = re.search(self.ASSERT_TYPE_REGEX, msgLines[1]).group(1)
-            diff_group = re.search(self.ASSERT_ANSWERS_REGEX[assert_type], value.args[0].split("\n")[0])
-            student_ans = diff_group.group(1)
-            correct_ans = diff_group.group(2)
-
+        try:
+            if "AssertionError: Lists differ:" in msgLines[2]:
+                list_diff_group = re.search(self.ASSERT_ANSWERS_REGEX["Lists differ"], msgLines[2])
+                student_ans = list_diff_group.group(1)
+                correct_ans = list_diff_group.group(2)
+            else:
+                assert_type = re.search(self.ASSERT_TYPE_REGEX, msgLines[1]).group(1)
+                diff_group = re.search(self.ASSERT_ANSWERS_REGEX[assert_type], value.args[0].split("\n")[0])
+                student_ans = diff_group.group(1)
+                correct_ans = diff_group.group(2)
+        except AttributeError:
+            student_ans = None
+            correct_ans = None
         # print(student_ans)
         # print(correct_ans)
         return student_ans, correct_ans
@@ -129,6 +132,8 @@ class ExamTestResult(TextTestResult):
         """
         Create formated fail msg using docstring from test function
         """
+        if test._testMethodDoc is None:
+            raise ValueError("Missing docstring. Used for explaining the test when Something wrong happens.")
         docstring = re.sub("\n +","\n",test._testMethodDoc)
         msg_list = docstring.split("\n")
         msg_list[-2] = Back.RED + Style.BRIGHT + msg_list[-2] + Style.RESET_ALL
@@ -194,7 +199,6 @@ class ExamTestResult(TextTestResult):
             test._test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
         except AttributeError:
             raise ValueError("Test function name should follow the structure 'test_<letter>_<name>'")
-
 
 
 
