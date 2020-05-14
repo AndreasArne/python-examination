@@ -22,6 +22,7 @@ class ExamTestResult(TextTestResult):
         "assertTrue": " is not ",
         "assertEqual": r"^(.+) != (.+)",
         "Lists differ": r"Lists differ: (\[.*\]) != (\[.*\])\n",
+        "assertIn": r"(.*) not found in (.*)",
     }
     ASSIGNEMTS_STARTED = []
     FAULTS = {
@@ -62,7 +63,7 @@ class ExamTestResult(TextTestResult):
         # here starts the interesting code, which we changed
         if exctype is test.failureException:
             try:
-                student_ans, correct_ans = self.extract_answers(value, msgLines)
+                student_ans, correct_ans = self.extract_answers_from_different_assert_msgs(value, msgLines)
                 function_args = self.extract_function_args(msgLines)
                 msgLines = self.create_fail_msg(
                     student_ans,
@@ -108,15 +109,27 @@ class ExamTestResult(TextTestResult):
             return None
 
 
-    def extract_answers(self, value, msgLines):
+
+    def extract_answers_from_different_assert_msgs(self, value, msgLines):
         """
         Try to extract the students answer and the correct answer from fail error.
         """
+        print(msgLines[2])
         try:
             if "AssertionError: Lists differ:" in msgLines[2]:
+                # assertEqual with lists need special pattern
                 list_diff_group = re.search(self.ASSERT_ANSWERS_REGEX["Lists differ"], msgLines[2])
                 student_ans = list_diff_group.group(1)
                 correct_ans = list_diff_group.group(2)
+            elif "AssertionError: unexpectedly None" in msgLines[2]:
+                # assertIsNotNone
+                student_ans = "None"
+                correct_ans = "Vad som helst förutom None."
+            elif "' not found in '" in msgLines[2]:
+                # for assertIn, it has switch which group has stud_ans and which has correct_ans
+                diff_group = re.search(self.ASSERT_ANSWERS_REGEX["assertIn"], value.args[0].split("\n")[0])
+                student_ans = diff_group.group(2)
+                correct_ans = diff_group.group(1)
             else:
                 assert_type = re.search(self.ASSERT_TYPE_REGEX, msgLines[1]).group(1)
                 diff_group = re.search(self.ASSERT_ANSWERS_REGEX[assert_type], value.args[0].split("\n")[0])
@@ -125,6 +138,9 @@ class ExamTestResult(TextTestResult):
         except AttributeError:
             student_ans = None
             correct_ans = None
+        except KeyError as e:
+            raise type(e)(str(e) + msgLines[2])\
+                .with_traceback(sys.exc_info()[2])
         # print(student_ans)
         # print(correct_ans)
         return student_ans, correct_ans
