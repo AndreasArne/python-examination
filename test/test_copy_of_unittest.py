@@ -70,11 +70,11 @@ class Test_TestResult(unittest.TestCase):
         """
         Changed name of "test_1" to "test_a_foo". To match requirement of test names.
         """
-        class Foo(unittest.TestCase):
+        class TestAssignment1(unittest.TestCase):
             def test_a_foo(self):
                 pass
 
-        test = Foo('test_a_foo')
+        test = TestAssignment1('test_a_foo')
 
         result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
 
@@ -91,11 +91,11 @@ class Test_TestResult(unittest.TestCase):
     # "Called after the test case test has been executed, regardless of
     # the outcome. The default implementation does nothing."
     def test_stopTest(self):
-        class Foo(unittest.TestCase):
+        class TestAssignment1(unittest.TestCase):
             def test_a_foo(self):
                 pass
 
-        test = Foo('test_a_foo')
+        test = TestAssignment1('test_a_foo')
 
         result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
 
@@ -143,11 +143,11 @@ class Test_TestResult(unittest.TestCase):
     # methods. Contains formatted tracebacks instead
     # of sys.exc_info() results."
     def test_addSuccess(self):
-        class Foo(unittest.TestCase):
+        class TestAssignment1(unittest.TestCase):
             def test_a_foo(self):
                 pass
 
-        test = Foo('test_a_foo')
+        test = TestAssignment1('test_a_foo')
 
         result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
 
@@ -183,14 +183,14 @@ class Test_TestResult(unittest.TestCase):
     # methods. Contains formatted tracebacks instead
     # of sys.exc_info() results."
     def test_addFailure(self):
-        class Foo(unittest.TestCase):
+        class TestAssignment1(unittest.TestCase):
             def test_a_foo(self):
                 """
                 A simple test that is supposed to fail.
                 """
                 pass
 
-        test = Foo('test_a_foo')
+        test = TestAssignment1('test_a_foo')
         try:
             test.fail("foo")
         except:
@@ -234,11 +234,11 @@ class Test_TestResult(unittest.TestCase):
     # methods. Contains formatted tracebacks instead
     # of sys.exc_info() results."
     def test_addError(self):
-        class Foo(unittest.TestCase):
+        class TestAssignment1(unittest.TestCase):
             def test_a_foo(self):
                 pass
 
-        test = Foo('test_a_foo')
+        test = TestAssignment1('test_a_foo')
         try:
             raise TypeError()
         except:
@@ -261,11 +261,11 @@ class Test_TestResult(unittest.TestCase):
         self.assertIsInstance(formatted_exc, str)
 
     def test_addError_locals(self):
-        class Foo(unittest.TestCase):
+        class TestAssignment1(unittest.TestCase):
             def test_a_foo(self):
                 1/0
 
-        test = Foo('test_a_foo')
+        test = TestAssignment1('test_a_foo')
         result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
 
         result.tb_locals = True
@@ -282,7 +282,7 @@ class Test_TestResult(unittest.TestCase):
         self.assertEqual('A tracebacklocals', formatted_exc)
 
     def test_addSubTest(self):
-        class Foo(unittest.TestCase):
+        class TestAssignment1(unittest.TestCase):
             def test_a_foo(self):
                 """
                 A simple test that is supposed to fail.
@@ -300,7 +300,7 @@ class Test_TestResult(unittest.TestCase):
                     self.fail("some recognizable failure")
 
         subtest = None
-        test = Foo('test_a_foo')
+        test = TestAssignment1('test_a_foo')
         result = ExamTestResult(_WritelnDecorator(sys.stderr), True, 2)
 
         test.run(result)

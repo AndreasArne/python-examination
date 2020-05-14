@@ -92,11 +92,10 @@ validate:
 # target: test-unit                    - Run tests in tests/unit with coverage.py
 .PHONY: test-unit
 test-unit: clean
-	@$(ECHO) "$(ACTION)---> Running all tests in tests/unit" "$(NO_COLOR)"
+	@$(ECHO) "$(ACTION)---> Running all tests in tests/" "$(NO_COLOR)"
 	@${py} \
 		-m coverage run --rcfile=.coveragerc \
-		-m test.test_exam_text_result
-		# -m test.test_copy_of_unittest
+		-m unittest discover -b test
 
 	$(MAKE) clean-py
 

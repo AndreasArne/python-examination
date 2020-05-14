@@ -1,3 +1,4 @@
+import sys
 import traceback
 import re
 from unittest.runner import TextTestResult
@@ -7,11 +8,14 @@ from colorama import Fore, Back, Style
 # import pprint
 # pp = pprint.PrettyPrinter(indent=4)
 
+STDOUT_LINE = '\nStdout:\n%s'
+STDERR_LINE = '\nStderr:\n%s'
+
 class ExamTestResult(TextTestResult):
     """
     Implementation of TextTestResult to use MyTestResult to create custom output for tests.
     """
-    ASSIGNMENT_REGEX = r"\(__main__.Test(.+)\)"
+    ASSIGNMENT_REGEX = r".*Test(Assignment[0-9]+)\)"
     TEST_NAME_REGEX = r"test_[a-z]_(\w+) "
     ASSERT_TYPE_REGEX = r"self.(assert[A-Z][A-z]+)\("
     ASSERT_ANSWERS_REGEX = {
@@ -68,7 +72,6 @@ class ExamTestResult(TextTestResult):
                 )
             except Exception as e:
                 # Something went wrong in our code
-                import sys
                 raise type(e)(str(e) + self.CONTACT_ERROR_MSG)\
                     .with_traceback(sys.exc_info()[2])
 
@@ -136,7 +139,8 @@ class ExamTestResult(TextTestResult):
             raise ValueError("Missing docstring. Used for explaining the test when Something wrong happens.")
         docstring = re.sub("\n +","\n",test._testMethodDoc)
         msg_list = docstring.split("\n")
-        msg_list[-2] = Back.RED + Style.BRIGHT + msg_list[-2] + Style.RESET_ALL
+        msg_list[-3] = Back.BLACK + Fore.GREEN + Style.BRIGHT + msg_list[-3] + Style.RESET_ALL
+        msg_list[-2] = Back.BLACK + Fore.RED + Style.BRIGHT + msg_list[-2] + Style.RESET_ALL
         msg = "\n".join(msg_list)
         # print(msg_list[-1])
         return [msg.format(
@@ -171,7 +175,7 @@ class ExamTestResult(TextTestResult):
         for test, err in errors:
             if not test._assignment in printed_assignments:
                 self.stream.writeln("{}{}s for {}{}".format(
-                    Back.MAGENTA + Style.BRIGHT,
+                    Back.MAGENTA + Fore.WHITE,
                     flavour,
                     test._assignment,
                     Style.RESET_ALL
@@ -179,7 +183,7 @@ class ExamTestResult(TextTestResult):
                 printed_assignments.append(test._assignment)
             for line in err.strip().split("\n"):
                 self.stream.writeln("    |" + line)
-            self.stream.writeln("    "  + Fore.YELLOW + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
+            self.stream.writeln("    "  + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
 
 
 

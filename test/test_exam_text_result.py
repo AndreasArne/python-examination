@@ -25,11 +25,11 @@ class Test_TestResult(unittest.TestCase):
 
         result.startTest(test)
 
-        self.assertEqual(test._assignment, "_TestResult.test_startTest.<locals>.TestAssignment1")
+        self.assertEqual(test._assignment, "Assignment1")
         self.assertEqual(test._test_name, "foo")
-        self.assertEqual(result.ASSIGNEMTS_STARTED, ['_TestResult.test_startTest.<locals>.TestAssignment1'])
+        self.assertEqual(result.ASSIGNEMTS_STARTED, ['Assignment1'])
 
-        self.assertEqual(result.ASSIGNEMTS_STARTED, ['_TestResult.test_startTest.<locals>.TestAssignment1'])
+        self.assertEqual(result.ASSIGNEMTS_STARTED, ['Assignment1'])
         self.assertTrue(result.wasSuccessful())
         self.assertEqual(len(result.errors), 0)
         self.assertEqual(len(result.failures), 0)
