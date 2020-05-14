@@ -3,7 +3,7 @@ import traceback
 import re
 from unittest.runner import TextTestResult
 from colorama import init
-init()
+init(strip=False)
 from colorama import Fore, Back, Style
 # import pprint
 # pp = pprint.PrettyPrinter(indent=4)
@@ -114,7 +114,6 @@ class ExamTestResult(TextTestResult):
         """
         Try to extract the students answer and the correct answer from fail error.
         """
-        print(msgLines[2])
         try:
             if "AssertionError: Lists differ:" in msgLines[2]:
                 # assertEqual with lists need special pattern
