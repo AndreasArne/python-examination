@@ -47,7 +47,7 @@ def check_pass_fail(assignments, result):
 
 
 def format_output(output, assignments):
-    result = "".join([str(res["pass"]) for res in assignments.values()])
+    result = " ".join([str(res["pass"]) for res in assignments.values()])
     print(result)
     print(output)
 
@@ -59,4 +59,3 @@ if __name__ == "__main__":
     output, assignments_results = run_tests(suite)
     check_pass_fail(assignments, assignments_results)
     final_output = format_output(output, assignments)
-    # print(final_output)
