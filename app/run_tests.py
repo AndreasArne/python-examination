@@ -31,7 +31,7 @@ def build_testsuite(assignments):
 
 
 
-def run_tests(suite):
+def run_testcases(suite):
     buf = io.StringIO()
     runner = unittest.TextTestRunner(resultclass=ExamTestResult, verbosity=2, stream=buf)
     assignments_results = runner.run(suite).assignments_results
@@ -53,9 +53,14 @@ def format_output(output, assignments):
 
 
 
-if __name__ == "__main__":
+def main():
     assignments = OrderedDict() # OrderedDict used for backwards compability
     suite = build_testsuite(assignments)
-    output, assignments_results = run_tests(suite)
+    output, assignments_results = run_testcases(suite)
     check_pass_fail(assignments, assignments_results)
     final_output = format_output(output, assignments)
+
+
+
+if __name__ == "__main__":
+    main()
