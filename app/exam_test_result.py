@@ -5,8 +5,6 @@ from unittest.runner import TextTestResult
 from colorama import init
 init(strip=False)
 from colorama import Fore, Back, Style
-# import pprint
-# pp = pprint.PrettyPrinter(indent=4)
 
 STDOUT_LINE = '\nStdout:\n%s'
 STDERR_LINE = '\nStderr:\n%s'
@@ -24,7 +22,6 @@ class ExamTestResult(TextTestResult):
         "Lists differ": r"Lists differ: (\[.*\]) != (\[.*\])\n",
         "assertIn": r"(.*) not found in (.*)",
     }
-    ASSIGNEMTS_STARTED = []
     FAULTS = {
         "fails": {},
         "errors": {},
@@ -35,6 +32,12 @@ class ExamTestResult(TextTestResult):
         "Kontakta Andreas med ovanstående felmeddelandet!"
         "\n*********"
     )
+
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.assignments_results = {}
 
 
 
@@ -225,19 +228,33 @@ class ExamTestResult(TextTestResult):
         """
         Summary print at beginning of output.
         Group output by Assignment.
+        Counts number of tests run for each assignment.
         """
-        super(TextTestResult, self).startTest(test)
-        MAX_TEST_FUNCNAME_LEN = 20
-        TEST_INDENT = 4
-        if self.showAll:
-            # desc = self.getDescription(test)
-            self.set_test_name_and_assignment(test)
-            if not test._assignment in self.ASSIGNEMTS_STARTED:
-                self.ASSIGNEMTS_STARTED.append(test._assignment)
-                self.stream.write(test._assignment + "\n")
+        self.set_test_name_and_assignment(test)
+        if not test._assignment in self.assignments_results:
+            self.assignments_results[test._assignment] = {
+                "started": 0,
+                "success": 0,
+            }
+            self.stream.write(test._assignment + "\n")
 
-            indent = " " * TEST_INDENT
-            whitespace = "." * (MAX_TEST_FUNCNAME_LEN - len(test._test_name))
-            self.stream.write(indent + test._test_name + whitespace)
-            self.stream.write("... ")
-            self.stream.flush()
+        self.assignments_results[test._assignment]["started"] += 1
+        super(TextTestResult, self).startTest(test)
+
+        MAX_TEST_FUNCNAME_LEN = 25
+        TEST_INDENT = 4
+
+        indent = " " * TEST_INDENT
+        whitespace = "." * (MAX_TEST_FUNCNAME_LEN - len(test._test_name))
+        self.stream.write(indent + test._test_name + whitespace)
+        self.stream.write("... ")
+        self.stream.flush()
+
+
+
+    def addSuccess(self, test):
+        """
+        Counts number of successfull run test for each assignment
+        """
+        super().addSuccess(test)
+        self.assignments_results[test._assignment]["success"] += 1
