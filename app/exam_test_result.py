@@ -130,19 +130,10 @@ class ExamTestResult(TextTestResult):
                 student_ans = diff_group.group(2)
                 correct_ans = diff_group.group(1)
             else:
-                try:
-                    assert_type = re.search(self.ASSERT_TYPE_REGEX, msgLines[1]).group(1)
-                    diff_group = re.search(self.ASSERT_ANSWERS_REGEX[assert_type], value.args[0].split("\n")[0])
-                    student_ans = diff_group.group(1)
-                    correct_ans = diff_group.group(2)
-                except AttributeError:
-                    if "' != '" in msgLines[2]:
-                        # assertEqual errors doesnt always contain the "assertEqual" part...
-                        diff_group = re.search(self.ASSERT_ANSWERS_REGEX["assertEqual"], value.args[0].split("\n")[0])
-                        student_ans = diff_group.group(1)
-                        correct_ans = diff_group.group(2)
-                #     student_ans = None
-                #     correct_ans = None
+                assert_type = re.search(self.ASSERT_TYPE_REGEX, msgLines[1]).group(1)
+                diff_group = re.search(self.ASSERT_ANSWERS_REGEX[assert_type], value.args[0].split("\n")[0])
+                student_ans = diff_group.group(1)
+                correct_ans = diff_group.group(2)
         except KeyError as e:
             raise type(e)(str(e) + msgLines[2])\
                 .with_traceback(sys.exc_info()[2])
