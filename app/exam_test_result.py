@@ -102,11 +102,15 @@ class ExamTestResult(TextTestResult):
         # TODO:
             _mult_arguments är inte testat än
         """
-        if test._argument is not None:
-            return repr(test._argument)
-        elif test._mult_arguments is not None:
-            return ", ".join([repr(arg)for arg in test._mult_arguments])
-        return None
+        try:
+            return repr(getattr(test, "_argument"))
+        except AttributeError:
+            try:
+                return ", ".join([repr(arg)for arg in getattr(test, "_mult_arguments")])
+            except AttributeError:
+                return None
+
+
 
 
 
