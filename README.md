@@ -10,7 +10,7 @@ This repository contain code for examining students on College level in an intro
 
 # TODO:
 - Write tests
-    - Continue converting tests in test_copy_of_unittest
-    - Add test in test_exam_text_result for the added functionality. Can toggle lies 99 and 98 in Makefile to run the different files.
+    - Add test in test_exam_text_result for the added functionality.
+- Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
 - Test it for multiple python versions (Tox?)
 - Package so students also get colorama module
