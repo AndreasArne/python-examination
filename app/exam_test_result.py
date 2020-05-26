@@ -17,7 +17,7 @@ class ExamTestResult(TextTestResult):
     TEST_NAME_REGEX = r"test_[a-z]_(\w+) "
     ASSERT_TYPE_REGEX = r"self.(assert[A-Z][A-z]+)\("
     ASSERT_ANSWERS_REGEX = {
-        "assertTrue": " is not ",
+        "assertTrue": "(.+) is not (.+)",
         "assertEqual": r"^(.+) != (.+)",
         "Lists differ": r"Lists differ: (\[.*\]) != (\[.*\])\n",
         "assertIn": r"(.*) not found in (.*)",
@@ -67,7 +67,7 @@ class ExamTestResult(TextTestResult):
         if exctype is test.failureException:
             try:
                 student_ans, correct_ans = self.extract_answers_from_different_assert_msgs(value, msgLines)
-                function_args = self.extract_function_args(msgLines)
+                function_args = self.get_function_args(test)
                 msgLines = self.create_fail_msg(
                     student_ans,
                     correct_ans,
@@ -95,21 +95,14 @@ class ExamTestResult(TextTestResult):
 
 
 
-    def extract_function_args(self, msgLines):
+    def get_function_args(self, test):
         """
-        Asserts are done with a function call or a variable, with the students answer.
-        Try to get the value that was used as argument for the students function, that is tested.
-        TODO:
-            - Testa med funktion som tar två arg
-            - Testa med funktion som tar två arg, där båda är tupler
+        Use repr() on arguments used for the students defined function.
+        If no arguments is used, return None.
         """
-        whole_line = msgLines[1]
-        try:
-            res = re.search("self.assert[A-z]+\(exam.[A-z0-9_]+\((.+)\), ", whole_line)
-            return res.group(1)
-        except AttributeError:
-            # print("No match for function argument!")
-            return None
+        if test._arguments is not None:
+            return repr(test._arguments)
+        return None
 
 
 
@@ -133,18 +126,22 @@ class ExamTestResult(TextTestResult):
                 student_ans = diff_group.group(2)
                 correct_ans = diff_group.group(1)
             else:
-                assert_type = re.search(self.ASSERT_TYPE_REGEX, msgLines[1]).group(1)
-                diff_group = re.search(self.ASSERT_ANSWERS_REGEX[assert_type], value.args[0].split("\n")[0])
-                student_ans = diff_group.group(1)
-                correct_ans = diff_group.group(2)
-        except AttributeError:
-            student_ans = None
-            correct_ans = None
+                try:
+                    assert_type = re.search(self.ASSERT_TYPE_REGEX, msgLines[1]).group(1)
+                    diff_group = re.search(self.ASSERT_ANSWERS_REGEX[assert_type], value.args[0].split("\n")[0])
+                    student_ans = diff_group.group(1)
+                    correct_ans = diff_group.group(2)
+                except AttributeError:
+                    if "' != '" in msgLines[2]:
+                        # assertEqual errors doesnt always contain the "assertEqual" part...
+                        diff_group = re.search(self.ASSERT_ANSWERS_REGEX["assertEqual"], value.args[0].split("\n")[0])
+                        student_ans = diff_group.group(1)
+                        correct_ans = diff_group.group(2)
+                #     student_ans = None
+                #     correct_ans = None
         except KeyError as e:
             raise type(e)(str(e) + msgLines[2])\
                 .with_traceback(sys.exc_info()[2])
-        # print(student_ans)
-        # print(correct_ans)
         return student_ans, correct_ans
 
 
@@ -154,7 +151,7 @@ class ExamTestResult(TextTestResult):
         Create formated fail msg using docstring from test function
         """
         if test._testMethodDoc is None:
-            raise ValueError("Missing docstring. Used for explaining the test when Something wrong happens.")
+            raise ValueError("Missing docstring. Used for explaining the test when Something is wrong.")
         docstring = re.sub("\n +","\n",test._testMethodDoc)
         msg_list = docstring.split("\n")
         msg_list[-3] = Back.BLACK + Fore.GREEN + Style.BRIGHT + msg_list[-3] + Style.RESET_ALL
