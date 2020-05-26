@@ -1,3 +1,6 @@
+"""
+Custom test collecter, builder and runner used for examining students.
+"""
 import io
 import unittest
 import test_exam
@@ -8,6 +11,9 @@ PASS = 1
 NOT_PASS = 0
 
 def get_testcases(assignments):
+    """
+    Add all TestCases to a list and return.
+    """
     testcases = []
     counter = 1
     while True:
@@ -23,6 +29,9 @@ def get_testcases(assignments):
 
 
 def build_testsuite(assignments):
+    """
+    Create TestSuit with testcases.
+    """
     testcases = get_testcases(assignments)
     suite = unittest.TestSuite()
     for case in testcases:
@@ -32,14 +41,21 @@ def build_testsuite(assignments):
 
 
 def run_testcases(suite):
+    """
+    Run testsuit.
+    """
     buf = io.StringIO()
     runner = unittest.TextTestRunner(resultclass=ExamTestResult, verbosity=2, stream=buf)
+    # runner = unittest.TextTestRunner(resultclass=ExamTestResult, verbosity=2)
     assignments_results = runner.run(suite).assignments_results
     return buf.getvalue(), assignments_results
 
 
 
 def check_pass_fail(assignments, result):
+    """
+    Mark assignments ass Passed if they succeded.
+    """
     for assignment, outcome in result.items():
         if outcome["started"] == outcome["success"]:
             assignments[assignment]["pass"] = PASS
@@ -47,6 +63,9 @@ def check_pass_fail(assignments, result):
 
 
 def format_output(output, assignments):
+    """
+    Print and format test run and which assignments pass/fail.
+    """
     result = " ".join([str(res["pass"]) for res in assignments.values()])
     print(result)
     print(output)
@@ -54,6 +73,9 @@ def format_output(output, assignments):
 
 
 def main():
+    """
+    Start point of program.
+    """
     assignments = OrderedDict() # OrderedDict used for backwards compability
     suite = build_testsuite(assignments)
     output, assignments_results = run_testcases(suite)
