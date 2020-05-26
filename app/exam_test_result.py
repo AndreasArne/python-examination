@@ -99,9 +99,13 @@ class ExamTestResult(TextTestResult):
         """
         Use repr() on arguments used for the students defined function.
         If no arguments is used, return None.
+        # TODO:
+            _mult_arguments är inte testat än
         """
-        if test._arguments is not None:
-            return repr(test._arguments)
+        if test._argument is not None:
+            return repr(test._argument)
+        elif test._mult_arguments is not None:
+            return ", ".join([repr(arg)for arg in test._mult_arguments])
         return None
 
 
