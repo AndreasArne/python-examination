@@ -41,6 +41,7 @@ class ExamTestResult(TextTestResult):
         """
         Converts a sys.exc_info()-style tuple of values into a string.
         Creates custom msg for assertErrors, for the students.
+        Code is copied from baseclass and then changed/added to.
         TO-DO:
         - Lägg till hjälp text för kända fel. T.ex. för felet när man har för många input
         """
@@ -59,7 +60,7 @@ class ExamTestResult(TextTestResult):
             exctype, value, tb, limit=length, capture_locals=self.tb_locals)
         msgLines = list(tb_e.format())
 
-        # here starts the interesting code, which we changed
+        # here starts the interesting code, which we changed. If test failed
         if exctype is test.failureException:
             try:
                 student_ans, correct_ans = self.extract_answers_from_different_assert_msgs(value, msgLines)
