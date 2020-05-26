@@ -9,6 +9,7 @@ This repository contain code for examining students on College level in an intro
 `test/2018-lp2/test.py` - Contains a running example of the exam_test_result.py code.
 
 # TODO:
+- [ ] How to handle "empty" exam.py?
 - [ ] Test it for multiple python versions (Tox?)
 - [ ] Try `_mult_arguments`.
 - [ ] Package so students also get colorama module
