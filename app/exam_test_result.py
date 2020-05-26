@@ -42,8 +42,6 @@ class ExamTestResult(TextTestResult):
         Converts a sys.exc_info()-style tuple of values into a string.
         Creates custom msg for assertErrors, for the students.
         Code is copied from baseclass and then changed/added to.
-        TO-DO:
-        - Lägg till hjälp text för kända fel. T.ex. för felet när man har för många input
         """
         exctype, value, tb = err
         # Skip test runner traceback levels
@@ -96,8 +94,6 @@ class ExamTestResult(TextTestResult):
         """
         Use repr() on arguments used for the students defined function.
         If no arguments is used, return None.
-        # TODO:
-            _mult_arguments är inte testat än
         """
         try:
             return repr(getattr(test, "_argument"))
@@ -175,8 +171,6 @@ class ExamTestResult(TextTestResult):
     def printErrorList(self, flavour, errors, explenation):
         """
         Print errors grouped by assignment (TestCase object)
-        TO-DO:
-        - visa inte samma error flera gånger, samma fel genereras av varje test funktion
         """
         printed_assignments = []
 
