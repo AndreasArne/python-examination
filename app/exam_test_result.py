@@ -22,10 +22,6 @@ class ExamTestResult(TextTestResult):
         "Lists differ": r"Lists differ: (\[.*\]) != (\[.*\])\n",
         "assertIn": r"(.*) not found in (.*)",
     }
-    FAULTS = {
-        "fails": {},
-        "errors": {},
-    }
     CONTACT_ERROR_MSG = (
         "\n*********\n"
         "Något gick fel i rättningsprogrammet. "
