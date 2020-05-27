@@ -3,8 +3,8 @@ Custom test collecter, builder and runner used for examining students.
 """
 import io
 import unittest
-import test_exam
 from collections import OrderedDict
+import test_exam
 from exam_test_result import ExamTestResult
 
 PASS = 1
@@ -80,7 +80,7 @@ def main():
     suite = build_testsuite(assignments)
     output, assignments_results = run_testcases(suite)
     check_pass_fail(assignments, assignments_results)
-    final_output = format_output(output, assignments)
+    format_output(output, assignments)
 
 
 

@@ -1,10 +1,13 @@
+"""
+Custom unittest.TextTestResult class. Is used to customize the output from unittests.
+"""
 import sys
 import traceback
 import re
 from unittest.runner import TextTestResult
-from colorama import init
+from colorama import init, Fore, Back, Style
+
 init(strip=False)
-from colorama import Fore, Back, Style
 
 STDOUT_LINE = '\nStdout:\n%s'
 STDERR_LINE = '\nStderr:\n%s'
@@ -143,9 +146,10 @@ class ExamTestResult(TextTestResult):
         """
         Create formated fail msg using docstring from test function
         """
+        #pylint: disable=protected-access
         if test._testMethodDoc is None:
             raise ValueError("Missing docstring. Used for explaining the test when Something is wrong.")
-        docstring = re.sub("\n +","\n",test._testMethodDoc)
+        docstring = re.sub("\n +", "\n", test._testMethodDoc)
         msg_list = docstring.split("\n")
         msg_list[-3] = Back.BLACK + Fore.GREEN + Style.BRIGHT + msg_list[-3] + Style.RESET_ALL
         msg_list[-2] = Back.BLACK + Fore.RED + Style.BRIGHT + msg_list[-2] + Style.RESET_ALL
@@ -156,6 +160,7 @@ class ExamTestResult(TextTestResult):
             correct=correct_ans,
             student=student_ans
         )]
+        #pylint: enable=protected-access
 
 
 
@@ -163,13 +168,13 @@ class ExamTestResult(TextTestResult):
         if self.dots or self.showAll:
             self.stream.writeln()
         if self.errors:
-            self.printErrorList("Error", self.errors, "Your code crasched!")
+            self.printErrorListWithExplenation("Error", self.errors, "Your code crasched!")
         if self.failures:
-            self.printErrorList("Fail", self.failures, "Your code produced wrong result!")
+            self.printErrorListWithExplenation("Fail", self.failures, "Your code produced wrong result!")
 
 
 
-    def printErrorList(self, flavour, errors, explenation):
+    def printErrorListWithExplenation(self, flavour, errors, explenation):
         """
         Print errors grouped by assignment (TestCase object)
         """
@@ -179,14 +184,14 @@ class ExamTestResult(TextTestResult):
         self.stream.writeln("{} section: {}".format(flavour.upper(), explenation))
         self.stream.writeln(self.separator1)
         for test, err in errors:
-            if not test._assignment in printed_assignments:
+            if not test.result_assignment in printed_assignments:
                 self.stream.writeln("{}{}s for {}{}".format(
                     Back.MAGENTA + Fore.WHITE,
                     flavour,
-                    test._assignment,
+                    test.result_assignment,
                     Style.RESET_ALL
                 ))
-                printed_assignments.append(test._assignment)
+                printed_assignments.append(test.result_assignment)
             for line in err.strip().split("\n"):
                 self.stream.writeln("    |" + line)
             self.stream.writeln("    "  + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
@@ -201,14 +206,24 @@ class ExamTestResult(TextTestResult):
         """
         test_string = str(test)
         try:
-            test._assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
+            test.result_assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
         except AttributeError:
             raise ValueError("Class name for TestCase should the follow structure 'TestAssignment<number>'")
 
         try:
-            test._test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
+            test.result_test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
         except AttributeError:
             raise ValueError("Test function name should follow the structure 'test_<letter>_<name>'")
+
+
+    def startTestBase(self):
+        """
+        Base version of startTest, from unittest.TestResult.
+        Super() calls the class inbetween this one and TestResult.
+        """
+        self.testsRun += 1
+        self._mirrorOutput = False
+        self._setupStdout()
 
 
 
@@ -219,22 +234,23 @@ class ExamTestResult(TextTestResult):
         Counts number of tests run for each assignment.
         """
         self.set_test_name_and_assignment(test)
-        if not test._assignment in self.assignments_results:
-            self.assignments_results[test._assignment] = {
+        if not test.result_assignment in self.assignments_results:
+            self.assignments_results[test.result_assignment] = {
                 "started": 0,
                 "success": 0,
             }
-            self.stream.write(test._assignment + "\n")
+            self.stream.write(test.result_assignment + "\n")
 
-        self.assignments_results[test._assignment]["started"] += 1
-        super(TextTestResult, self).startTest(test)
+        self.assignments_results[test.result_assignment]["started"] += 1
+
+        self.startTestBase()
 
         MAX_TEST_FUNCNAME_LEN = 25
         TEST_INDENT = 4
 
         indent = " " * TEST_INDENT
-        whitespace = "." * (MAX_TEST_FUNCNAME_LEN - len(test._test_name))
-        self.stream.write(indent + test._test_name + whitespace)
+        whitespace = "." * (MAX_TEST_FUNCNAME_LEN - len(test.result_test_name))
+        self.stream.write(indent + test.result_test_name + whitespace)
         self.stream.write("... ")
         self.stream.flush()
 
@@ -245,4 +261,4 @@ class ExamTestResult(TextTestResult):
         Counts number of successfull run test for each assignment
         """
         super().addSuccess(test)
-        self.assignments_results[test._assignment]["success"] += 1
+        self.assignments_results[test.result_assignment]["success"] += 1
