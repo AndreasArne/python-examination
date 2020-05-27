@@ -18,6 +18,7 @@ class ExamTestResult(TextTestResult):
     ASSERT_TYPE_REGEX = r"self.(assert[A-Z][A-z]+)\("
     ASSERT_ANSWERS_REGEX = {
         "assertTrue": "(.+) is not (.+)",
+        "assertFalse": "(.+) is not (.+)",
         "assertEqual": r"^(.+) != (.+)",
         "Lists differ": r"Lists differ: (\[.*\]) != (\[.*\])\n",
         "assertIn": r"(.*) not found in (.*)",
