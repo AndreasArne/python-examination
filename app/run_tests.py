@@ -3,9 +3,17 @@ Custom test collecter, builder and runner used for examining students.
 """
 import io
 import unittest
+import sys
 from collections import OrderedDict
 import test_exam
 from exam_test_result import ExamTestResult
+
+CONTACT_ERROR_MSG = (
+    "\n*********\n"
+    "Något gick fel i rättningsprogrammet. "
+    "Kontakta Ansvarig med ovanstående felmeddelandet!"
+    "\n*********"
+)
 
 PASS = 1
 NOT_PASS = 0
@@ -47,7 +55,14 @@ def run_testcases(suite):
     buf = io.StringIO()
     runner = unittest.TextTestRunner(resultclass=ExamTestResult, verbosity=2, stream=buf)
     # runner = unittest.TextTestRunner(resultclass=ExamTestResult, verbosity=2)
-    assignments_results = runner.run(suite).assignments_results
+
+    try:
+        assignments_results = runner.run(suite).assignments_results
+    except Exception as e:
+        # Something went wrong in our code
+        raise type(e)(str(e) + CONTACT_ERROR_MSG)\
+            .with_traceback(sys.exc_info()[2])
+
     return buf.getvalue(), assignments_results
 
 

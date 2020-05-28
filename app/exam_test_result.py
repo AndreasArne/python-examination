@@ -27,12 +27,6 @@ class ExamTestResult(TextTestResult):
         "Lists differ": r"Lists differ: (\[.*\]) != (\[.*\])\n",
         "assertIn": r"(.*) not found in (.*)",
     }
-    CONTACT_ERROR_MSG = (
-        "\n*********\n"
-        "Något gick fel i rättningsprogrammet. "
-        "Kontakta Andreas med ovanstående felmeddelandet!"
-        "\n*********"
-    )
 
 
 
@@ -65,19 +59,14 @@ class ExamTestResult(TextTestResult):
 
         # here starts the interesting code, which we changed. If test failed
         if exctype is test.failureException:
-            try:
-                student_ans, correct_ans = self.extract_answers_from_different_assert_msgs(value, msgLines)
-                function_args = self.get_function_args(test)
-                msgLines = self.create_fail_msg(
-                    student_ans,
-                    correct_ans,
-                    function_args,
-                    test
-                )
-            except Exception as e:
-                # Something went wrong in our code
-                raise type(e)(str(e) + self.CONTACT_ERROR_MSG)\
-                    .with_traceback(sys.exc_info()[2])
+            student_ans, correct_ans = self.extract_answers_from_different_assert_msgs(value, msgLines)
+            function_args = self.get_function_args(test)
+            msgLines = self.create_fail_msg(
+                student_ans,
+                correct_ans,
+                function_args,
+                test
+            )
 
         if self.buffer:
             # Dont care about this code
@@ -271,6 +260,7 @@ class ExamTestResult(TextTestResult):
         return False
 
 
+
     @failfast
     def addError(self, test, err):
         """Called when an error has occurred. 'err' is a tuple of values as
@@ -282,7 +272,6 @@ class ExamTestResult(TextTestResult):
         self.errors.append((test, self._exc_info_to_string(err, test)))
         self._mirrorOutput = True
         self.stream.writeln("ERROR")
-
 
 
 
