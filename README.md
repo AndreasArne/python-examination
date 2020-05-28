@@ -51,7 +51,7 @@ class TestAssignment3(unittest.TestCase):
 ```
 
 # TODO:
-- [ ] How to handle "empty" exam.py/functions the students haven't started on?
+- [x] How to handle "empty" exam.py/functions the students haven't started on?
 - [ ] Test it for multiple python versions (Tox?)
 - [ ] Try `_mult_arguments`.
 - [ ] Package so students also get colorama module
@@ -62,6 +62,7 @@ class TestAssignment3(unittest.TestCase):
 - [ ] Add help text for common errors, such as too many inputs when mocking.
 - [ ] Don't show same error, from different tests for same error.
 - [ ] Asserts where arguments are on multiple lines destroy the regex for finding assert type. The function call is omitted from error lines. One fix is to overload all assert mehtods in the TestCase class. And save arguments and assert type from there.
+- [ ] Remake flowchart as sequence diagram.
 
 
 
