@@ -1,7 +1,7 @@
 [MASTER]
 
 #init-hook='import sys; import os; sys.path.append(os.getcwd() + "/example/hello_world")'
-ignore=colorama
+ignore=colorama, test_copy_of_unittest.py
 [MESSAGES CONTROL]
 
 #disable=superfluous-parens,anomalous-backslash-in-string,bad-builtin,invalid-name
