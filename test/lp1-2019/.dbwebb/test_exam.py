@@ -5,7 +5,6 @@ Contains testcases for the individual examination.
 import unittest
 from unittest import TextTestRunner
 from unittest.mock import patch
-from importlib import util
 import os
 import sys
 from exam_test_result import ExamTestResult
@@ -16,7 +15,7 @@ if proj_path not in sys.path:
 #pylint: disable=wrong-import-position
 import exam
 #pylint: enable=wrong-import-position
-
+#pylint: disable=attribute-defined-outside-init, line-too-long
 class TestAssignment1(unittest.TestCase):
     """
     Each assignment has 1 testcase with multiple asserts.
