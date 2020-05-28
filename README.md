@@ -62,3 +62,9 @@ class TestAssignment3(unittest.TestCase):
 - [ ] Add help text for common errors, such as too many inputs when mocking.
 - [ ] Don't show same error, from different tests for same error.
 - [ ] Asserts where arguments are on multiple lines destroy the regex for finding assert type. The function call is omitted from error lines. One fix is to overload all assert mehtods in the TestCase class. And save arguments and assert type from there.
+
+
+
+# Flowchart of unittest execution
+
+[unittest execution order](https://app.lucidchart.com/invitations/accept/f9604303-3cf8-4cbf-ab22-be0e64b99f49)
