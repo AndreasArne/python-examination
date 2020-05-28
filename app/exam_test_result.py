@@ -4,6 +4,7 @@ Custom unittest.TextTestResult class. Is used to customize the output from unitt
 import sys
 import traceback
 import re
+from unittest.result import failfast
 from unittest.runner import TextTestResult
 from colorama import init, Fore, Back, Style
 
@@ -106,8 +107,6 @@ class ExamTestResult(TextTestResult):
                 return ", ".join([repr(arg)for arg in getattr(test, "_mult_arguments")])
             except AttributeError:
                 return None
-
-
 
 
 
@@ -216,6 +215,7 @@ class ExamTestResult(TextTestResult):
             raise ValueError("Test function name should follow the structure 'test_<letter>_<name>'")
 
 
+
     def startTestBase(self):
         """
         Base version of startTest, from unittest.TestResult.
@@ -253,6 +253,36 @@ class ExamTestResult(TextTestResult):
         self.stream.write(indent + test.result_test_name + whitespace)
         self.stream.write("... ")
         self.stream.flush()
+
+
+
+    def error_is_missing_assignment_function(self, error):
+        """
+        Returns True if the error is a missing assignment function in the
+        students code.
+        """
+        _, value, tb = error
+        if "module 'exam' has no attribute" in str(value):
+            while tb.tb_next:
+                tb = tb.tb_next
+            filename = tb.tb_frame.f_code.co_filename.split("/")[-1]
+            if filename == "test_exam.py":
+                return True
+        return False
+
+
+    @failfast
+    def addError(self, test, err):
+        """Called when an error has occurred. 'err' is a tuple of values as
+        returned by sys.exc_info().
+        """
+        if self.error_is_missing_assignment_function(err):
+            self.stream.writeln("Assignment Not Implemented")
+            return
+        self.errors.append((test, self._exc_info_to_string(err, test)))
+        self._mirrorOutput = True
+        self.stream.writeln("ERROR")
+
 
 
 
