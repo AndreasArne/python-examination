@@ -5,14 +5,17 @@ import io
 import unittest
 import sys
 from collections import OrderedDict
+from colorama import init, Fore, Back, Style
 import test_exam
 from exam_test_result import ExamTestResult
 
+init(strip=False)
+
 CONTACT_ERROR_MSG = (
-    "\n*********\n"
+    Fore.RED + "\n*********\n"
     "Något gick fel i rättningsprogrammet. "
     "Kontakta Ansvarig med ovanstående felmeddelandet!"
-    "\n*********"
+    "\n*********" + Style.RESET_ALL
 )
 
 PASS = 1
@@ -69,7 +72,7 @@ def run_testcases(suite):
 
 def check_pass_fail(assignments, result):
     """
-    Mark assignments ass Passed if they succeded.
+    Mark assignments as Passed if they succeded.
     """
     for assignment, outcome in result.items():
         if outcome["started"] == outcome["success"]:
