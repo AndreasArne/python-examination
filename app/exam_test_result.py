@@ -12,6 +12,12 @@ init(strip=False)
 
 STDOUT_LINE = '\nStdout:\n%s'
 STDERR_LINE = '\nStderr:\n%s'
+CONTACT_ERROR_MSG = (
+    Fore.RED + "\n*********\n"
+    "Assert method is not ovveriden!\n"
+    "Is needed to set answers."
+    "\n*********" + Style.RESET_ALL
+)
 
 class ExamTestResult(TextTestResult):
     """
@@ -57,16 +63,17 @@ class ExamTestResult(TextTestResult):
             exctype, value, tb, limit=length, capture_locals=self.tb_locals)
         msgLines = list(tb_e.format())
 
+        #----------------------
         # here starts the interesting code, which we changed. If test failed
+        # because of wrong answer from student
         if exctype is test.failureException:
-            student_ans, correct_ans = self.extract_answers_from_different_assert_msgs(value, msgLines)
+            # student_ans, correct_ans = self.extract_answers_from_different_assert_msgs(value, msgLines)
             function_args = self.get_function_args(test)
             msgLines = self.create_fail_msg(
-                student_ans,
-                correct_ans,
                 function_args,
                 test
             )
+        #---------------------
 
         if self.buffer:
             # Dont care about this code
@@ -93,7 +100,7 @@ class ExamTestResult(TextTestResult):
             return repr(getattr(test, "_argument"))
         except AttributeError:
             try:
-                return ", ".join([repr(arg)for arg in getattr(test, "_mult_arguments")])
+                return ", ".join([repr(arg) for arg in getattr(test, "_mult_arguments")])
             except AttributeError:
                 return None
 
@@ -130,7 +137,7 @@ class ExamTestResult(TextTestResult):
 
 
 
-    def create_fail_msg(self, student_ans, correct_ans, function_args, test):
+    def create_fail_msg(self, function_args, test):
         """
         Create formated fail msg using docstring from test function
         """
@@ -143,11 +150,15 @@ class ExamTestResult(TextTestResult):
         msg_list[-2] = Back.BLACK + Fore.RED + Style.BRIGHT + msg_list[-2] + Style.RESET_ALL
         msg = "\n".join(msg_list)
         # print(msg_list[-1])
-        return [msg.format(
-            arguments=function_args,
-            correct=correct_ans,
-            student=student_ans
-        )]
+        try:
+            return [msg.format(
+                arguments=function_args,
+                correct=test.correct_answer,
+                student=test.student_answer
+            )]
+        except AttributeError as e:
+            raise type(e)(str(e) + CONTACT_ERROR_MSG)\
+            .with_traceback(sys.exc_info()[2])
         #pylint: enable=protected-access
 
 
