@@ -3,7 +3,8 @@
 # only for testing, solve differently for live
 cp -f ../../../app/exam_test_result.py .
 cp -f ../../../app/run_tests.py .
-cp -rf ../../../.venv/lib/python3.6/site-packages/colorama .
+cp -f ../../../app/exam_textcase.py .
+cp -rf ../../../.venv/lib/python3.7/site-packages/colorama .
 
 
 # Verbose check
@@ -37,7 +38,7 @@ test_status="$(cd "$DBWEBB_PATH" && ${py} run_tests.py &> "$LOG_PATH")"
 ALL_LINES="$(cat "$LOG_PATH" | head -6)"
 FIRST_LINE="$(cat "$LOG_PATH" | head -1)"
 SECOND_LINE="$(cat "$LOG_PATH" | head -2 | tail -1)"
-REST="$(cat "$LOG_PATH" | tail +2)"
+REST="$(cat "$LOG_PATH" | tail -n +2)"
 
 
 
