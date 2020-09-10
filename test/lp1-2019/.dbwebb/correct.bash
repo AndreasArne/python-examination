@@ -63,6 +63,12 @@ clean_up () {
     rm "$DBWEBB_PATH/$COPY_FILE"
     rm "$LOG_PATH"
     rm "$DBWEBB_PATH/$OUTPUT_FILE"
+
+    # REMOVE!!!!!!!!!!!!!!!!!!!!!!!
+    rm exam_test_result.py
+    rm run_tests.py
+    rm exam_textcase.py
+    rm -rf colorama
 }
 
 
