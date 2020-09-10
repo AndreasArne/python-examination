@@ -7,7 +7,9 @@ from unittest import TextTestRunner
 from unittest.mock import patch
 import os
 import sys
+import exam_textcase
 from exam_test_result import ExamTestResult
+
 
 proj_path = os.path.dirname(os.path.realpath(__file__ + "/.."))
 if proj_path not in sys.path:
@@ -16,7 +18,8 @@ if proj_path not in sys.path:
 import exam
 #pylint: enable=wrong-import-position
 #pylint: disable=attribute-defined-outside-init, line-too-long
-class TestAssignment1(unittest.TestCase):
+# class TestAssignment1(unittest.TestCase):
+class TestAssignment1(exam_textcase.ExamTestCase):
     """
     Each assignment has 1 testcase with multiple asserts.
 
@@ -82,9 +85,9 @@ class TestAssignment1(unittest.TestCase):
             with open("manifesto.txt") as fh:
                 manifesto = fh.readlines()
             for index, line in enumerate(output):
-                self.assertEqual(line, manifesto[index])
+                self.assertEqual(line+"-", manifesto[index])
 
-class TestAssignment2(unittest.TestCase):
+class TestAssignment2(exam_textcase.ExamTestCase):
     """
     Assignment 2.
     """
@@ -109,7 +112,7 @@ class TestAssignment2(unittest.TestCase):
         }
         self.assertEqual(exam.count_animals(self._argument), "1 gris: Babe\n7 höna: Aapo, Eero, Juhani, Lauri, Simeoni, Timo, Tuomas\n2 ko: Kalvin, Mamma Mu\n1 tupp: Jussi")
 
-class TestAssignment3(unittest.TestCase):
+class TestAssignment3(exam_textcase.ExamTestCase):
     """
     Each assignment has 3 testcase with multiple asserts.
     """
@@ -152,7 +155,7 @@ class TestAssignment3(unittest.TestCase):
         self.assertFalse(exam.validate_isbn(self._argument))
 
 
-class TestAssignment4(unittest.TestCase):
+class TestAssignment4(exam_textcase.ExamTestCase):
     """
     Each assignment has 4 testcase with multiple asserts.
     """
@@ -192,7 +195,7 @@ class TestAssignment4(unittest.TestCase):
         self.assertEqual(exam.decide_winners(self._argument), ['player2', 'player1', 'player2'])
 
 
-class TestAssignment5(unittest.TestCase):
+class TestAssignment5(exam_textcase.ExamTestCase):
     """
     Each assignment has 5 testcase with multiple asserts.
     """
