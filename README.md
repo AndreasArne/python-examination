@@ -51,18 +51,19 @@ class TestAssignment3(unittest.TestCase):
 ```
 
 # TODO:
-- [x] How to handle "empty" exam.py/functions the students haven't started on?
-- [ ] Test it for multiple python versions (Tox?)
 - [ ] Try `_mult_arguments`.
-- [ ] Package so students also get colorama module
+- [ ] Create custom exception for contacting responsible.
+- [ ] Don't show same error, from different tests for same error.
 - [ ] Write tests
     - Add test in test_exam_text_result for the added functionality.
+- [ ] Test it for multiple python versions (Tox?)
+- [ ] Package so students also get colorama module
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
     - Identify errors where this happens.
 - [ ] Add help text for common errors, such as too many inputs when mocking.
-- [ ] Don't show same error, from different tests for same error.
-- [ ] Asserts where arguments are on multiple lines destroy the regex for finding assert type. The function call is omitted from error lines. One fix is to overload all assert mehtods in the TestCase class. And save arguments and assert type from there.
 - [ ] Remake flowchart as sequence diagram.
+- [x] How to handle "empty" exam.py/functions the students haven't started on?
+- [x] Asserts where arguments are on multiple lines destroy the regex for finding assert type. The function call is omitted from error lines. One fix is to overload all assert mehtods in the TestCase class. And save arguments and assert type from there.
 
 
 
