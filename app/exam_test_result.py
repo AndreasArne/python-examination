@@ -19,20 +19,14 @@ CONTACT_ERROR_MSG = (
     "\n*********" + Style.RESET_ALL
 )
 
+
+
 class ExamTestResult(TextTestResult):
     """
     Implementation of TextTestResult to use MyTestResult to create custom output for tests.
     """
     ASSIGNMENT_REGEX = r".*Test(Assignment[0-9]+)\)"
     TEST_NAME_REGEX = r"test_[a-z]_(\w+) "
-    ASSERT_TYPE_REGEX = r"self.(assert[A-Z][A-z]+)\("
-    ASSERT_ANSWERS_REGEX = {
-        "assertTrue": "(.+) is not (.+)",
-        "assertFalse": "(.+) is not (.+)",
-        "assertEqual": r"^(.+) != (.+)",
-        "Lists differ": r"Lists differ: (\[.*\]) != (\[.*\])\n",
-        "assertIn": r"(.*) not found in (.*)",
-    }
 
 
 
@@ -67,7 +61,6 @@ class ExamTestResult(TextTestResult):
         # here starts the interesting code, which we changed. If test failed
         # because of wrong answer from student
         if exctype is test.failureException:
-            # student_ans, correct_ans = self.extract_answers_from_different_assert_msgs(value, msgLines)
             function_args = self.get_function_args(test)
             msgLines = self.create_fail_msg(
                 function_args,
@@ -106,37 +99,6 @@ class ExamTestResult(TextTestResult):
 
 
 
-    def extract_answers_from_different_assert_msgs(self, value, msgLines):
-        """
-        Try to extract the students answer and the correct answer from fail error.
-        """
-        try:
-            if "AssertionError: Lists differ:" in msgLines[2]:
-                # assertEqual with lists need special pattern
-                list_diff_group = re.search(self.ASSERT_ANSWERS_REGEX["Lists differ"], msgLines[2])
-                student_ans = list_diff_group.group(1)
-                correct_ans = list_diff_group.group(2)
-            elif "AssertionError: unexpectedly None" in msgLines[2]:
-                # assertIsNotNone
-                student_ans = "None"
-                correct_ans = "Vad som helst förutom None."
-            elif "' not found in '" in msgLines[2]:
-                # for assertIn, it has switch which group has stud_ans and which has correct_ans
-                diff_group = re.search(self.ASSERT_ANSWERS_REGEX["assertIn"], value.args[0].split("\n")[0])
-                student_ans = diff_group.group(2)
-                correct_ans = diff_group.group(1)
-            else:
-                assert_type = re.search(self.ASSERT_TYPE_REGEX, msgLines[1]).group(1)
-                diff_group = re.search(self.ASSERT_ANSWERS_REGEX[assert_type], value.args[0].split("\n")[0])
-                student_ans = diff_group.group(1)
-                correct_ans = diff_group.group(2)
-        except KeyError as e:
-            raise type(e)(str(e) + msgLines[2])\
-                .with_traceback(sys.exc_info()[2])
-        return student_ans, correct_ans
-
-
-
     def create_fail_msg(self, function_args, test):
         """
         Create formated fail msg using docstring from test function
@@ -146,8 +108,8 @@ class ExamTestResult(TextTestResult):
             raise ValueError("Missing docstring. Used for explaining the test when Something is wrong.")
         docstring = re.sub("\n +", "\n", test._testMethodDoc)
         msg_list = docstring.split("\n")
-        msg_list[-3] = Back.BLACK + Fore.GREEN + Style.BRIGHT + msg_list[-3] + Style.RESET_ALL
-        msg_list[-2] = Back.BLACK + Fore.RED + Style.BRIGHT + msg_list[-2] + Style.RESET_ALL
+        msg_list[-5] = Back.BLACK + Fore.GREEN + Style.BRIGHT + msg_list[-5] + Style.RESET_ALL
+        msg_list[-3] = Back.BLACK + Fore.RED + Style.BRIGHT + msg_list[-3] + Style.RESET_ALL
         msg = "\n".join(msg_list)
         # print(msg_list[-1])
         try:
@@ -207,7 +169,7 @@ class ExamTestResult(TextTestResult):
         try:
             test.result_assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
         except AttributeError:
-            raise ValueError("Class name for TestCase should the follow structure 'TestAssignment<number>'")
+            raise ValueError("Class name for TestCase should follow the structure 'TestAssignment<number>'")
 
         try:
             test.result_test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
