@@ -1,12 +1,36 @@
 """
 Overriding TestCase for exam tool.
 """
+import re
 import unittest
 
 class ExamTestCase(unittest.TestCase):
     """
     Override methods to help customize outputs of testcases.
     """
+
+    ASSIGNMENT_REGEX = r".*Test(Assignment[0-9]+)\)"
+    TEST_NAME_REGEX = r"test_[a-z]_(\w+) "
+
+
+    def set_test_name_and_assignment(self):
+        """
+        Extract Assignment from TestCase name.
+        Extract test name from test function name.
+        Format testname and assignment text and assign to test object.
+        """
+        test_string = str(self)
+        try:
+            self.result_assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
+        except AttributeError as e:
+            raise ValueError("Class name for TestCase should follow the structure 'TestAssignment<number>'") from e
+
+        try:
+            self.result_test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
+        except AttributeError as e:
+            raise ValueError("Test function name should follow the structure 'test_<letter>_<name>'") from e
+
+
 
     def set_answers(self, student_answer, correct_answer):
         """

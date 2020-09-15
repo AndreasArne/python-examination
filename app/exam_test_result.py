@@ -3,21 +3,15 @@ Custom unittest.TextTestResult class. Is used to customize the output from unitt
 """
 import sys
 import traceback
-import re
 from unittest.result import failfast
 from unittest.runner import TextTestResult
 from colorama import init, Fore, Back, Style
+import helper_functions as hf
 
 init(strip=False)
 
 STDOUT_LINE = '\nStdout:\n%s'
 STDERR_LINE = '\nStderr:\n%s'
-CONTACT_ERROR_MSG = (
-    Fore.RED + "\n*********\n"
-    "Assert method is not ovveriden!\n"
-    "Is needed to set answers."
-    "\n*********" + Style.RESET_ALL
-)
 
 
 
@@ -25,10 +19,6 @@ class ExamTestResult(TextTestResult):
     """
     Implementation of TextTestResult to use MyTestResult to create custom output for tests.
     """
-    ASSIGNMENT_REGEX = r".*Test(Assignment[0-9]+)\)"
-    TEST_NAME_REGEX = r"test_[a-z]_(\w+) "
-
-
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -61,8 +51,8 @@ class ExamTestResult(TextTestResult):
         # here starts the interesting code, which we changed. If test failed
         # because of wrong answer from student
         if exctype is test.failureException:
-            function_args = self.get_function_args(test)
-            msgLines = self.create_fail_msg(
+            function_args = hf.get_function_args(test)
+            msgLines = hf.create_fail_msg(
                 function_args,
                 test
             )
@@ -81,47 +71,6 @@ class ExamTestResult(TextTestResult):
                     error += '\n'
                 msgLines.append(STDERR_LINE % error)
         return ''.join(msgLines)
-
-
-
-    def get_function_args(self, test):
-        """
-        Use repr() on arguments used for the students defined function.
-        If no arguments is used, return None.
-        """
-        try:
-            return repr(getattr(test, "_argument"))
-        except AttributeError:
-            try:
-                return ", ".join([repr(arg) for arg in getattr(test, "_mult_arguments")])
-            except AttributeError:
-                return None
-
-
-
-    def create_fail_msg(self, function_args, test):
-        """
-        Create formated fail msg using docstring from test function
-        """
-        #pylint: disable=protected-access
-        if test._testMethodDoc is None:
-            raise ValueError("Missing docstring. Used for explaining the test when Something is wrong.")
-        docstring = re.sub("\n +", "\n", test._testMethodDoc)
-        msg_list = docstring.split("\n")
-        msg_list[-5] = Back.BLACK + Fore.GREEN + Style.BRIGHT + msg_list[-5] + Style.RESET_ALL
-        msg_list[-3] = Back.BLACK + Fore.RED + Style.BRIGHT + msg_list[-3] + Style.RESET_ALL
-        msg = "\n".join(msg_list)
-        # print(msg_list[-1])
-        try:
-            return [msg.format(
-                arguments=function_args,
-                correct=test.correct_answer,
-                student=test.student_answer
-            )]
-        except AttributeError as e:
-            raise type(e)(str(e) + CONTACT_ERROR_MSG)\
-            .with_traceback(sys.exc_info()[2])
-        #pylint: enable=protected-access
 
 
 
@@ -159,25 +108,6 @@ class ExamTestResult(TextTestResult):
 
 
 
-    def set_test_name_and_assignment(self, test):
-        """
-        Extract Assignment from TestCase name.
-        Extract test name from test function name.
-        Format testname and assignment text and assign to test object.
-        """
-        test_string = str(test)
-        try:
-            test.result_assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
-        except AttributeError:
-            raise ValueError("Class name for TestCase should follow the structure 'TestAssignment<number>'")
-
-        try:
-            test.result_test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
-        except AttributeError:
-            raise ValueError("Test function name should follow the structure 'test_<letter>_<name>'")
-
-
-
     def startTestBase(self):
         """
         Base version of startTest, from unittest.TestResult.
@@ -195,7 +125,7 @@ class ExamTestResult(TextTestResult):
         Group output by Assignment.
         Counts number of tests run for each assignment.
         """
-        self.set_test_name_and_assignment(test)
+        test.set_test_name_and_assignment()
         if not test.result_assignment in self.assignments_results:
             self.assignments_results[test.result_assignment] = {
                 "started": 0,
@@ -218,28 +148,12 @@ class ExamTestResult(TextTestResult):
 
 
 
-    def error_is_missing_assignment_function(self, error):
-        """
-        Returns True if the error is a missing assignment function in the
-        students code.
-        """
-        _, value, tb = error
-        if "module 'exam' has no attribute" in str(value):
-            while tb.tb_next:
-                tb = tb.tb_next
-            filename = tb.tb_frame.f_code.co_filename.split("/")[-1]
-            if filename == "test_exam.py":
-                return True
-        return False
-
-
-
     @failfast
     def addError(self, test, err):
         """Called when an error has occurred. 'err' is a tuple of values as
         returned by sys.exc_info().
         """
-        if self.error_is_missing_assignment_function(err):
+        if hf.error_is_missing_assignment_function(err):
             self.stream.writeln("Assignment Not Implemented")
             return
         self.errors.append((test, self._exc_info_to_string(err, test)))

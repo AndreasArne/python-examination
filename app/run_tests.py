@@ -3,9 +3,8 @@ Custom test collecter, builder and runner used for examining students.
 """
 import io
 import unittest
-import sys
 from collections import OrderedDict
-from colorama import init, Fore, Back, Style
+from colorama import init, Fore, Style
 import test_exam
 from exam_test_result import ExamTestResult
 
@@ -57,15 +56,13 @@ def run_testcases(suite):
     """
     buf = io.StringIO()
     runner = unittest.TextTestRunner(resultclass=ExamTestResult, verbosity=2, stream=buf)
+    # i think this is used to see print()'s
     # runner = unittest.TextTestRunner(resultclass=ExamTestResult, verbosity=2)
 
     try:
         assignments_results = runner.run(suite).assignments_results
     except Exception as e:
-        # Something went wrong in our code
-        raise type(e)(str(e) + CONTACT_ERROR_MSG)\
-            .with_traceback(sys.exc_info()[2])
-
+        raise UserWarning(CONTACT_ERROR_MSG) from e
     return buf.getvalue(), assignments_results
 
 
