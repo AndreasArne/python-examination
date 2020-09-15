@@ -74,8 +74,10 @@ class TestAssignment1(exam_textcase.ExamTestCase):
     def test_d_find_replace_no_match(self):
         """
         Testar att byta ut ord som inte finns, för att kolla att manifesto.txt kopieras till output.txt.
-        Förväntar att följande finns i output: {correct}
-        Letade i följande:  {student}
+        Förväntar att följande finns i output:
+        {correct}
+        Fick följande:
+        {student}
         """
         inp = ["in", "ko"]
         with patch('builtins.input', side_effect=inp):
@@ -85,7 +87,7 @@ class TestAssignment1(exam_textcase.ExamTestCase):
             with open("manifesto.txt") as fh:
                 manifesto = fh.readlines()
             for index, line in enumerate(output):
-                self.assertEqual(line+"-", manifesto[index])
+                self.assertEqual(line, manifesto[index])
 
 class TestAssignment2(exam_textcase.ExamTestCase):
     """
@@ -95,8 +97,10 @@ class TestAssignment2(exam_textcase.ExamTestCase):
         """
         Räknar djur med olika mängd.
         Följande användes som argument till funktionen: {arguments}
-        Testet förväntar sig att följande sträng returneras: {correct}
-        Följande sträng returnerades istället:  {student}
+        Testet förväntar sig att följande sträng returneras:
+        {correct}
+        Följande sträng returnerades istället:
+        {student}
         """
         self._argument = {
             "ko": ["Mamma Mu", "Kalvin"],
@@ -120,8 +124,10 @@ class TestAssignment3(exam_textcase.ExamTestCase):
         """
         Test Testar olika korrekta isbn nummer.
         Följande användes som argument till funktionen: {arguments}
-        Testet förväntar sig att följande returneras: True
-        Följande värde returnerades istället:  {student}
+        Testet förväntar sig att följande returneras:
+        {correct}
+        Följande värde returnerades istället:
+        {student}
         """
         self._argument = "9781861972712"
         self.assertTrue(exam.validate_isbn(self._argument))
