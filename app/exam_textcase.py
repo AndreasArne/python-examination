@@ -1,31 +1,56 @@
 """
-Test Case implementaion for exam tool.
+Overriding TestCase for exam tool.
 """
 import unittest
-from unittest.util import safe_repr
 
 class ExamTestCase(unittest.TestCase):
     """
-    Override method to customize outputs of testcases.
+    Override methods to help customize outputs of testcases.
     """
 
-    def set_answer(self, student_answer, correct_answer):
+    def set_answers(self, student_answer, correct_answer):
         """
         Set students answer and correct answer as members.
         """
-        self.student_answer = student_answer
-        self.correct_answer = correct_answer
+        self.student_answer = repr(student_answer)
+        self.correct_answer = repr(correct_answer)
+
+
+
+    def assertEqual(self, first, second, msg=None):
+        """
+        Check if first is equal to second. Save correct and student answer as to variables.
+        First comes from student
+        """
+        self.set_answers(first, second)
+        super().assertEqual(first, second, msg)
 
 
 
     def assertIn(self, member, container, msg=None):
-        """Check if value in container. Container comes from student"""
-        self.set_answer(container, member)
+        """
+        Check if value in container.  Save correct and student answer as to variables.
+        Container comes from student
+        """
+        self.set_answers(container, member)
         super().assertIn(member, container, msg)
 
 
 
+    def assertFalse(self, expr, msg=None):
+        """
+        Check that the expression is False.
+        Save correct and student answer as to variables.
+        """
+        self.set_answers(expr, False)
+        super().assertFalse(expr, msg)
+
+
+
     def assertTrue(self, expr, msg=None):
-        """Check that the expression is true."""
-        self.set_answer(expr, True)
+        """
+        Check that the expression is true.
+        Save correct and student answer as to variables.
+        """
+        self.set_answers(expr, True)
         super().assertTrue(expr, msg)
