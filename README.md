@@ -52,9 +52,9 @@ class TestAssignment3(unittest.TestCase):
 
 # TODO:
 - [ ] Try `_mult_arguments`.
-- [ ] Don't show same error, from different tests for same error.
 - [ ] Write tests
-    - Add test in test_exam_text_result for the added functionality.
+    - [ ] Fix import, now we cant run from correct.bash and unittest with same import of files.
+- [ ] Don't show same error, from different tests for same error.
 - [ ] Test it for multiple python versions (Tox?)
 - [ ] Package so students also get colorama module
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
