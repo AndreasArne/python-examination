@@ -31,7 +31,6 @@ class ExamTestCase(unittest.TestCase):
         Format testname and assignment text and assign to test object.
         """
         test_string = str(self)
-        print(test_string)
         try:
             self.assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
         except AttributeError as e:
