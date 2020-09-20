@@ -6,7 +6,7 @@ import unittest
 from collections import OrderedDict
 from colorama import init, Fore, Style
 import test_exam
-from exam_test_result import ExamTestResult
+from app.exam_test_result import ExamTestResult
 
 init(strip=False)
 

@@ -1,10 +1,7 @@
 # Correct.bash script used for autocorrecting programming exams.
 
 # only for testing, solve differently for live
-cp -f ../../../app/exam_test_result.py .
-cp -f ../../../app/run_tests.py .
-cp -f ../../../app/exam_textcase.py .
-cp -f ../../../app/helper_functions.py .
+cp -fr ../../../app .
 cp -rf ../../../.venv/lib/python3.7/site-packages/colorama .
 
 
@@ -31,7 +28,7 @@ cp "$PROJ_PATH/$COPY_FILE" "$DBWEBB_PATH"
 
 
 
-test_status="$(cd "$DBWEBB_PATH" && ${py} run_tests.py &> "$LOG_PATH")"
+test_status="$(cd "$DBWEBB_PATH" && ${py} -m app.run_tests &> "$LOG_PATH")"
 
 
 
@@ -66,12 +63,8 @@ clean_up () {
     rm "$DBWEBB_PATH/$OUTPUT_FILE"
 
     # REMOVE!!!!!!!!!!!!!!!!!!!!!!!
-    rm exam_test_result.py
-    rm run_tests.py
-    rm exam_textcase.py
-    rm helper_functions.py
-    
     rm -rf colorama
+    rm -rf app
 }
 
 

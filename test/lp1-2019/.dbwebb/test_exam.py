@@ -7,8 +7,8 @@ from unittest import TextTestRunner
 from unittest.mock import patch
 import os
 import sys
-import exam_textcase
-from exam_test_result import ExamTestResult
+from app.exam_textcase import ExamTestCase
+from app.exam_test_result import ExamTestResult
 
 
 proj_path = os.path.dirname(os.path.realpath(__file__ + "/.."))
@@ -19,7 +19,7 @@ import exam
 #pylint: enable=wrong-import-position
 #pylint: disable=attribute-defined-outside-init, line-too-long
 # class TestAssignment1(unittest.TestCase):
-class TestAssignment1(exam_textcase.ExamTestCase):
+class TestAssignment1(ExamTestCase):
     """
     Each assignment has 1 testcase with multiple asserts.
 
@@ -89,7 +89,7 @@ class TestAssignment1(exam_textcase.ExamTestCase):
             for index, line in enumerate(output):
                 self.assertEqual(line, manifesto[index])
 
-class TestAssignment2(exam_textcase.ExamTestCase):
+class TestAssignment2(ExamTestCase):
     """
     Assignment 2.
     """
@@ -116,7 +116,7 @@ class TestAssignment2(exam_textcase.ExamTestCase):
         }
         self.assertEqual(exam.count_animals(self._argument), "1 gris: Babe\n7 höna: Aapo, Eero, Juhani, Lauri, Simeoni, Timo, Tuomas\n2 ko: Kalvin, Mamma Mu\n1 tupp: Jussi")
 
-class TestAssignment3(exam_textcase.ExamTestCase):
+class TestAssignment3(ExamTestCase):
     """
     Each assignment has 3 testcase with multiple asserts.
     """
@@ -161,7 +161,7 @@ class TestAssignment3(exam_textcase.ExamTestCase):
         self.assertFalse(exam.validate_isbn(self._argument))
 
 
-class TestAssignment4(exam_textcase.ExamTestCase):
+class TestAssignment4(ExamTestCase):
     """
     Each assignment has 4 testcase with multiple asserts.
     """
@@ -201,7 +201,7 @@ class TestAssignment4(exam_textcase.ExamTestCase):
         self.assertEqual(exam.decide_winners(self._argument), ['player2', 'player1', 'player2'])
 
 
-class TestAssignment5(exam_textcase.ExamTestCase):
+class TestAssignment5(ExamTestCase):
     """
     Each assignment has 5 testcase with multiple asserts.
     """
