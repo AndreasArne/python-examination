@@ -6,7 +6,8 @@ import traceback
 from unittest.result import failfast
 from unittest.runner import TextTestResult
 from colorama import init, Fore, Back, Style
-import helper_functions as hf
+from app import helper_functions as hf
+# import helper_functions as hf
 
 init(strip=False)
 
@@ -94,14 +95,14 @@ class ExamTestResult(TextTestResult):
         self.stream.writeln("{} section: {}".format(flavour.upper(), explenation))
         self.stream.writeln(self.separator1)
         for test, err in errors:
-            if not test.result_assignment in printed_assignments:
+            if not test.assignment in printed_assignments:
                 self.stream.writeln("{}{}s for {}{}".format(
                     Back.MAGENTA + Fore.WHITE,
                     flavour,
-                    test.result_assignment,
+                    test.assignment,
                     Style.RESET_ALL
                 ))
-                printed_assignments.append(test.result_assignment)
+                printed_assignments.append(test.assignment)
             for line in err.strip().split("\n"):
                 self.stream.writeln("    |" + line)
             self.stream.writeln("    "  + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
@@ -125,15 +126,14 @@ class ExamTestResult(TextTestResult):
         Group output by Assignment.
         Counts number of tests run for each assignment.
         """
-        test.set_test_name_and_assignment()
-        if not test.result_assignment in self.assignments_results:
-            self.assignments_results[test.result_assignment] = {
+        if not test.assignment in self.assignments_results:
+            self.assignments_results[test.assignment] = {
                 "started": 0,
                 "success": 0,
             }
-            self.stream.write(test.result_assignment + "\n")
+            self.stream.write(test.assignment + "\n")
 
-        self.assignments_results[test.result_assignment]["started"] += 1
+        self.assignments_results[test.assignment]["started"] += 1
 
         self.startTestBase()
 
@@ -141,8 +141,8 @@ class ExamTestResult(TextTestResult):
         TEST_INDENT = 4
 
         indent = " " * TEST_INDENT
-        whitespace = "." * (MAX_TEST_FUNCNAME_LEN - len(test.result_test_name))
-        self.stream.write(indent + test.result_test_name + whitespace)
+        whitespace = "." * (MAX_TEST_FUNCNAME_LEN - len(test.test_name))
+        self.stream.write(indent + test.test_name + whitespace)
         self.stream.write("... ")
         self.stream.flush()
 
@@ -167,4 +167,4 @@ class ExamTestResult(TextTestResult):
         Counts number of successfull run test for each assignment
         """
         super().addSuccess(test)
-        self.assignments_results[test.result_assignment]["success"] += 1
+        self.assignments_results[test.assignment]["success"] += 1

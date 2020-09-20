@@ -8,7 +8,7 @@ from app.exam_textcase import ExamTestCase
 
 
 
-class Test_ExamTestCase(ExamTestCase):
+class Test_ExamTestCase(unittest.TestCase):
 
     def test_set_test_name_and_assignment(self):
         """
@@ -20,9 +20,9 @@ class Test_ExamTestCase(ExamTestCase):
                 pass
         
         test = TestAssignment1('test_a_foo')
-        test.set_test_name_and_assignment()
-        self.assertEqual(test.result_assignment, "Assignment1")
-        self.assertEqual(test.result_test_name, "foo")
+        # test._set_test_name_and_assignment()
+        self.assertEqual(test.assignment, "Assignment1")
+        self.assertEqual(test.test_name, "foo")
 
 
 
@@ -35,13 +35,8 @@ class Test_ExamTestCase(ExamTestCase):
             def test_a(self):
                 pass
 
-        test = TestAssignment1('test_a')
         with self.assertRaises(ValueError) as cxt:
-            test.set_test_name_and_assignment()
-
-        self.assertEqual(test.result_assignment, "Assignment1")
-        with self.assertRaises(AttributeError) as cxt:
-            self.assertEqual(test.result_test_name, "foo")
+            test = TestAssignment1('test_a')
 
 
 
@@ -54,13 +49,8 @@ class Test_ExamTestCase(ExamTestCase):
             def test_foo(self):
                 pass
 
-        test = TestAssignment1('test_foo')
         with self.assertRaises(ValueError) as cxt:
-            test.set_test_name_and_assignment()
-
-        self.assertEqual(test.result_assignment, "Assignment1")
-        with self.assertRaises(AttributeError) as cxt:
-            self.assertEqual(test.result_test_name, "foo")
+            test = TestAssignment1('test_foo')
 
 
 
@@ -73,11 +63,8 @@ class Test_ExamTestCase(ExamTestCase):
             def test_a_foo(self):
                 pass
 
-        test = Testassignment1('test_a_foo')
         with self.assertRaises(ValueError) as cxt:
-            test.set_test_name_and_assignment()
-        with self.assertRaises(AttributeError) as cxt:
-            self.assertEqual(test.result_test_name, "foo")
+            test = Testassignment1('test_a_foo')
 
 
 
@@ -90,11 +77,8 @@ class Test_ExamTestCase(ExamTestCase):
             def test_a_foo(self):
                 pass
 
-        test = TestAssignment('test_a_foo')
         with self.assertRaises(ValueError) as cxt:
-            test.set_test_name_and_assignment()
-        with self.assertRaises(AttributeError) as cxt:
-            self.assertEqual(test.result_test_name, "foo")
+            test = TestAssignment('test_a_foo')
 
 
 

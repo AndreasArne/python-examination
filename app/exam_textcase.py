@@ -13,20 +13,32 @@ class ExamTestCase(unittest.TestCase):
     TEST_NAME_REGEX = r"test_[a-z]_(\w+) "
 
 
-    def set_test_name_and_assignment(self):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.assignment = ""
+        self.test_name = ""
+        self.student_answer = ""
+        self.correct_answer = ""
+        self._set_test_name_and_assignment()
+
+
+
+    def _set_test_name_and_assignment(self):
         """
         Extract Assignment from TestCase name.
         Extract test name from test function name.
         Format testname and assignment text and assign to test object.
         """
         test_string = str(self)
+        print(test_string)
         try:
-            self.result_assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
+            self.assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
         except AttributeError as e:
             raise ValueError("Class name for TestCase should follow the structure 'TestAssignment<number>'") from e
 
         try:
-            self.result_test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
+            self.test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
         except AttributeError as e:
             raise ValueError("Test function name should follow the structure 'test_<letter>_<name>'") from e
 
