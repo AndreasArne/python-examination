@@ -53,17 +53,18 @@ class TestAssignment3(unittest.TestCase):
 # TODO:
 - [ ] Try `_mult_arguments`.
 - [ ] Write tests
-    - [ ] Fix import, now we cant run from correct.bash and unittest with same import of files.
+- [ ] Add CircleCi
 - [ ] Don't show same error, from different tests for same error.
-- [ ] Test it for multiple python versions (Tox?)
 - [ ] Package so students also get colorama module
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
     - Identify errors where this happens.
 - [ ] Add help text for common errors, such as too many inputs when mocking.
 - [ ] Remake flowchart as sequence diagram.
+- [x] Test it for multiple python versions (Tox?)
 - [X] Create custom exception for contacting responsible.
 - [x] How to handle "empty" exam.py/functions the students haven't started on?
 - [x] Asserts where arguments are on multiple lines destroy the regex for finding assert type. The function call is omitted from error lines. One fix is to overload all assert mehtods in the TestCase class. And save arguments and assert type from there.
+- [x] Fix import structure, now we cant run from correct.bash and unittest with same import of files.
 
 
 
