@@ -56,6 +56,7 @@ class TestAssignment3(unittest.TestCase):
 - [ ] Add CircleCi
 - [ ] Don't show same error, from different tests for same error.
 - [ ] Package so students also get colorama module
+    - Install colorama on stud servern? Correct is always run on studeserver. Like validate and inspect?
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
     - Identify errors where this happens.
 - [ ] Add help text for common errors, such as too many inputs when mocking.
