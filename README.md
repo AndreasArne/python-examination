@@ -11,20 +11,39 @@ This repository contain code to customize the output from the unittest module.  
 `test/lp1-2019/` - Contains a running example of the exam_test_result.py code. Stand in `.dbwebb` folder and run with `bash correct.bash`.
 
 
+
+
 Using it, create your tests in a file called test_exam.py. Create one TestCase class for each assignment. Classes name should match `.*Test(Assignment[0-9]+)`.
 Each class can contain many test functions. Each function need a docstring.
-The docstring should start with explaining what is tested. Then there are three possible options to add, each on its own line and order is important.
-If the student function is called with and argument it can be added to the fail output with `{arguments}` in the on a line in docstring.
-On next line we can add `{correct}` to show the expected answer.
-And on last line should be `{student}` to show what was returned from students function.
 
-Example below.
+Use the docstring to explain what is tested. The docstring is used to display info to the student when their answer is wrong. The output of docstring can be enhanced and display what was used as argument, `{argument}`, to the students function, what the function returned, `{student}`, and what the correct answer is, `{correct}`. It is also possible to inject colors in the output.
+
+By default the line above `{correct}` is colored green and the line above `{student}` is colored red. Manual colors can be injected with `"|<color letter>|"` and reset value `"|/RE|"`. The reset color removes all color options up to that point. The module [colorama](https://pypi.org/project/colorama/) is used for coloring.
+
+Available colors and letters are:
+
+```
+"G": Fore.GREEN,
+"B": Fore.BLACK,
+"R": Fore.RED,
+"G": Fore.GREEN,
+"Y": Fore.YELLOW,
+"BL": Fore.BLUE,
+"M": Fore.MAGENTA,
+"C": Fore.CYAN,
+"W": Fore.WHITE,
+"RE": Fore.RESET,
+```
+
+Example:
 ```
 """
-Testar med tom lista
+|Y|Testar med tom lista|/RE|
 Följande användes som argument till funktionen: {arguments}
-Testet förväntar sig att följande lista returneras: {correct}
-Följande lista returnerades istället:  {student}
+Testet förväntar sig att följande lista returneras:
+{correct}
+Följande lista returnerades istället:
+{student}
 """
 ```
 
@@ -33,13 +52,13 @@ In test functions where functions that are tested need arguments, before asserti
 Example of a TestCase for one assignment:
 
 ```
-class TestAssignment3(unittest.TestCase):
+class TestAssignment3(ExamTestCase):
     """
     Each assignment has 3 testcase with multiple asserts.
     """
     def test_a_valid_isbn(self):
         """
-        Test Testar olika korrekta isbn nummer.
+        |M|Test Testar olika korrekta isbn nummer.|/RE|
         Följande användes som argument till funktionen: {arguments}
         Testet förväntar sig att följande returneras: True
         Följande värde returnerades istället:  {student}
@@ -56,7 +75,7 @@ class TestAssignment3(unittest.TestCase):
 - [ ] Add CircleCi
 - [ ] Don't show same error, from different tests for same error.
 - [ ] Package so students also get colorama module
-    - Install colorama on stud servern? Correct is always run on studeserver. Like validate and inspect?
+    - Install colorama on stud servern? Correct is always run on studeserver. Like validate and inspect? Or just have coloroama package in .dbwebb folder
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
     - Identify errors where this happens.
 - [ ] Add help text for common errors, such as too many inputs when mocking.

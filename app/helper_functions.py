@@ -7,6 +7,73 @@ from colorama import init, Fore, Back, Style
 init(strip=False)
 
 
+COLOR_REGEX_START = r"\|(\w)\|"
+COLOR_REGEX_STOP = r"\|/(\w)\|"
+COLORS = {
+    "G": Fore.GREEN,
+    "B": Fore.BLACK,
+    "R": Fore.RED,
+    "G": Fore.GREEN,
+    "Y": Fore.YELLOW,
+    "BL": Fore.BLUE,
+    "M": Fore.MAGENTA,
+    "C": Fore.CYAN,
+    "W": Fore.WHITE,
+    "RE": Fore.RESET,
+}
+
+
+
+def get_color_indexes(msg_list):
+    """
+    Return index of lines with {correct} (green) and {student} (red).
+    """
+    indexes = {}
+    for i, line in enumerate(msg_list):
+        if "{correct}" in line:
+            indexes["green"] = i - 1
+        elif "{student}" in line:
+            indexes["red"] = i - 1
+
+    return indexes
+
+
+
+def inject_answer_colors(msg_list):
+    """
+    Insert red and green color if "correct" and "student" is present in doscring.
+    """
+    indexes = get_color_indexes(msg_list)
+    if "green" in indexes:
+        i = indexes["green"]
+        msg_list[i] = (
+            Back.BLACK + Fore.GREEN + Style.BRIGHT
+            + msg_list[i]
+            + Style.RESET_ALL
+        )
+    if "red" in indexes:
+        i = indexes["red"]
+        msg_list[i] = (
+            Back.BLACK + Fore.RED + Style.BRIGHT
+            + msg_list[i]
+            + Style.RESET_ALL
+        )
+
+    return msg_list
+
+
+
+def inject_regex_colors(msg):
+    """
+    Use regex to find |<color letter>| and replace with colors.
+    """
+    color_start = re.findall(COLOR_REGEX_START, msg)
+    for color in color_start:
+        msg = msg.replace(f"|{color}|", COLORS[color])
+    msg = msg.replace("|/RE|", COLORS["RE"])
+    return msg
+
+
 
 def create_fail_msg(function_args, test):
     """
@@ -19,9 +86,9 @@ def create_fail_msg(function_args, test):
     docstring = re.sub("\n +", "\n", test._testMethodDoc)
 
     msg_list = docstring.split("\n")
-    msg_list[-5] = Back.BLACK + Fore.GREEN + Style.BRIGHT + msg_list[-5] + Style.RESET_ALL
-    msg_list[-3] = Back.BLACK + Fore.RED + Style.BRIGHT + msg_list[-3] + Style.RESET_ALL
+    inject_answer_colors(msg_list)
     msg = "\n".join(msg_list)
+    msg = inject_regex_colors(msg)
 
     return [msg.format(
         arguments=function_args,
