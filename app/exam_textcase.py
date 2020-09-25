@@ -3,6 +3,7 @@ Overriding TestCase for exam tool.
 """
 import re
 import unittest
+from app import helper_functions as hf
 
 class ExamTestCase(unittest.TestCase):
     """
@@ -43,12 +44,15 @@ class ExamTestCase(unittest.TestCase):
 
 
 
-    def set_answers(self, student_answer, correct_answer):
+    def set_answers(self, student_answer, correct_answer, options=None):
         """
         Set students answer and correct answer as members.
         """
         self.student_answer = repr(student_answer)
         self.correct_answer = repr(correct_answer)
+        if options is not None:
+            if "norepr" in options:
+                self.student_answer = hf.clean_str(student_answer)
 
 
 
@@ -67,7 +71,7 @@ class ExamTestCase(unittest.TestCase):
         Check if value in container.  Save correct and student answer as to variables.
         Container comes from student
         """
-        self.set_answers(container, member)
+        self.set_answers(container, member, msg)
         super().assertIn(member, container, msg)
 
 

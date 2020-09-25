@@ -23,6 +23,9 @@ COLORS = {
 }
 
 
+def clean_str(string):
+    return string.replace(chr(27) + "[2J" + chr(27) + "[;H", "")
+
 
 def get_color_indexes(msg_list):
     """

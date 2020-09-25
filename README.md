@@ -69,16 +69,22 @@ class TestAssignment3(ExamTestCase):
         self.assertTrue(exam.validate_isbn(self._argument))
 ```
 
+
+
+It is possible to add `msg` string to assert-functions with options about student and correct answer to assignments. At the moment it supports `"norepr"`. If you don't want repr() to be run on the students respons.
+
+
+
 # TODO:
 - [ ] Try `_mult_arguments`.
 - [ ] Write tests
 - [ ] Add CircleCi
-- [ ] Don't show same error, from different tests for same error.
 - [ ] Package so students also get colorama module
     - Install colorama on stud servern? Correct is always run on studeserver. Like validate and inspect? Or just have coloroama package in .dbwebb folder
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
     - Identify errors where this happens.
 - [ ] Add help text for common errors, such as too many inputs when mocking.
+- [ ] Don't show same error, from different tests for same error.
 - [ ] Remake flowchart as sequence diagram.
 - [x] Test it for multiple python versions (Tox?)
 - [X] Create custom exception for contacting responsible.
