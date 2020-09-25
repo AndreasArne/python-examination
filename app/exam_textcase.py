@@ -52,8 +52,10 @@ class ExamTestCase(unittest.TestCase):
         self.correct_answer = repr(correct_answer)
         if options is not None:
             if "norepr" in options:
-                self.student_answer = hf.clean_str(student_answer)
-
+                if isinstance(student_answer, str):
+                    self.student_answer = hf.clean_str(student_answer)
+                else:
+                    self.student_answer = str(student_answer)
 
 
     def assertEqual(self, first, second, msg=None):
