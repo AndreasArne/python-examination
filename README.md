@@ -76,17 +76,17 @@ It is possible to set member `norepr` to True on a testcase. If you don't want `
 
 
 # TODO:
-- [ ] How will it look analyzer look when all commands are not yet implemented.
+- [ ] Change regex for Testcase class name so can have more than "assigment X".
 - [ ] Try `_mult_arguments`.
 - [ ] Write tests
 - [ ] Add CircleCi
 - [ ] Package so students also get colorama module
     - Install colorama on stud servern? Correct is always run on studeserver. Like validate and inspect? Or just have coloroama package in .dbwebb folder
+- [ ] Add help text for common errors, such as too many inputs when mocking.
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
     - Identify errors where this happens.
-- [ ] Add help text for common errors, such as too many inputs when mocking.
-- [ ] Don't show same error, from different tests for same error.
 - [ ] Remake flowchart as sequence diagram.
+- [x] Don't show same error, from different tests for same error.
 - [x] Test it for multiple python versions (Tox?)
 - [X] Create custom exception for contacting responsible.
 - [x] How to handle "empty" exam.py/functions the students haven't started on?

@@ -111,5 +111,5 @@ output_log
 
 
 # Clean up
-# clean_up
+clean_up
 exit $EXIT_STATUS

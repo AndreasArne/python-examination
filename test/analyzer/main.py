@@ -99,16 +99,16 @@ def main():
 
         elif command == "word_frequency":
             analyzer.word_frequency(TEXT)
-
+        
         elif command == "letter_frequency":
             analyzer.letter_frequency(TEXT)
 
         elif command == "all":
             analyzer.analyze_all(TEXT)
         if command == "q":
-            marvin.quitIt()
+            # marvin.quitIt()
             return
-        input("Enter to continue...")
+        # input("Enter to continue...")
         continue
 
 
