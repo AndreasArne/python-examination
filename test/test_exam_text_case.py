@@ -48,7 +48,8 @@ class Test_ExamTestCase(unittest.TestCase):
         Test that special chars are not escaped
         """
         test = self.setup_empty_examtextcase()
-        test.set_answers("\[ 32 m a string\n", "another string", "norepr")
+        test.norepr = True
+        test.set_answers("\[ 32 m a string\n", "another string")
         self.assertEqual(test.student_answer, "\\[ 32 m a string\n")
         self.assertEqual(test.correct_answer, "'another string'")
 
@@ -59,10 +60,10 @@ class Test_ExamTestCase(unittest.TestCase):
         Answers are lists and with no options
         """
         test = self.setup_empty_examtextcase()
+        test.norepr = True
         test.set_answers(
             ["a string", 1],
             ["another string", 3.2, True],
-            "norepr"
         )
         self.assertEqual(test.student_answer, "['a string', 1]")
         self.assertEqual(test.correct_answer, "['another string', 3.2, True]")
@@ -75,10 +76,10 @@ class Test_ExamTestCase(unittest.TestCase):
         Called with option norepr and that clean works
         """
         test = self.setup_empty_examtextcase()
+        test.norepr = True
         test.set_answers(
             chr(27) + "[2J" + chr(27) + "[;H" + "a string",
-            "another string",
-            "norepr"
+            "another string"
         )
         self.assertEqual(test.student_answer, "a string")
         self.assertEqual(test.correct_answer, "'another string'")
