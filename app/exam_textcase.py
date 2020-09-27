@@ -21,6 +21,7 @@ class ExamTestCase(unittest.TestCase):
         self.test_name = ""
         self.student_answer = ""
         self.correct_answer = ""
+        self.norepr = False
         self._set_test_name_and_assignment()
 
 
@@ -44,18 +45,17 @@ class ExamTestCase(unittest.TestCase):
 
 
 
-    def set_answers(self, student_answer, correct_answer, options=None):
+    def set_answers(self, student_answer, correct_answer):
         """
         Set students answer and correct answer as members.
         """
         self.student_answer = repr(student_answer)
         self.correct_answer = repr(correct_answer)
-        if options is not None:
-            if "norepr" in options:
-                if isinstance(student_answer, str):
-                    self.student_answer = hf.clean_str(student_answer)
-                else:
-                    self.student_answer = str(student_answer)
+        if self.norepr:
+            if isinstance(student_answer, str):
+                self.student_answer = hf.clean_str(student_answer)
+            else:
+                self.student_answer = str(student_answer)
 
 
     def assertEqual(self, first, second, msg=None):
@@ -73,7 +73,7 @@ class ExamTestCase(unittest.TestCase):
         Check if value in container.  Save correct and student answer as to variables.
         Container comes from student
         """
-        self.set_answers(container, member, msg)
+        self.set_answers(container, member)
         super().assertIn(member, container, msg)
 
 

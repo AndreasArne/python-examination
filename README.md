@@ -71,11 +71,12 @@ class TestAssignment3(ExamTestCase):
 
 
 
-It is possible to add `msg` string to assert-functions with options about student and correct answer to assignments. At the moment it supports `"norepr"`. If you don't want repr() to be run on the students respons.
+It is possible to set member `norepr` to True on a testcase. If you don't want `repr()` to be run on the students respons before printing it when a test fail.
 
 
 
 # TODO:
+- [ ] How will it look analyzer look when all commands are not yet implemented.
 - [ ] Try `_mult_arguments`.
 - [ ] Write tests
 - [ ] Add CircleCi
