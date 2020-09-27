@@ -13,7 +13,6 @@ COLORS = {
     "G": Fore.GREEN,
     "B": Fore.BLACK,
     "R": Fore.RED,
-    "G": Fore.GREEN,
     "Y": Fore.YELLOW,
     "BL": Fore.BLUE,
     "M": Fore.MAGENTA,
@@ -24,6 +23,9 @@ COLORS = {
 
 
 def clean_str(string):
+    """
+    Remove cluther form students answer string.
+    """
     return string.replace(chr(27) + "[2J" + chr(27) + "[;H", "")
 
 
@@ -72,7 +74,7 @@ def inject_regex_colors(msg):
     """
     color_start = re.findall(COLOR_REGEX_START, msg)
     for color in color_start:
-        msg = msg.replace(f"|{color}|", COLORS[color])
+        msg = msg.replace("|{}|".format(color), COLORS[color]+ Style.BRIGHT)
     msg = msg.replace("|/RE|", COLORS["RE"])
     return msg
 
