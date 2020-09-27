@@ -29,8 +29,10 @@ class TestAssignment1(ExamTestCase):
     def test_a_find_replace_middle(self):
         """
         Testar att byta ut ett ord mitt i strängen.
-        Förväntar att följande finns i output: {correct}
-        Letade i följande:  {student}
+        Förväntar att följande finns i output:
+        {correct}
+        Letade i följande:
+        {student}
         """
 
         inp = ["is", "ko"]
