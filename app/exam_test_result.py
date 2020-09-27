@@ -7,7 +7,6 @@ from unittest.result import failfast
 from unittest.runner import TextTestResult
 from colorama import init, Fore, Back, Style
 from app import helper_functions as hf
-# import helper_functions as hf
 
 init(strip=False)
 
@@ -79,33 +78,51 @@ class ExamTestResult(TextTestResult):
         if self.dots or self.showAll:
             self.stream.writeln()
         if self.errors:
-            self.printErrorListWithExplenation("Error", self.errors, "Your code crasched!")
+            self.printErrorListWithExplenation("Error", self.errors, "Your code crasched!", True)
         if self.failures:
             self.printErrorListWithExplenation("Fail", self.failures, "Your code produced wrong result!")
 
 
 
-    def printErrorListWithExplenation(self, flavour, errors, explenation):
+    def printErrorList(self, error):
+        """
+        Print error and fails traceback
+        """
+        for line in error:
+            self.stream.writeln("    |" + line)
+        self.stream.writeln("    "  + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
+
+
+
+    def printErrorListWithExplenation(self, flavour, errors, explenation, is_errors=False):
         """
         Print errors grouped by assignment (TestCase object)
         """
-        printed_assignments = []
+        already_printed_assignments = {}
 
         self.stream.writeln(self.separator1)
         self.stream.writeln("{} section: {}".format(flavour.upper(), explenation))
         self.stream.writeln(self.separator1)
         for test, err in errors:
-            if not test.assignment in printed_assignments:
+            if not test.assignment in already_printed_assignments:
                 self.stream.writeln("{}{}s for {}{}".format(
                     Back.MAGENTA + Fore.WHITE,
                     flavour,
                     test.assignment,
                     Style.RESET_ALL
                 ))
-                printed_assignments.append(test.assignment)
-            for line in err.strip().split("\n"):
-                self.stream.writeln("    |" + line)
-            self.stream.writeln("    "  + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
+                already_printed_assignments[test.assignment] = {}
+
+            err_as_list = err.strip().split("\n")
+            if is_errors:
+                hex_dig = hf.list_to_hash(err_as_list[-3:])
+                if hex_dig in already_printed_assignments[test.assignment]:
+                    self.printErrorList(["Hiding same error as above!"])
+                else:
+                    self.printErrorList(err_as_list)
+                    already_printed_assignments[test.assignment][hex_dig] = True
+            else:
+                self.printErrorList(err_as_list)
 
 
 

@@ -2,6 +2,7 @@
 pass
 """
 import re
+import hashlib
 from colorama import init, Fore, Back, Style
 
 init(strip=False)
@@ -20,6 +21,15 @@ COLORS = {
     "W": Fore.WHITE,
     "RE": Fore.RESET,
 }
+
+
+def list_to_hash(error):
+    """
+    hash a list
+    """
+    hash_obj = hashlib.sha1(bytes("".join(error), "utf-8"))
+    return hash_obj.hexdigest()
+
 
 
 def clean_str(string):
