@@ -4,50 +4,37 @@ Custom test collecter, builder and runner used for examining students.
 import io
 import unittest
 from collections import OrderedDict
-from colorama import init, Fore, Style
 import test_exam
 from app.exam_test_result import ExamTestResult
-
-init(strip=False)
-
-
-
-class ContanctError(Exception):
-    """
-    Custom error. Used when there is an error in the test code and the
-    student should contact the person responsible for the exam.
-    """
-    DEFAULT_MSG = (
-        Fore.RED + "\n*********\n"
-        "Något gick fel i rättningsprogrammet. "
-        "Kontakta Ansvarig med ovanstående felmeddelandet!"
-        "\n*********" + Style.RESET_ALL
-    )
-
-    def __init__(self, message=DEFAULT_MSG):
-        self.message = message
-        super().__init__(self.message)
+from app.exam_textcase import ExamTestCase
+from app.exceptions import ContanctError
 
 
 
 PASS = 1
 NOT_PASS = 0
 
+
+
 def get_testcases(assignments):
     """
     Add all TestCases to a list and return.
     """
     testcases = []
-    counter = 1
-    while True:
-        try:
-            testcases.append(getattr(test_exam, "TestAssignment" + str(counter)))
-            assignments["Assignment" + str(counter)] = {
+    testMethodPrefix = "Test"
+
+    for attrname in dir(test_exam):
+        if not attrname.startswith(testMethodPrefix):
+            continue
+        testClass = getattr(test_exam, attrname)
+        # Should use isinstance. But it return False, don't know why.
+        if testClass.__base__ is ExamTestCase:
+            testcases.append(testClass)
+            # remove "TestX"
+            assignments[str(attrname)[5:]] = {
                 "pass": NOT_PASS,
             }
-        except AttributeError:
-            return testcases
-        counter += 1
+    return testcases
 
 
 

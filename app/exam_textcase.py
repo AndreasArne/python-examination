@@ -4,13 +4,14 @@ Overriding TestCase for exam tool.
 import re
 import unittest
 from app import helper_functions as hf
+from app.exceptions import TestFuncNameError, TestClassNameError
 
 class ExamTestCase(unittest.TestCase):
     """
     Override methods to help customize outputs of testcases.
     """
 
-    ASSIGNMENT_REGEX = r".*Test(Assignment[0-9]+)\)"
+    ASSIGNMENT_REGEX = r"\.Test[0-9]([A-Z].+)\)"
     TEST_NAME_REGEX = r"test_[a-z]_(\w+) "
 
 
@@ -36,12 +37,12 @@ class ExamTestCase(unittest.TestCase):
         try:
             self.assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
         except AttributeError as e:
-            raise ValueError("Class name for TestCase should follow the structure 'TestAssignment<number>'") from e
+            raise TestClassNameError("Class name for TestCase should follow the structure 'Test<number><words>'") from e
 
         try:
             self.test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
         except AttributeError as e:
-            raise ValueError("Test function name should follow the structure 'test_<letter>_<name>'") from e
+            raise TestFuncNameError("Test function name should follow the structure 'test_<letter>_<name>'") from e
 
 
 

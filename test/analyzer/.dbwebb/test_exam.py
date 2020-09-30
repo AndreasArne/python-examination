@@ -19,7 +19,9 @@ import main
 #pylint: enable=wrong-import-position
 #pylint: disable=attribute-defined-outside-init, line-too-long
 
-class TestAssignment1(ExamTestCase):
+
+
+class Test1Files(ExamTestCase):
     """
     Each assignment has 1 testcase with multiple asserts.
 
@@ -40,7 +42,7 @@ class TestAssignment1(ExamTestCase):
         self._argument = "analyzer"
         self.assertIsNotNone(util.find_spec(self._argument))
 
-class TestAssignment2(ExamTestCase):
+class Test2Counters(ExamTestCase):
     """
     Meny options for counting
     """
@@ -93,7 +95,7 @@ class TestAssignment2(ExamTestCase):
 
 
 
-class TestAssignment3(ExamTestCase):
+class Test3Frequencies(ExamTestCase):
     """
     Meny options for frequency
     """
@@ -157,7 +159,12 @@ class TestAssignment3(ExamTestCase):
 
 
 
-    def test_c_all(self):
+class Test4All(ExamTestCase):
+    """
+    Meny options for frequency
+    """
+
+    def test_a_all(self):
         """
         Testar "all" kommandot.
         Förväntar sig att följande finns i utskriften:

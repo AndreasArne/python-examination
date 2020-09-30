@@ -4,17 +4,20 @@ Use this to test our new and added functionality.
 import sys
 import unittest
 from unittest.runner import _WritelnDecorator
+
+import app.exceptions as exce
 from app.exam_textcase import ExamTestCase
+
 
 
 
 class Test_ExamTestCase(unittest.TestCase):
 
     def setup_empty_examtextcase(self):
-        class TestAssignment1(ExamTestCase):
+        class Test1Assignment1(ExamTestCase):
             def test_a_foo(self):
                 pass
-        return TestAssignment1("test_a_foo")
+        return Test1Assignment1("test_a_foo")
 
 
 
@@ -38,7 +41,6 @@ class Test_ExamTestCase(unittest.TestCase):
         test.set_answers(["a string", 1], ["another string", 3.2, True])
         self.assertEqual(test.student_answer, "['a string', 1]")
         self.assertEqual(test.correct_answer, "['another string', 3.2, True]")
-
 
 
 
@@ -91,69 +93,97 @@ class Test_ExamTestCase(unittest.TestCase):
         Tests that set_test_name_and_assignment extracts test name and assignment
         correct.
         """
-        class TestAssignment1(ExamTestCase):
+        class Test1Assignment1(ExamTestCase):
             def test_a_foo(self):
                 pass
         
-        test = TestAssignment1('test_a_foo')
+        test = Test1Assignment1('test_a_foo')
         self.assertEqual(test.assignment, "Assignment1")
         self.assertEqual(test.test_name, "foo")
 
 
 
-    def test_set_test_name_and_assignment_rasie_exception_missing_identifier(self):
+    def test_set_assignment_rasie_exception_missing_identifier(self):
         """
         Tests that set_test_name_and_assignment raise ValueError when test function
         miss identifier after letter.
         """
-        class TestAssignment1(ExamTestCase):
+        class Test2Assignment1(ExamTestCase):
             def test_a(self):
                 pass
-
-        with self.assertRaises(ValueError) as cxt:
-            test = TestAssignment1('test_a')
-
-
-
-    def test_set_test_name_and_assignment_rasie_exception_missing_lettert(self):
+    
+        with self.assertRaises(exce.TestFuncNameError) as cxt:
+            test = Test2Assignment1('test_a')
+    
+    
+    
+    def test_set_assignment_rasie_exception_missing_lettert(self):
         """
         Tests that set_test_name_and_assignment raise ValueError when test function
         miss letter.
         """
-        class TestAssignment1(ExamTestCase):
+        class Test1Assignment1(ExamTestCase):
             def test_foo(self):
                 pass
 
-        with self.assertRaises(ValueError) as cxt:
-            test = TestAssignment1('test_foo')
+        with self.assertRaises(exce.TestFuncNameError) as cxt:
+            test = Test1Assignment1('test_foo')
 
 
 
-    def test_set_test_name_and_assignment_rasie_exception_missing_assignment(self):
+    def test_set_assignment_rasie_exception_missing_Upper_letter(self):
         """
         Tests that set_test_name_and_assignment raise ValueError when class name
-        miss "Assignment".
+        miss word that start with uppercase letter.
         """
-        class Testassignment1(ExamTestCase):
+        class Test1assignment(ExamTestCase):
             def test_a_foo(self):
                 pass
+    
+        with self.assertRaises(exce.TestClassNameError) as cxt:
+            test = Test1assignment('test_a_foo')
 
-        with self.assertRaises(ValueError) as cxt:
-            test = Testassignment1('test_a_foo')
 
 
-
-    def test_set_test_name_and_assignment_rasie_exception_missing_number(self):
+    def test_set_assignment_rasie_exception_missing_number(self):
         """
         Tests that set_test_name_and_assignment raise ValueError when class name
-        number is missing.
+        miss start number.
         """
-        class TestAssignment(ExamTestCase):
+        class TestAssignment1(ExamTestCase):
             def test_a_foo(self):
                 pass
+    
+        with self.assertRaises(exce.TestClassNameError) as cxt:
+            test = TestAssignment1('test_a_foo')
 
-        with self.assertRaises(ValueError) as cxt:
-            test = TestAssignment('test_a_foo')
+
+
+    def test_set_assignment_works_without_number_after(self):
+        """
+        Tests that set_test_name_and_assignment work with number after word.
+        """
+        class Test1Assignment(ExamTestCase):
+            def test_a_foo(self):
+                pass
+    
+        test = Test1Assignment('test_a_foo')
+        self.assertEqual(test.assignment, "Assignment")
+        self.assertEqual(test.test_name, "foo")
+    
+    
+    
+    def test_set_assignment_works_with_multiple_words(self):
+        """
+        Tests that set_test_name_and_assignment work with multiple words.
+        """
+        class Test4ModulesExist(ExamTestCase):
+            def test_a_foo(self):
+                pass
+    
+        test = Test4ModulesExist('test_a_foo')
+        self.assertEqual(test.assignment, "ModulesExist")
+        self.assertEqual(test.test_name, "foo")
 
 
 

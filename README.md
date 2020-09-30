@@ -13,8 +13,8 @@ This repository contain code to customize the output from the unittest module.  
 
 
 
-Using it, create your tests in a file called test_exam.py. Create one TestCase class for each assignment. Classes name should match `.*Test(Assignment[0-9]+)`.
-Each class can contain many test functions. Each function need a docstring.
+Using it, create your tests in a file called test_exam.py. Create one TestCase class for each assignment. Classes name should match `.*Test[0-9]([A-Z].+)`.
+The integer is used to sort the output. Each class can contain many test functions. Each function need a docstring.
 
 Use the docstring to explain what is tested. The docstring is used to display info to the student when their answer is wrong. The output of docstring can be enhanced and display what was used as argument, `{argument}`, to the students function, what the function returned, `{student}`, and what the correct answer is, `{correct}`. It is also possible to inject colors in the output.
 
@@ -52,7 +52,7 @@ In test functions where functions that are tested need arguments, before asserti
 Example of a TestCase for one assignment:
 
 ```
-class TestAssignment3(ExamTestCase):
+class Test3Assignment3(ExamTestCase):
     """
     Each assignment has 3 testcase with multiple asserts.
     """
