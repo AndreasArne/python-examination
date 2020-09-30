@@ -1,7 +1,7 @@
 """
 Custom exceptions
 """
-from colorama import init, Fore, Style
+from colorama import init, Fore, Back, Style
 init(strip=False)
 
 class ExamException(Exception):
@@ -34,7 +34,7 @@ class ContanctError(ExamException):
     student should contact the person responsible for the exam.
     """
     DEFAULT_MSG = (
-        Fore.RED + "\n*********\n"
+        Style.BRIGHT + Back.BLACK + Fore.RED + "\n*********\n"
         "Något gick fel i rättningsprogrammet. "
         "Kontakta Ansvarig med ovanstående felmeddelandet!"
         "\n*********" + Style.RESET_ALL

@@ -76,7 +76,6 @@ It is possible to set member `norepr` to True on a testcase. If you don't want `
 
 
 # TODO:
-- [ ] Change regex for Testcase class name so can have more than "assigment X".
 - [ ] Try `_mult_arguments`.
 - [ ] Write tests
 - [ ] Add CircleCi
@@ -86,6 +85,7 @@ It is possible to set member `norepr` to True on a testcase. If you don't want `
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
     - Identify errors where this happens.
 - [ ] Remake flowchart as sequence diagram.
+- [x] Change regex for Testcase class name so can have more than "assigment X".
 - [x] Don't show same error, from different tests for same error.
 - [x] Test it for multiple python versions (Tox?)
 - [X] Create custom exception for contacting responsible.

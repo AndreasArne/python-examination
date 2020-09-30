@@ -106,7 +106,7 @@ class ExamTestResult(TextTestResult):
         for test, err in errors:
             if not test.assignment in already_printed_assignments:
                 self.stream.writeln("{}{}s for {}{}".format(
-                    Back.MAGENTA + Fore.WHITE,
+                    Back.MAGENTA +Style.BRIGHT+ Fore.WHITE,
                     flavour,
                     test.assignment,
                     Style.RESET_ALL
