@@ -76,6 +76,7 @@ It is possible to set member `norepr` to True on a testcase. If you don't want `
 
 
 # TODO:
+- [ ] Try examiner in analyzer in python repo. update assignment about extra input. Make video on monday
 - [ ] Try `_mult_arguments`.
 - [ ] Write tests
 - [ ] Add CircleCi
