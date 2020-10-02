@@ -37,12 +37,16 @@ class ExamTestCase(unittest.TestCase):
         try:
             self.assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
         except AttributeError as e:
-            raise TestClassNameError("Class name for TestCase should follow the structure 'Test<number><words>'") from e
+            raise TestClassNameError(
+                "Class name for TestCase should follow the structure 'Test<number><words>'. Got '" + test_string + "'"
+            ) from e
 
         try:
             self.test_name = re.search(self.TEST_NAME_REGEX, test_string).group(1).replace("_", " ")
         except AttributeError as e:
-            raise TestFuncNameError("Test function name should follow the structure 'test_<letter>_<name>'") from e
+            raise TestFuncNameError(
+                "Test function name should follow the structure 'test_<letter>_<name>' Got '" + test_string + "'"
+            ) from e
 
 
 
