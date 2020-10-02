@@ -109,6 +109,8 @@ def main():
             # marvin.quitIt()
             return
         # input("Enter to continue...")
+        input("\nThe knowledge has been granted. Now go bother someone else...")
+        
         continue
 
 

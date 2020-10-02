@@ -55,11 +55,11 @@ class Test2Counters(ExamTestCase):
         {student}
         """
         self.norepr = True
-        with patch('builtins.input', side_effect=["lines", "q"]):
+        with patch('builtins.input', side_effect=["lines", "", "q"]):
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 main.main()
                 str_data = fake_out.getvalue()
-                self.assertIn("17-", str_data)
+                self.assertIn("17", str_data)
 
     def test_c_words(self):
         """
@@ -70,7 +70,7 @@ class Test2Counters(ExamTestCase):
         {student}
         """
         self.norepr = True
-        with patch('builtins.input', side_effect=["words", "q"]):
+        with patch('builtins.input', side_effect=["words", "", "q"]):
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 main.main()
                 str_data = fake_out.getvalue()
@@ -87,7 +87,7 @@ class Test2Counters(ExamTestCase):
         {student}
         """
         self.norepr = True
-        with patch('builtins.input', side_effect=["letters", "q"]):
+        with patch('builtins.input', side_effect=["letters", "", "q"]):
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 main.main()
                 str_data = fake_out.getvalue()
@@ -107,9 +107,8 @@ class Test3Frequencies(ExamTestCase):
         Fick utskriften:
         {student}
         """ 
-        raise ValueError
         self.norepr = True
-        with patch('builtins.input', side_effect=["word_frequency", "q"]):
+        with patch('builtins.input', side_effect=["word_frequency", "", "q"]):
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 main.main()
                 str_data = fake_out.getvalue()
@@ -139,7 +138,7 @@ class Test3Frequencies(ExamTestCase):
         {student}
         """ 
         self.norepr = True
-        with patch('builtins.input', side_effect=["letter_frequency", "q"]):
+        with patch('builtins.input', side_effect=["letter_frequency", "", "q"]):
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 main.main()
                 str_data = fake_out.getvalue()
@@ -174,7 +173,7 @@ class Test4All(ExamTestCase):
         {student}
         """ 
         self.norepr = True
-        with patch('builtins.input', side_effect=["all", "q"]):
+        with patch('builtins.input', side_effect=["all", "", "q"]):
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 main.main()
                 str_data = fake_out.getvalue()
