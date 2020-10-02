@@ -7,7 +7,7 @@ from unittest import TextTestRunner
 from unittest.mock import patch
 import os
 import sys
-from examiner.exam_textcase import ExamTestCase
+from examiner.exam_test_case import ExamTestCase
 from examiner.exam_test_result import ExamTestResult
 
 

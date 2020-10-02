@@ -1,7 +1,7 @@
 # Correct.bash script used for autocorrecting programming exams.
 
 # only for testing, solve differently for live
-cp -fr ../../../examiner .
+cp -fr ../../../build/examiner .
 # cp -rf ../../../.venv/lib/python3.7/site-packages/colorama .
 
 
@@ -65,7 +65,6 @@ clean_up () {
     rm "$LOG_PATH"
 
     # REMOVE!!!!!!!!!!!!!!!!!!!!!!!
-    rm -rf colorama
     rm -rf examiner
 }
 

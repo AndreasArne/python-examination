@@ -6,7 +6,7 @@ import unittest
 from unittest.runner import _WritelnDecorator
 
 import examiner.exceptions as exce
-from examiner.exam_textcase import ExamTestCase
+from examiner.exam_test_case import ExamTestCase
 
 
 

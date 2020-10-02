@@ -8,7 +8,7 @@ from importlib import util
 from io import StringIO
 import os
 import sys
-from examiner.exam_textcase import ExamTestCase
+from examiner.exam_test_case import ExamTestCase
 from examiner.exam_test_result import ExamTestResult
 
 proj_path = os.path.dirname(os.path.realpath(__file__ + "/.."))
