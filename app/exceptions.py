@@ -11,7 +11,6 @@ class ExamException(Exception):
     """
     Base exception for custom exception
     """
-    pass
 
 
 
@@ -19,7 +18,6 @@ class TestFuncNameError(Exception):
     """
     Error for when test function name is wrong
     """
-    pass
 
 
 
@@ -27,7 +25,6 @@ class TestClassNameError(Exception):
     """
     Error for when test class name is wrong
     """
-    pass
 
 
 

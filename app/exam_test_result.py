@@ -87,7 +87,7 @@ class ExamTestResult(TextTestResult):
 
 
 
-    def printErrorList(self, error):
+    def printErrorLines(self, error):
         """
         Print error and fails traceback
         """
@@ -120,12 +120,12 @@ class ExamTestResult(TextTestResult):
             if is_errors:
                 hex_dig = hf.list_to_hash(err_as_list[-3:])
                 if hex_dig in already_printed_assignments[test.assignment]:
-                    self.printErrorList(["Hiding same error as above!"])
+                    self.printErrorLines(["Hiding same error as above!"])
                 else:
-                    self.printErrorList(err_as_list)
+                    self.printErrorLines(err_as_list)
                     already_printed_assignments[test.assignment][hex_dig] = True
             else:
-                self.printErrorList(err_as_list)
+                self.printErrorLines(err_as_list)
 
 
 
