@@ -3,7 +3,10 @@ pass
 """
 import re
 import hashlib
-from colorama import init, Fore, Back, Style
+try:
+    from app.colorama import init, Fore, Back, Style
+except ModuleNotFoundError:
+    from colorama import init, Fore, Back, Style
 
 init(strip=False)
 
