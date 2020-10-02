@@ -2,7 +2,7 @@
 Custom exceptions
 """
 try:
-    from app.colorama import init, Fore, Back, Style
+    from examiner.colorama import init, Fore, Back, Style
 except ModuleNotFoundError:
     from colorama import init, Fore, Back, Style
 init(strip=False)

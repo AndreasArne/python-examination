@@ -1,8 +1,8 @@
 # Correct.bash script used for autocorrecting programming exams.
 
 # only for testing, solve differently for live
-cp -fr ../../../app .
-cp -rf ../../../.venv/lib/python3.7/site-packages/colorama .
+cp -fr ../../../examiner .
+# cp -rf ../../../.venv/lib/python3.7/site-packages/colorama .
 
 
 # Verbose check
@@ -28,7 +28,7 @@ cp "$PROJ_PATH/$COPY_FILE" "$DBWEBB_PATH"
 
 
 
-test_status="$(cd "$DBWEBB_PATH" && ${py} -m app.run_tests &> "$LOG_PATH")"
+test_status="$(cd "$DBWEBB_PATH" && ${py} -m examiner.run_tests &> "$LOG_PATH")"
 
 
 
@@ -66,7 +66,7 @@ clean_up () {
 
     # REMOVE!!!!!!!!!!!!!!!!!!!!!!!
     rm -rf colorama
-    rm -rf app
+    rm -rf examiner
 }
 
 
@@ -95,11 +95,11 @@ done
 
 
 # Sets grade message based on POINTS
-if [[ $POINTS -gt 19 ]]; then
+if [[ $POINTS -gt 49 ]]; then
     echo "Du har $POINTS poäng och är godkänd på den individuella examinationen."
     EXIT_STATUS=0
 else
-    echo "Du har $POINTS poäng. Detta är mindre än 20 och du är inte godkänd på den individuella examinationen."
+    echo "Du har $POINTS poäng. Detta är mindre än 50 och du är inte godkänd på den individuella examinationen."
     EXIT_STATUS=1
 fi
 
@@ -111,5 +111,5 @@ output_log
 
 
 # Clean up
-clean_up
+# clean_up
 exit $EXIT_STATUS

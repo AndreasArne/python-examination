@@ -5,8 +5,8 @@ import sys
 import unittest
 from unittest.runner import _WritelnDecorator
 
-import app.exceptions as exce
-from app.exam_textcase import ExamTestCase
+import examiner.exceptions as exce
+from examiner.exam_textcase import ExamTestCase
 
 
 

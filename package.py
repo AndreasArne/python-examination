@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 import shutil
 import os
-import app
+import examiner
 from importlib.util import find_spec
 
 
@@ -30,16 +30,16 @@ def build(modules):
         os.mkdir("build")
     except FileExistsError:
         pass
-    shutil.copytree('app', 'build/app', ignore=shutil.ignore_patterns("*pycache*"))
+    shutil.copytree('examiner', 'build/examiner', ignore=shutil.ignore_patterns("*pycache*"))
     for module in modules:
         shutil.copytree(
             module[0],
-            "build/app/"+module[1],
+            "build/examiner/"+module[1],
             ignore=shutil.ignore_patterns("*pycache*")
         )
 
 
-    shutil.make_archive("build/app-"+app.__version__, 'zip', "build/app")
+    shutil.make_archive("build/examiner-"+examiner.__version__, 'zip', "build/examiner")
 
 
 

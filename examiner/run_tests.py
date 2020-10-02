@@ -5,9 +5,9 @@ import io
 import unittest
 from collections import OrderedDict
 import test_exam
-from app.exam_test_result import ExamTestResult
-from app.exam_textcase import ExamTestCase
-from app.exceptions import ContanctError
+from examiner.exam_test_result import ExamTestResult
+from examiner.exam_textcase import ExamTestCase
+from examiner.exceptions import ContanctError
 
 
 

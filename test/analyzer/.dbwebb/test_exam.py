@@ -8,8 +8,8 @@ from importlib import util
 from io import StringIO
 import os
 import sys
-from app.exam_textcase import ExamTestCase
-from app.exam_test_result import ExamTestResult
+from examiner.exam_textcase import ExamTestCase
+from examiner.exam_test_result import ExamTestResult
 
 proj_path = os.path.dirname(os.path.realpath(__file__ + "/.."))
 if proj_path not in sys.path:
@@ -59,7 +59,7 @@ class Test2Counters(ExamTestCase):
             with patch('sys.stdout', new=StringIO()) as fake_out:
                 main.main()
                 str_data = fake_out.getvalue()
-                self.assertIn("17", str_data)
+                self.assertIn("17-", str_data)
 
     def test_c_words(self):
         """
@@ -107,6 +107,7 @@ class Test3Frequencies(ExamTestCase):
         Fick utskriften:
         {student}
         """ 
+        raise ValueError
         self.norepr = True
         with patch('builtins.input', side_effect=["word_frequency", "q"]):
             with patch('sys.stdout', new=StringIO()) as fake_out:

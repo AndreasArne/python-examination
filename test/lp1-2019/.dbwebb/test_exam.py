@@ -7,8 +7,8 @@ from unittest import TextTestRunner
 from unittest.mock import patch
 import os
 import sys
-from app.exam_textcase import ExamTestCase
-from app.exam_test_result import ExamTestResult
+from examiner.exam_textcase import ExamTestCase
+from examiner.exam_test_result import ExamTestResult
 
 
 proj_path = os.path.dirname(os.path.realpath(__file__ + "/.."))

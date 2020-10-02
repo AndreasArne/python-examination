@@ -5,9 +5,9 @@ import sys
 import traceback
 from unittest.result import failfast
 from unittest.runner import TextTestResult
-from app import helper_functions as hf
+from examiner import helper_functions as hf
 try:
-    from app.colorama import init, Fore, Back, Style
+    from examiner.colorama import init, Fore, Back, Style
 except ModuleNotFoundError:
     from colorama import init, Fore, Back, Style
 

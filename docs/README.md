@@ -1,8 +1,8 @@
 This repository contain code to customize the output from the unittest module.  The altered code is used for examining students on College level in an introduction python course.
 
-`app/exam_test_result.py` - overshadows methods in [unittest.TextTestResult](https://github.com/python/cpython/blob/master/Lib/unittest/runner.py#L29) to customize the output from unittest.
+`examiner/exam_test_result.py` - overshadows methods in [unittest.TextTestResult](https://github.com/python/cpython/blob/master/Lib/unittest/runner.py#L29) to customize the output from unittest.
 
-`app/run_tests.py` - Build test suits and runs them.
+`examiner/run_tests.py` - Build test suits and runs them.
 
 `test/test_copy_of_unittest.py` - Is a copy of the test file for the sourcecode of unittest. Is used to limit how much we break the original usage of unitest.
 
