@@ -73,6 +73,13 @@ help:
 
 
 
+# target: build                     - Build and package code. Result in build/ folder.
+.PHONY: build
+build:
+	@${py} package.py
+
+
+
 # target: info                         - Displays versions.
 .PHONY: info
 info:
@@ -101,12 +108,18 @@ test-unit: clean
 
 
 
-# target: test                         - Run tests and display code coverage
+# target: test                         - Run code validation, tests and display code coverage
 .PHONY: test
 test: validate test-unit
 	${py} -m coverage report  --rcfile=.coveragerc
 	$(MAKE) clean-cov
 
+
+
+# target: tox                         - Run "test" command for python version >=3.5
+.PHONY: tox
+tox:
+	tox
 
 
 ## target: clean-py                     - Remove generated python files
