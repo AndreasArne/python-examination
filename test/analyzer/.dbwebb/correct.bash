@@ -1,9 +1,6 @@
 # Correct.bash script used for autocorrecting programming exams.
 
-# only for testing, solve differently for live
-cp -fr ../../../build/examiner .
-# cp -rf ../../../.venv/lib/python3.7/site-packages/colorama .
-
+-cp -fr ../../../build/examiner .
 
 # Verbose check
 VERBOSE=true
@@ -13,7 +10,6 @@ COPY_FILE="phil.txt"
 
 # If available use python3 else python
 python3 --version >/dev/null 2>&1 && py=python3 || py=python
-
 
 
 # get path to .dbwebb folder
@@ -33,12 +29,8 @@ test_status="$(cd "$DBWEBB_PATH" && ${py} -m examiner.run_tests &> "$LOG_PATH")"
 
 
 # Picks subparts of log file
-ALL_LINES="$(cat "$LOG_PATH" | head -6)"
+NOT_FIRSTS="$(cat "$LOG_PATH" | tail -n +2)" # start on line 2
 FIRST_LINE="$(cat "$LOG_PATH" | head -1)"
-SECOND_LINE="$(cat "$LOG_PATH" | head -2 | tail -1)"
-#REST="$(cat "$LOG_PATH" | head -6 | tail -4)"
-REST="$(cat "$LOG_PATH" | tail -n +2)"
-
 
 
 
@@ -53,8 +45,7 @@ output_log () {
     echo "====================================="
     echo "TEST SCRIPT OUTPUT"
     echo "====================================="
-    echo "$REST"
-    # cat "$LOG_PATH"
+    cat "$NOT_FIRSTS"
 }
 
 
@@ -63,10 +54,8 @@ output_log () {
 clean_up () {
     rm "$DBWEBB_PATH/$COPY_FILE"
     rm "$LOG_PATH"
-
-    # REMOVE!!!!!!!!!!!!!!!!!!!!!!!
-    rm -rf examiner
 }
+
 
 
 first_assignment="$(echo $FIRST_LINE | cut -c1)"
@@ -75,7 +64,7 @@ other_assignments="$(echo $FIRST_LINE | cut -c3-)"
 # Outputs whether an assignment is solved or not.
 if [[ $first_assignment = "1" ]]; then
     echo "Du har löst uppgift 1."
-    POINTS=$((POINTS+20))
+    POINTS=$((POINTS+10))
 else
     echo "Du har inte löst uppgift 1."
 fi
@@ -94,11 +83,11 @@ done
 
 
 # Sets grade message based on POINTS
-if [[ $POINTS -gt 49 ]]; then
+if [[ $POINTS -gt 39 ]]; then
     echo "Du har $POINTS poäng och är godkänd på den individuella examinationen."
     EXIT_STATUS=0
 else
-    echo "Du har $POINTS poäng. Detta är mindre än 50 och du är inte godkänd på den individuella examinationen."
+    echo "Du har $POINTS poäng. Detta är mindre än 40 och du är inte godkänd på Analyzer."
     EXIT_STATUS=1
 fi
 
@@ -110,5 +99,5 @@ output_log
 
 
 # Clean up
-# clean_up
-exit $EXIT_STATUS
+clean_up
+exit 0
