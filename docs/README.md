@@ -1,22 +1,13 @@
-This repository contain code to customize the output from the unittest module.  The altered code is used for examining students on College level in an introduction python course.
+Examiner is a layer on top of pythons unittest framwork, for more verbose and clear output when test fail. It is used in a university course to examinate student in a introductionary python course. 
 
-`examiner/exam_test_result.py` - overshadows methods in [unittest.TextTestResult](https://github.com/python/cpython/blob/master/Lib/unittest/runner.py#L29) to customize the output from unittest.
+You can see working examples of it in `test/analyzer/.dbwebb`. To run it you first need to build it, run `make build`, it will copy external modules into the package so it can be distributed to students. Then you can find the folder `examiner` in the build folder. Execute `bash correct.bash` in `test/analyzer/.dbwebb`, it will copy the package. to run it.
 
-`examiner/run_tests.py` - Build test suits and runs them.
+Examiner utilize function docstrings for testcases to modify and specialize error outputs for each test.
 
-`test/test_copy_of_unittest.py` - Is a copy of the test file for the sourcecode of unittest. Is used to limit how much we break the original usage of unitest.
-
-`test/test_exam_text_result.py` - Contains tests for the new functionality of the TextTestResult class.
-
-`test/lp1-2019/` - Contains a running example of the exam_test_result.py code. Stand in `.dbwebb` folder and run with `bash correct.bash`.
+So far it only supports tests in one file, `test_exam.py`. TestCase classes need to inherit from `ExamTestCase` and naming should follow the regex `.*Test[0-9]([A-Z].+)`. The number is used to sort execution order and the output.
 
 
-
-
-Using it, create your tests in a file called test_exam.py. Create one TestCase class for each assignment. Classes name should match `.*Test[0-9]([A-Z].+)`.
-The integer is used to sort the output. Each class can contain many test functions. Each function need a docstring.
-
-Use the docstring to explain what is tested. The docstring is used to display info to the student when their answer is wrong. The output of docstring can be enhanced and display what was used as argument, `{argument}`, to the students function, what the function returned, `{student}`, and what the correct answer is, `{correct}`. It is also possible to inject colors in the output.
+Test function need to follow the naming, `"test_[a-z]_(\w+)"`, and have a docstring. The docstring is used when test fail. The output of docstring can be enhanced and display what was used as argument, `{argument}`, to the students function, what the function returned, `{student}`, and what the correct answer is, `{correct}`. It is also possible to inject colors in the output.
 
 By default the line above `{correct}` is colored green and the line above `{student}` is colored red. Manual colors can be injected with `"|<color letter>|"` and reset value `"|/RE|"`. The reset color removes all color options up to that point. The module [colorama](https://pypi.org/project/colorama/) is used for coloring.
 
@@ -76,7 +67,6 @@ It is possible to set member `norepr` to True on a testcase. If you don't want `
 
 
 # TODO:
-- [ ] Try examiner in analyzer in python repo. update assignment about extra input. Make video on monday
 - [ ] Try `_mult_arguments`.
 - [ ] Write tests
 - [ ] Add CircleCi
