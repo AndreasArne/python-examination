@@ -45,7 +45,7 @@ output_log () {
     echo "====================================="
     echo "TEST SCRIPT OUTPUT"
     echo "====================================="
-    cat "$NOT_FIRSTS"
+    echo "$NOT_FIRSTS"
 }
 
 
