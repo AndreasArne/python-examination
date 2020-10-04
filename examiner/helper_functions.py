@@ -99,8 +99,10 @@ def create_fail_msg(function_args, test):
     """
     #pylint: disable=protected-access
     if test._testMethodDoc is None:
-        raise AttributeError("Test is missing docstring."
-            " Docstring is needed to explainin the test when Something goes wrong.")
+        raise AttributeError(
+            "Test is missing docstring."
+            " Docstring is needed to explainin the test when Something goes wrong."
+        )
     docstring = re.sub("\n +", "\n", test._testMethodDoc)
 
     msg_list = docstring.split("\n")
