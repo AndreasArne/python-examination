@@ -6,10 +6,11 @@ cp -fr ../../../build/examiner .
 VERBOSE=true
 
 # Text file use by students
-COPY_FILE="phil.txt"
+COPY_FILE="manifesto.txt"
 
 # If available use python3 else python
 python3 --version >/dev/null 2>&1 && py=python3 || py=python
+
 
 
 # get path to .dbwebb folder
@@ -57,14 +58,14 @@ clean_up () {
 }
 
 
-
 first_assignment="$(echo $FIRST_LINE | cut -c1)"
 other_assignments="$(echo $FIRST_LINE | cut -c3-)"
+
 
 # Outputs whether an assignment is solved or not.
 if [[ $first_assignment = "1" ]]; then
     echo "Du har löst uppgift 1."
-    POINTS=$((POINTS+10))
+    POINTS=$((POINTS+20))
 else
     echo "Du har inte löst uppgift 1."
 fi
@@ -83,11 +84,11 @@ done
 
 
 # Sets grade message based on POINTS
-if [[ $POINTS -gt 39 ]]; then
+if [[ $POINTS -gt 19 ]]; then
     echo "Du har $POINTS poäng och är godkänd på den individuella examinationen."
     EXIT_STATUS=0
 else
-    echo "Du har $POINTS poäng. Detta är mindre än 40 och du är inte godkänd på Analyzer."
+    echo "Du har $POINTS poäng. Detta är mindre än 20 och du är inte godkänd på individuella examinationen."
     EXIT_STATUS=1
 fi
 
