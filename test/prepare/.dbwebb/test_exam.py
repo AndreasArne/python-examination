@@ -4,6 +4,7 @@ Contains testcases for the individual examination.
 """
 import unittest
 from unittest.mock import patch
+from unittest import TextTestRunner
 from importlib import util
 from io import StringIO
 from modulefinder import ModuleFinder
