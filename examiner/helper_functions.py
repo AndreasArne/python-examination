@@ -128,7 +128,7 @@ def get_function_args(test):
         return repr(getattr(test, "_argument"))
     except AttributeError:
         try:
-            return ", ".join([repr(arg) for arg in getattr(test, "_mult_arguments")])
+            return ", ".join([repr(arg) for arg in getattr(test, "_multi_arguments")])
         except AttributeError:
             return None
 
