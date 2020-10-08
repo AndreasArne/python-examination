@@ -31,7 +31,6 @@ class Test1Assignment1(ExamTestCase):
     """
     def test_a_module_exist(self):
         """
-        Test that correct module exist for assignment 1.
         |G|Förväntar att följande modul finns men hittades inte:|/RE|
         {arguments}
         """
