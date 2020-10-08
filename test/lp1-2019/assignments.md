@@ -2,6 +2,7 @@ Authors:
     - aar, Andreas Arnesson
     - efo, Emil Folino
 Revisions:
+    - "2020-10-07": (B, aar) Omgjord för nya rättningsprogrammet HT20.
     - "2019-10-22": (A, efo, aar) individuella examinationen 2019-lp1.
 
 
@@ -89,6 +90,7 @@ Tips, om du råkar skriva över eller ändrar i `manifesto.txt` kan du först ta
     check = 10 - (sum % 10)
     check == 6
     ```
+
 
 
 4. **Avgör vinnare**. Fyll i funktionen `decide_winners`, den ska ta emot en lista som argument. Listan innehåller i sin tur andra listor som i sin tur innehåller resultat från set i pingismatcher. Resultatet från ett set är formaterat som en sträng med första spelarens poäng följt av ett bindestreck och andra spelarens poäng. T.ex. "5-11", här vann player2 med 11 mot 5. I funktionen ska du räkna ut om player1 eller player2 vann för varje match. Vinnaren är den som vann flest set och vinnare av ett set är spelaren med flest poäng i setet. Funktionen ska returnera en lista som innehåller vinnaren av de olika matcherna. Om du får en tom lista som argument ska du returnera en tom lista.

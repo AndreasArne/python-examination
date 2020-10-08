@@ -1,8 +1,8 @@
 # Correct.bash script used for autocorrecting programming exams.
 
 # only for testing, solve differently for live
-cp -fr ../../../examiner .
-cp -rf ../../../.venv/lib/python3.7/site-packages/colorama .
+cp -fr ../../../build/examiner .
+
 
 
 # Verbose check
@@ -33,10 +33,8 @@ test_status="$(cd "$DBWEBB_PATH" && ${py} -m examiner.run_tests &> "$LOG_PATH")"
 
 
 # Picks subparts of log file
-ALL_LINES="$(cat "$LOG_PATH" | head -6)"
+NOT_FIRSTS="$(cat "$LOG_PATH" | tail -n +2)" # start on line 2
 FIRST_LINE="$(cat "$LOG_PATH" | head -1)"
-SECOND_LINE="$(cat "$LOG_PATH" | head -2 | tail -1)"
-REST="$(cat "$LOG_PATH" | tail -n +2)"
 
 
 
@@ -51,7 +49,7 @@ output_log () {
     echo "====================================="
     echo "TEST SCRIPT OUTPUT"
     echo "====================================="
-    echo "$REST"
+    echo "$NOT_FIRSTS"
 }
 
 
@@ -61,10 +59,6 @@ clean_up () {
     rm "$DBWEBB_PATH/$COPY_FILE"
     rm "$LOG_PATH"
     rm "$DBWEBB_PATH/$OUTPUT_FILE"
-
-    # REMOVE!!!!!!!!!!!!!!!!!!!!!!!
-    rm -rf colorama
-    rm -rf examiner
 }
 
 
