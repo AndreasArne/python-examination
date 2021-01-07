@@ -2,6 +2,9 @@
 
 cp -fr ../../../build/examiner .
 
+# Text file use by students
+COPY_FILE="repetition.txt"
+
 
 
 check_python_version () {
@@ -35,9 +38,6 @@ get_python_command
 # Verbose check
 VERBOSE=true
 
-# Text file use by students
-COPY_FILE1="title.basics.csv"
-COPY_FILE2="title.ratings.csv"
 
 # get path to .dbwebb folder
 DBWEBB_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"
@@ -47,8 +47,7 @@ LOG_PATH="$DBWEBB_PATH/log"
 
 
 # Copy value-of-time file to .dbwebb for correction
-cp "$PROJ_PATH/$COPY_FILE1" "$DBWEBB_PATH"
-cp "$PROJ_PATH/$COPY_FILE2" "$DBWEBB_PATH"
+cp "$PROJ_PATH/$COPY_FILE" "$DBWEBB_PATH"
 
 
 
@@ -80,8 +79,7 @@ output_log () {
 
 # Clean, removes files
 clean_up () {
-    rm "$DBWEBB_PATH/$COPY_FILE1"
-    rm "$DBWEBB_PATH/$COPY_FILE2"
+    rm "$DBWEBB_PATH/$COPY_FILE"
     rm "$LOG_PATH"
 }
 

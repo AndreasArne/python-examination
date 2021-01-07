@@ -104,4 +104,4 @@ output_log
 
 # Clean up
 clean_up
-exit 0
+exit $EXIT_STATUS
