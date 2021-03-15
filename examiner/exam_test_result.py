@@ -78,6 +78,9 @@ class ExamTestResult(TextTestResult):
 
 
     def printErrors(self):
+        """
+        Overridden and is called from unittest framework
+        """
         if self.dots or self.showAll:
             self.stream.writeln()
         if self.errors:
