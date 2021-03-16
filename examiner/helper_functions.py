@@ -23,7 +23,9 @@ COLORS = {
     "C": Fore.CYAN,
     "W": Fore.WHITE,
     "RE": Fore.RESET,
+    "BR": Style.BRIGHT,
 }
+
 
 
 def list_to_hash(error):

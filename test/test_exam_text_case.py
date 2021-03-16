@@ -72,7 +72,6 @@ class Test_ExamTestCase(unittest.TestCase):
 
 
 
-
     def test_set_answer_norepr_clean(self):
         """
         Called with option norepr and that clean works
@@ -96,7 +95,7 @@ class Test_ExamTestCase(unittest.TestCase):
         class Test1Assignment1(ExamTestCase):
             def test_a_foo(self):
                 pass
-        
+
         test = Test1Assignment1('test_a_foo')
         self.assertEqual(test.assignment, "Assignment1")
         self.assertEqual(test.test_name, "foo")
@@ -111,12 +110,12 @@ class Test_ExamTestCase(unittest.TestCase):
         class Test2Assignment1(ExamTestCase):
             def test_a(self):
                 pass
-    
+
         with self.assertRaises(exce.TestFuncNameError) as cxt:
             test = Test2Assignment1('test_a')
-    
-    
-    
+
+
+
     def test_set_assignment_rasie_exception_missing_lettert(self):
         """
         Tests that set_test_name_and_assignment raise ValueError when test function
@@ -139,7 +138,7 @@ class Test_ExamTestCase(unittest.TestCase):
         class Test1assignment(ExamTestCase):
             def test_a_foo(self):
                 pass
-    
+
         with self.assertRaises(exce.TestClassNameError) as cxt:
             test = Test1assignment('test_a_foo')
 
@@ -153,7 +152,7 @@ class Test_ExamTestCase(unittest.TestCase):
         class TestAssignment1(ExamTestCase):
             def test_a_foo(self):
                 pass
-    
+
         with self.assertRaises(exce.TestClassNameError) as cxt:
             test = TestAssignment1('test_a_foo')
 
@@ -166,13 +165,13 @@ class Test_ExamTestCase(unittest.TestCase):
         class Test1Assignment(ExamTestCase):
             def test_a_foo(self):
                 pass
-    
+
         test = Test1Assignment('test_a_foo')
         self.assertEqual(test.assignment, "Assignment")
         self.assertEqual(test.test_name, "foo")
-    
-    
-    
+
+
+
     def test_set_assignment_works_with_multiple_words(self):
         """
         Tests that set_test_name_and_assignment work with multiple words.
@@ -180,7 +179,7 @@ class Test_ExamTestCase(unittest.TestCase):
         class Test4ModulesExist(ExamTestCase):
             def test_a_foo(self):
                 pass
-    
+
         test = Test4ModulesExist('test_a_foo')
         self.assertEqual(test.assignment, "ModulesExist")
         self.assertEqual(test.test_name, "foo")

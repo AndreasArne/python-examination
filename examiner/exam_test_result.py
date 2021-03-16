@@ -5,6 +5,7 @@ import sys
 import traceback
 from unittest.result import failfast
 from unittest.runner import TextTestResult
+from examiner import common_errors
 from examiner import helper_functions as hf
 try:
     from examiner.colorama import init, Fore, Back, Style
@@ -40,16 +41,6 @@ class ExamTestResult(TextTestResult):
         while tb and self._is_relevant_tb_level(tb):
             tb = tb.tb_next
 
-        if exctype is test.failureException:
-            # Skip assert*() traceback levels
-            length = self._count_relevant_tb_levels(tb)
-            # length = None
-        else:
-            length = None
-        tb_e = traceback.TracebackException(
-            exctype, value, tb, limit=length, capture_locals=self.tb_locals)
-        msgLines = list(tb_e.format())
-
         #----------------------
         # here starts the interesting code, which we changed. If test failed
         # because of wrong answer from student
@@ -59,6 +50,13 @@ class ExamTestResult(TextTestResult):
                 function_args,
                 test
             )
+        else:
+            tb_e = traceback.TracebackException(
+                exctype, value, tb, limit=None, capture_locals=self.tb_locals)
+            msgLines = list(tb_e.format())
+            help_msg = common_errors.check_if_common_error(exctype.__name__, tb_e, value)
+            if help_msg:
+                msgLines.append(help_msg)
         #---------------------
 
         if self.buffer:
