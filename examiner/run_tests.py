@@ -8,12 +8,12 @@ import test_exam
 from examiner.exam_test_result import ExamTestResult
 from examiner.exam_test_case import ExamTestCase
 from examiner.exceptions import ContanctError
-
+from examiner.cli_parser import parse
 
 
 PASS = 1
 NOT_PASS = 0
-
+ARGS = parse()
 
 
 def get_testcases(assignments):
@@ -45,6 +45,7 @@ def build_testsuite(assignments):
     testcases = get_testcases(assignments)
     suite = unittest.TestSuite()
     for case in testcases:
+        case.USER_TAGS = ARGS.tags
         suite.addTest(unittest.makeSuite(case))
     return suite
 

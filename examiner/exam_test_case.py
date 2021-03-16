@@ -1,6 +1,7 @@
 """
 Overriding TestCase for exam tool.
 """
+#import sys
 import re
 import unittest
 from examiner import helper_functions as hf
@@ -13,6 +14,7 @@ class ExamTestCase(unittest.TestCase):
 
     ASSIGNMENT_REGEX = r"\.Test[0-9]([A-Z].+)\)"
     TEST_NAME_REGEX = r"test_[a-z]_(\w+)"
+    USER_TAGS = []
 
 
 
@@ -23,6 +25,7 @@ class ExamTestCase(unittest.TestCase):
         self.student_answer = ""
         self.correct_answer = ""
         self.norepr = False
+        self.tags = []
         self._set_test_name_and_assignment()
 
 
@@ -63,6 +66,8 @@ class ExamTestCase(unittest.TestCase):
                 self.student_answer = str(student_answer)
 
 
+
+    @hf.check_for_tags()
     def assertEqual(self, first, second, msg=None):
         """
         Check if first is equal to second. Save correct and student answer as to variables.
@@ -73,6 +78,7 @@ class ExamTestCase(unittest.TestCase):
 
 
 
+    @hf.check_for_tags()
     def assertIn(self, member, container, msg=None):
         """
         Check if value in container.  Save correct and student answer as to variables.
@@ -83,6 +89,7 @@ class ExamTestCase(unittest.TestCase):
 
 
 
+    @hf.check_for_tags()
     def assertFalse(self, expr, msg=None):
         """
         Check that the expression is False.
@@ -93,6 +100,7 @@ class ExamTestCase(unittest.TestCase):
 
 
 
+    @hf.check_for_tags()
     def assertTrue(self, expr, msg=None):
         """
         Check that the expression is true.

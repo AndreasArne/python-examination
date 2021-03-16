@@ -147,3 +147,24 @@ def error_is_missing_assignment_function(error):
         if filename == "test_exam.py":
             return True
     return False
+
+
+
+def check_for_tags(msg="Inkluderar inte någon av de givna taggarna"):
+    """
+    Compares the user tags and the test_case tags to see which tests
+    should be be ran.
+    """
+    def decorator(f):
+        """Decorator for overwritten asserts"""
+        def wrapper(self, *args, **kwargs):
+            """Wrapper"""
+            arguments = set(self.USER_TAGS)
+            if arguments:
+                test_case_tags = set(self.tags)
+                if not arguments.intersection(test_case_tags):
+                    self.skipTest(msg)
+
+            f(self, *args, **kwargs)
+        return wrapper
+    return decorator

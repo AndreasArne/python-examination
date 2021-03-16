@@ -4,6 +4,9 @@ Parses all custom options and arguments
 import argparse
 
 def parse():
+    """
+    Handles the arguments and options.
+    """
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter)
     group = parser.add_mutually_exclusive_group()
