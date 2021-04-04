@@ -5,8 +5,8 @@ import sys
 import traceback
 from unittest.result import failfast
 from unittest.runner import TextTestResult
-from examiner import common_errors
-from examiner import helper_functions as hf
+import common_errors
+import helper_functions as hf
 try:
     from examiner.colorama import init, Fore, Back, Style
 except ImportError:

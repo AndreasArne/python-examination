@@ -4,11 +4,11 @@ Custom test collecter, builder and runner used for examining students.
 import io
 import unittest
 from collections import OrderedDict
-import test_exam
-from examiner.exam_test_result import ExamTestResult
-from examiner.exam_test_case import ExamTestCase
-from examiner.exceptions import ContanctError
-from examiner.cli_parser import parse
+from exceptions import ContanctError
+from exam_test_result import ExamTestResult
+from exam_test_case import ExamTestCase
+from cli_parser import parse
+from helper_functions import get_testfiles, import_module
 
 
 PASS = 1

@@ -1,11 +1,10 @@
 """
 Overriding TestCase for exam tool.
 """
-#import sys
 import re
 import unittest
-from examiner import helper_functions as hf
-from examiner.exceptions import TestFuncNameError, TestClassNameError
+from exceptions import TestFuncNameError, TestClassNameError
+import helper_functions as hf
 
 class ExamTestCase(unittest.TestCase):
     """

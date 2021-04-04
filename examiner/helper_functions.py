@@ -3,6 +3,9 @@ pass
 """
 import re
 import hashlib
+import os
+from unittest import SkipTest
+import importlib.util as importer
 try:
     from examiner.colorama import init, Fore, Back, Style
 except ImportError:
