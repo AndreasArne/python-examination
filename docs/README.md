@@ -1,10 +1,16 @@
 Examiner is a layer on top of pythons unittest framwork, for more verbose and clear output when test fail. It is used in a university course to examinate student in a introductionary python course. 
 
-You can see working examples of it in `test/analyzer/.dbwebb`. To run it you first need to build it, run `make build`, it will copy external modules into the package so it can be distributed to students. Then you can find the folder `examiner` in the build folder. Execute `bash correct.bash` in `test/analyzer/.dbwebb`, it will copy the package. to run it.
+You can see working examples of it in `test/python` folder. To run it you first need to build it, run `make build`, it will copy external modules into the package into the `build` and `.dbwebb/test` folder which holds all the unittests. Execute `bash test.bash {KMOM/ASSIGNMENT}` (script located in `.dbwebb/test`) and include an argument of what folder inside `.dbwebb/test` it should run the unittests from. The code that is tested are found inside `me`. If no argument is given it defaults to the current directory.
+
+Examiner uses the `argparse` module and has 3 available arugments:
+ * `-w, --what`, **required** - The absolute path to the desired folder containing the tests. It recursevly looks in all folders for files matching the pattern `"test_(\w)*.py"`.
+ * `-e, --extra` optional - Adds the pattern `"extra_test_(\w)*.py"` so the students can test their extra assignments.
+ * `-t, --tags` optional - Takes a list of tags (sperated by a comma). This filters what tests should be ran. If given it only runs cases that matches the tags.
+
 
 Examiner utilize function docstrings for testcases to modify and specialize error outputs for each test.
 
-So far it only supports tests in one file, `test_exam.py`. TestCase classes need to inherit from `ExamTestCase` and naming should follow the regex `.*Test[0-9]([A-Z].+)`. The number is used to sort execution order and the output.
+TestCase classes need to inherit from `ExamTestCase` and naming should follow the regex `.*Test[0-9]([A-Z].+)`. The number is used to sort execution order and the output.
 
 
 Test function need to follow the naming, `"test_[a-z]_(\w+)"`, and have a docstring. The docstring is used when test fail. The output of docstring can be enhanced and display what was used as argument, `{argument}`, to the students function, what the function returned, `{student}`, and what the correct answer is, `{correct}`. It is also possible to inject colors in the output.
