@@ -2,11 +2,18 @@
 Use this to test our new and added functionality.
 """
 import sys
+import os
 import unittest
 from unittest.runner import _WritelnDecorator
+from unittest import SkipTest
 
-import examiner.exceptions as exce
-from examiner.exam_test_case import ExamTestCase
+proj_path = os.path.dirname(os.path.realpath(__file__ + "/../"))
+path = proj_path + "/examiner"
+if path not in sys.path:
+    sys.path.insert(0, path)
+
+import exceptions as exce
+from exam_test_case import ExamTestCase
 
 
 
@@ -57,7 +64,7 @@ class Test_ExamTestCase(unittest.TestCase):
 
 
 
-    def test_set_answer_list(self):
+    def test_set_answer_list_two(self):
         """
         Answers are lists and with no options
         """
@@ -184,6 +191,39 @@ class Test_ExamTestCase(unittest.TestCase):
         self.assertEqual(test.assignment, "ModulesExist")
         self.assertEqual(test.test_name, "foo")
 
+
+
+    def test_skip_test_by_tags(self):
+        """
+        Tests that SkipTest is raised when the tags does not match.
+        """
+        class Test1Tags1(ExamTestCase):
+            USER_TAGS = ["dont_skip"]
+
+            def test_a_foo(self):
+                self.tags = ["skip"]
+                self.assertEqual('correct', 'incorrect')
+
+        test = Test1Tags1('test_a_foo')
+
+        with self.assertRaises(SkipTest) as _:
+            test.test_a_foo()
+
+
+
+    def test_run_test_by_tags(self):
+        """
+        Tests that an overwritten assert runs the test without being skipped.
+        """
+        class Test1Tags1(ExamTestCase):
+            USER_TAGS = ["dont_skip"]
+
+            def test_a_foo(self):
+                self.tags = ["dont_skip"]
+                return "Not Skipped"
+
+        test = Test1Tags1('test_a_foo')
+        self.assertEqual(test.test_a_foo(), "Not Skipped")
 
 
 if __name__ == '__main__':

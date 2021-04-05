@@ -8,17 +8,26 @@ from importlib import util
 from io import StringIO
 import os
 import sys
-from examiner.exam_test_case import ExamTestCase
-from examiner.exam_test_result import ExamTestResult
+from unittest import TextTestRunner
+from exam_test_case import ExamTestCase
+from exam_test_result import ExamTestResult
+from helper_functions import import_module
 
-proj_path = os.path.dirname(os.path.realpath(__file__ + "/.."))
-if proj_path not in sys.path:
-    sys.path.insert(0, proj_path)
-#pylint: disable=wrong-import-position
-import main
-#pylint: enable=wrong-import-position
-#pylint: disable=attribute-defined-outside-init, line-too-long
 
+# Calculates the path to the import file - Given it has the same folder structure as the me-folder
+FILE_DIR = os.path.dirname(os.path.realpath(__file__))
+FILE_DIR_LIST = FILE_DIR.split("/")
+FILE_DIR_LEN = len(FILE_DIR_LIST) - 1
+FOLDERS_TO_ROOT = FILE_DIR_LEN - FILE_DIR_LIST.index('python')
+COURSE_ROOT = '../' * FOLDERS_TO_ROOT
+KMOM_AND_ASSIGNENT = "/".join(FILE_DIR_LIST[-(FOLDERS_TO_ROOT - 2):])
+REPO_PATH = f"{FILE_DIR}/{COURSE_ROOT}me/{KMOM_AND_ASSIGNENT}"
+
+if REPO_PATH not in sys.path:
+    sys.path.insert(0, REPO_PATH)
+
+# Path to file and basename of the file to import
+main = import_module(REPO_PATH, "main")
 
 
 class Test1Files(ExamTestCase):
@@ -27,6 +36,11 @@ class Test1Files(ExamTestCase):
 
     The different asserts https://docs.python.org/3.6/library/unittest.html#test-cases
     """
+
+    @classmethod
+    def setUpClass(cls):
+        # Otherwise the .txt files will not be found
+        os.chdir(REPO_PATH)
 
     def test_a_modules_exist(self):
         """

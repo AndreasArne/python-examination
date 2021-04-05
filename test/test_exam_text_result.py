@@ -2,10 +2,17 @@
 Use this to test our new and added functionality.
 """
 import sys
+import os
 import unittest
 from unittest.runner import _WritelnDecorator
-from examiner.exam_test_result import ExamTestResult
-from examiner.exam_test_case import ExamTestCase
+
+proj_path = os.path.dirname(os.path.realpath(__file__ + "/../"))
+path = proj_path + "/examiner"
+if path not in sys.path:
+    sys.path.insert(0, path)
+
+from exam_test_result import ExamTestResult
+from exam_test_case import ExamTestCase
 
 
 

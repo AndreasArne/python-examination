@@ -168,7 +168,7 @@ def check_for_tags(msg="Inkluderar inte någon av de givna taggarna"):
             if arguments:
                 test_case_tags = set(self.tags)
                 if not arguments.intersection(test_case_tags):
-                    self.skipTest(msg)
+                    raise SkipTest(msg)
 
             f(self, *args, **kwargs)
         return wrapper
