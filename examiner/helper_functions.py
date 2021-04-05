@@ -173,3 +173,56 @@ def check_for_tags(msg="Inkluderar inte någon av de givna taggarna"):
             f(self, *args, **kwargs)
         return wrapper
     return decorator
+
+
+
+def find_test_folders(root):
+    """
+    Recursively looks for folder names matching test_folder
+    starting from where the script is called and returns the paths.
+    """
+    test_dirs = [root]
+
+    for path, dirs, _files in os.walk(root):
+        for dir_ in dirs:
+            if dir_ != "__pycache__":
+                test_dirs.append(os.path.join(path, dir_))
+    return test_dirs
+
+
+
+def get_testfiles(root=None, extra_assignments=False):
+    """
+    Gets a list of tuples (path and the testfiles basename) for all
+    test_folders.
+    """
+    base_test_pattern = r"test_(\w)*.py"
+    extra_test_pattern = r"extra_test_(\w)*.py"
+
+    test_folders = find_test_folders(root)
+    test_files = []
+
+    for dir_ in test_folders:
+        tests = []
+        for file in os.listdir(dir_):    
+            if extra_assignments and re.match(extra_test_pattern, file):
+                tests.append((dir_, file[:-3]))
+            if re.match(base_test_pattern, file):
+                tests.append((dir_, file[:-3]))
+        test_files.extend(tests)
+
+
+    return test_files
+
+
+
+def import_module(proj_path, module_name):
+    """
+    Loads a module from the given path and name.
+    """
+    spec = importer.spec_from_file_location(
+        module_name, f"{proj_path}/{module_name}.py"
+    )
+    module = importer.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module

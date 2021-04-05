@@ -16,17 +16,18 @@ NOT_PASS = 0
 ARGS = parse()
 
 
-def get_testcases(assignments):
+def get_testcases(assignments, path_and_name):
     """
     Add all TestCases to a list and return.
     """
     testcases = []
     testMethodPrefix = "Test"
-
-    for attrname in dir(test_exam):
+    path, name = path_and_name
+    module = import_module(path, name)
+    for attrname in dir(module):
         if not attrname.startswith(testMethodPrefix):
             continue
-        testClass = getattr(test_exam, attrname)
+        testClass = getattr(module, attrname)
         # Should use isinstance. But it return False, don't know why.
         if testClass.__base__ is ExamTestCase:
             testcases.append(testClass)
@@ -42,11 +43,14 @@ def build_testsuite(assignments):
     """
     Create TestSuit with testcases.
     """
-    testcases = get_testcases(assignments)
+
     suite = unittest.TestSuite()
-    for case in testcases:
-        case.USER_TAGS = ARGS.tags
-        suite.addTest(unittest.makeSuite(case))
+    for path_and_name in get_testfiles(ARGS.what, ARGS.extra_assignments):
+        testcases = get_testcases(assignments, path_and_name)
+
+        for case in testcases:
+            case.USER_TAGS = ARGS.tags
+            suite.addTest(unittest.makeSuite(case))
     return suite
 
 
