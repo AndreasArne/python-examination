@@ -1,5 +1,6 @@
-**/.dbwebb/examiner/
-**/.dbwebb/colorama/
+**/.dbwebb/test/examiner/
+**/.dbwebb/test/colorama/
+**/.dbwebb/test/.test-log
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
