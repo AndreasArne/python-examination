@@ -1,6 +1,6 @@
 Examiner is a layer on top of pythons unittest framwork, for more verbose and clear output when test fail. It is used in a university course to examinate student in a introductionary python course. 
 
-You can see working examples of it in `test/python` folder. To run it you first need to build it, run `make build`, it will copy external modules into the package into the `build` and `.dbwebb/test` folder which holds all the unittests. Execute `bash test.bash {KMOM/ASSIGNMENT}` (script located in `.dbwebb/test`) and include an argument of what folder inside `.dbwebb/test` it should run the unittests from. The code that is tested are found inside `me`. If no argument is given it defaults to the current directory.
+You can see working examples of it in `test/python` folder. To run it you first need to build it, run `make build`, it will copy external modules into the package into the `build` and `.dbwebb/test` folder which holds all the unittests. Execute `bash test.bash {KMOM/ASSIGNMENT}` (script located in `.dbwebb/test`) and include an argument of what folder inside `.dbwebb/test/suite.d` it should run the unittests from. The code that is tested are found inside `me`. If no argument is given it defaults to the current directory.
 
 Examiner uses the `argparse` module and has 3 available arugments:
  * `-w, --what`, **required** - The absolute path to the desired folder containing the tests. It recursevly looks in all folders for files matching the pattern `"test_(\w)*.py"`.
