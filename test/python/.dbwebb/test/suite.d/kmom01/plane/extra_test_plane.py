@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Contains testcases for the individual examination.
+Example for an extra assignment, has no other function.
 """
 import unittest
 import os
@@ -23,7 +23,7 @@ if REPO_PATH not in sys.path:
 
 
 
-class Test2ExtraPlane(ExamTestCase):
+class Test2PlaneExtra(ExamTestCase):
     """
     Each assignment has 1 testcase with multiple asserts.
 
@@ -35,7 +35,7 @@ class Test2ExtraPlane(ExamTestCase):
         # Otherwise the .txt files will not be found
         os.chdir(REPO_PATH)
 
-    def test_a_no_extra(self):
+    def test_a_no_extra_assignments(self):
         """
         Ingen extra uppgift.
         Förväntar att följande finns med i utskrift:
@@ -43,6 +43,7 @@ class Test2ExtraPlane(ExamTestCase):
         Fick följande:
         {student}
         """
+        self.tags = ["speed", "temp", "height"]
         self.assertTrue(True)
 
 if __name__ == '__main__':
