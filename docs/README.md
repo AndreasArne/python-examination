@@ -1,4 +1,4 @@
-Examiner is a layer on top of pythons unittest framwork, for more verbose and clear output when test fail. It is used in a university course to examinate student in a introductionary python course. 
+Examiner is a layer on top of pythons unittest framwork, for more verbose and clear output when test fail. It is used in a university course to examinate student in a introductionary python course.
 
 You can see working examples of it in `test/python` folder. To run it you first need to build it, run `make build`, it will copy external modules into the package into the `build` and `.dbwebb/test` folder which holds all the unittests. Execute `bash test.bash {KMOM/ASSIGNMENT}` (script located in `.dbwebb/test`) and include an argument of what folder inside `.dbwebb/test/suite.d` it should run the unittests from. The code that is tested are found inside `me`. If no argument is given it defaults to the current directory.
 
@@ -72,23 +72,20 @@ It is possible to set member `norepr` to True on a testcase. If you don't want `
 
 
 
+# Development
+
+We use [semantic versioning](https://semver.org/). Set version in `examiner/__init__.py` and update `CHANGELOG.md` with changes before creating a new tag. Only create new releases when code changes in `examiner`, changes that should be sent to the students.
+
+When a new release is create, CircleCi will push the new `examiner` build automatically to the repo `dbwebb-se/python`.
+
+
+
 # TODO:
-- [ ] Try `_mult_arguments`.
-- [ ] Write tests
-- [ ] Add CircleCi
-    - Install colorama on stud servern? Correct is always run on studeserver. Like validate and inspect? Or just have coloroama package in .dbwebb folder
-- [ ] Add help text for common errors, such as too many inputs when mocking.
+- [ ] Write more tests
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
     - Identify errors where this happens.
 - [ ] Remake flowchart as sequence diagram.
-- [x] Package so students also get colorama module
-- [x] Change regex for Testcase class name so can have more than "assigment X".
-- [x] Don't show same error, from different tests for same error.
-- [x] Test it for multiple python versions (Tox?)
-- [X] Create custom exception for contacting responsible.
-- [x] How to handle "empty" exam.py/functions the students haven't started on?
-- [x] Asserts where arguments are on multiple lines destroy the regex for finding assert type. The function call is omitted from error lines. One fix is to overload all assert mehtods in the TestCase class. And save arguments and assert type from there.
-- [x] Fix import structure, now we cant run from correct.bash and unittest with same import of files.
+
 
 
 
