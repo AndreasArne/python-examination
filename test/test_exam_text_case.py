@@ -12,11 +12,8 @@ path = proj_path + "/examiner"
 if path not in sys.path:
     sys.path.insert(0, path)
 
-import exceptions as exce
-from exam_test_case import ExamTestCase
-
-
-
+import examiner.exceptions as exce
+from examiner.exam_test_case import ExamTestCase
 
 class Test_ExamTestCase(unittest.TestCase):
 
@@ -109,21 +106,20 @@ class Test_ExamTestCase(unittest.TestCase):
 
 
 
-    def test_set_assignment_rasie_exception_missing_identifier(self):
+    def test_set_assignment_only_a_letter_for_func_name(self):
         """
-        Tests that set_test_name_and_assignment raise ValueError when test function
-        miss identifier after letter.
+        Tests that set_test_name_and_assignment work for only a letter after test_.
         """
         class Test2Assignment1(ExamTestCase):
             def test_a(self):
                 pass
 
-        with self.assertRaises(exce.TestFuncNameError) as cxt:
-            test = Test2Assignment1('test_a')
+        test = Test2Assignment1('test_a')
+        self.assertEqual(test.assignment, "Assignment1")
+        self.assertEqual(test.test_name, "a")
 
 
-
-    def test_set_assignment_rasie_exception_missing_lettert(self):
+    def test_set_assignment_rasie_exception_missing_letter(self):
         """
         Tests that set_test_name_and_assignment raise ValueError when test function
         miss letter.
@@ -132,8 +128,9 @@ class Test_ExamTestCase(unittest.TestCase):
             def test_foo(self):
                 pass
 
-        with self.assertRaises(exce.TestFuncNameError) as cxt:
-            test = Test1Assignment1('test_foo')
+        test = Test1Assignment1('test_foo')
+        self.assertEqual(test.assignment, "Assignment1")
+        self.assertEqual(test.test_name, "foo")
 
 
 
@@ -160,9 +157,9 @@ class Test_ExamTestCase(unittest.TestCase):
             def test_a_foo(self):
                 pass
 
-        with self.assertRaises(exce.TestClassNameError) as cxt:
-            test = TestAssignment1('test_a_foo')
-
+        test = TestAssignment1('test_a_foo')
+        self.assertEqual(test.assignment, "Assignment1")
+        self.assertEqual(test.test_name, "foo")
 
 
     def test_set_assignment_works_without_number_after(self):

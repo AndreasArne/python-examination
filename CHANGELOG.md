@@ -14,6 +14,13 @@ Available types:
 - `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+### Changed
+- Changed allowed naming for test classes and test functions
+### Added
+- assertNotIn method
+
+## [1.0.2] - 2021-04-21
+
 
 ## [1.0.1] - 2021-04-16
 ### Added
