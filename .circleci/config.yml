@@ -128,7 +128,7 @@ jobs:
             name: Diff changes
             command: |
                 cd python
-                git diff .dbwebb/test/examiner
+                git --no-pager diff .dbwebb/test/examiner
         - run:
             name: Config git
             command: |
