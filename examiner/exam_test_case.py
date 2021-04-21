@@ -107,3 +107,14 @@ class ExamTestCase(unittest.TestCase):
         """
         self.set_answers(expr, True)
         super().assertTrue(expr, msg)
+
+
+
+    @hf.check_for_tags()
+    def assertNotIn(self, member, container, msg=None):
+        """
+        Check that the expression is true.
+        Save correct and student answer as to variables.
+        """
+        self.set_answers(container, member)
+        super().assertNotIn(member, container, msg)
