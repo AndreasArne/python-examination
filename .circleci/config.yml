@@ -173,8 +173,8 @@ workflows:
                     - python38
             - push_to_python:
                 filters:
-                    branches:
-                        ignore: /.*/ # ignore all branch builds. If we dont have this, push_to_python will run anyways because the required job is run. Some kind of "or" logic
+                    # branches:
+                        # ignore: /.*/ # ignore all branch builds. If we dont have this, push_to_python will run anyways because the required job is run. Some kind of "or" logic
                     tags:
                         only: /^v\d+\.\d+\.\d+/
                 requires:
