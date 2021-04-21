@@ -10,10 +10,10 @@ Examiner uses the `argparse` module and has 3 available arugments:
 
 Examiner utilize function docstrings for testcases to modify and specialize error outputs for each test.
 
-TestCase classes need to inherit from `ExamTestCase` and naming should follow the regex `.*Test[0-9]([A-Z].+)`. The number is used to sort execution order and the output.
+TestCase classes need to inherit from `ExamTestCase` and naming should follow the regex `.*Test[0-9]?([A-Z].+)`. The number is used to sort execution order and the output.
 
 
-Test function need to follow the naming, `"test_[a-z]_(\w+)"`, and have a docstring. The docstring is used when test fail. The output of docstring can be enhanced and display what was used as argument, `{argument}`, to the students function, what the function returned, `{student}`, and what the correct answer is, `{correct}`. It is also possible to inject colors in the output.
+Test function need to follow the naming, `"test(_[a-z])?_(\w+)"`, and have a docstring. `(_[a-z])?` is used to order output of tests but don't show it. The docstring is used when test fail. The output of docstring can be enhanced and display what was used as argument, `{argument}`, to the students function, what the function returned, `{student}`, and what the correct answer is, `{correct}`. It is also possible to inject colors in the output.
 
 By default the line above `{correct}` is colored green and the line above `{student}` is colored red. Manual colors can be injected with `"|<color letter>|"` and reset value `"|/RE|"`. The reset color removes all color options up to that point. The module [colorama](https://pypi.org/project/colorama/) is used for coloring.
 
