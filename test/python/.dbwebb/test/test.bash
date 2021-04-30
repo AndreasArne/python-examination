@@ -28,33 +28,4 @@ then
 fi
 
 
-test_status="$(${py} ${DBWEBB_TEST_DIR}/examiner/run_tests.py --what=${PYTHON_TESTS_PATH} ${ARGUMENTS} &> "$LOG_PATH")"
-
-# Picks a subpart of log file
-NOT_FIRSTS="$(cat "$LOG_PATH" | tail -n +2)" # start on line 2
-
-# Output log file
-output_log () {
-    echo
-    echo "====================================="
-    echo "DBWEBB TEST - ${WHAT}"
-    echo "====================================="
-    echo "$NOT_FIRSTS"
-}
-
-
-
-# Clean, removes files
-clean_up () {
-    rm "$LOG_PATH"
-}
-
-
-
-# Outputs log file from Python test script
-output_log
-
-
-# Clean up
-clean_up
-exit 0
+cd $DBWEBB_TEST_DIR && $py -m examiner.run_tests --what=$PYTHON_TESTS_PATH $ARGUMENTS

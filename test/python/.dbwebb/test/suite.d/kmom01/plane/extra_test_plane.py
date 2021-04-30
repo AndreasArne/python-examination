@@ -6,9 +6,9 @@ import unittest
 import os
 import sys
 from unittest import TextTestRunner
-from exam_test_case import ExamTestCase
-from exam_test_result import ExamTestResult
-from helper_functions import find_path_to_assignment
+from examiner.exam_test_case import ExamTestCase
+from examiner.exam_test_result import ExamTestResult
+from examiner.helper_functions import find_path_to_assignment
 
 
 FILE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -44,7 +44,7 @@ class Test2PlaneExtra(ExamTestCase):
         {student}
         """
         self.tags = ["speed", "temp", "height"]
-        self.assertTrue(True)
+        self.assertTrue(False)
 
 if __name__ == '__main__':
     runner = TextTestRunner(resultclass=ExamTestResult, verbosity=2)
