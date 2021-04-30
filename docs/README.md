@@ -6,7 +6,7 @@ Examiner uses the `argparse` module and has 3 available arugments:
  * `-w, --what`, **required** - The absolute path to the desired folder containing the tests. It recursevly looks in all folders for files matching the pattern `"test_(\w)*.py"`.
  * `-e, --extra` optional - Adds the pattern `"extra_test_(\w)*.py"` so the students can test their extra assignments.
  * `-t, --tags` optional - Takes a list of tags (sperated by a comma). This filters what tests should be ran. If given it only runs cases that matches the tags.
-
+ * `--trace` optional - Gives traceback output to assertion errors when they occure.
 
 Examiner utilize function docstrings for testcases to modify and specialize error outputs for each test.
 
