@@ -45,7 +45,7 @@ class ExamTestResult(TextTestResult):
         # here starts the interesting code, which we changed. If test failed
         # because of wrong answer from student
         tb_e = traceback.TracebackException(
-                exctype, value, tb, limit=None, capture_locals=self.tb_locals)
+            exctype, value, tb, limit=None, capture_locals=self.tb_locals)
         help_msg = common_errors.check_if_common_error(exctype.__name__, tb_e, value)
 
         if exctype is test.failureException:
