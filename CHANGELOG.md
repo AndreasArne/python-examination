@@ -14,6 +14,10 @@ Available types:
 - `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+## [1.0.3] - 2021-04-30
+### Added
+- --trace option to traceback assertion errors
+
 ## [1.0.2] - 2021-04-21
 ### Changed
 - Changed allowed naming for test classes and test functions
