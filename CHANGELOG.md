@@ -14,6 +14,8 @@ Available types:
 - `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+
+## [1.0.4] - 2021-05-04
 ### Added
 -  Two new assert methods, assertModule and assertAttribute.
 
