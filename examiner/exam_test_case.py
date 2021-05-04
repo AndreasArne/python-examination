@@ -140,14 +140,14 @@ class ExamTestCase(unittest.TestCase):
 
 
     @hf.check_for_tags()
-    def assertAttribute(self, object, attr, msg=None):
+    def assertAttribute(self, obj, attr, msg=None):
         """
         Check that object has attribute.
         Save correct and student answer as to variables.
         """
-        self.set_answers(object, attr)
+        self.set_answers(obj, attr)
         try:
-            getattr(object, attr)
+            getattr(obj, attr)
         except AttributeError:
-            msg = self._formatMessage(msg, f"attribute {attr} not found in object {object}")
+            msg = self._formatMessage(msg, f"attribute {attr} not found in object {obj}")
             raise self.failureException(msg)
