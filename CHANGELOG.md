@@ -14,6 +14,10 @@ Available types:
 - `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+### Added
+-  Two new assert methods, assertModule and assertAttribute.
+
+
 ## [1.0.3] - 2021-04-30
 ### Added
 - --trace option to traceback assertion errors
