@@ -1,21 +1,140 @@
-Examiner is a layer on top of pythons unittest framwork, for more verbose and clear output when test fail. It is used in a university course to examinate student in a introductionary python course.
+Examiner is a layer on top of pythons unittest framework, for more verbose and clear output when test fail. It is used in a university course to examine student in a introductionary python course.
+
+
+# Added functionality
+
+- Custom fail output based on docstring in test function.
+
+- Color in text output.
+
+- New Assert methods.
+
+- Run only tests based on tags.
+
+- Tips in output for common errors.
 
 You can see working examples of it in `test/python` folder. To run it you first need to build it, run `make build`, it will copy external modules into the package into the `build` and `.dbwebb/test` folder which holds all the unittests. Execute `bash test.bash {KMOM/ASSIGNMENT}` (script located in `.dbwebb/test`) and include an argument of what folder inside `.dbwebb/test/suite.d` it should run the unittests from. The code that is tested are found inside `me`. If no argument is given it defaults to the current directory.
 
-Examiner uses the `argparse` module and has 3 available arugments:
- * `-w, --what`, **required** - The absolute path to the desired folder containing the tests. It recursevly looks in all folders for files matching the pattern `"test_(\w)*.py"`.
+
+
+# Available arguments
+
+Examiner uses the `argparse` module and has the following available arguments:
+ * `-w, --what`, **required** - The absolute path to the desired folder containing the tests. It recursively looks in all folders for files matching the pattern `"test_(\w)*.py"`.
  * `-e, --extra` optional - Adds the pattern `"extra_test_(\w)*.py"` so the students can test their extra assignments.
- * `-t, --tags` optional - Takes a list of tags (sperated by a comma). This filters what tests should be ran. If given it only runs cases that matches the tags.
- * `--trace` optional - Gives traceback output to assertion errors when they occure.
+ * `-t, --tags` optional - Takes a list of tags (separated by a comma). This filters what tests should be ran. If given it only runs cases that matches the tags.
+ * `--trace` optional - Gives traceback output to assertion errors when they occur.
 
 Examiner utilize function docstrings for testcases to modify and specialize error outputs for each test.
 
 TestCase classes need to inherit from `ExamTestCase` and naming should follow the regex `.*Test[0-9]?([A-Z].+)`. The number is used to sort execution order and the output.
 
 
-Test function need to follow the naming, `"test(_[a-z])?_(\w+)"`, and have a docstring. `(_[a-z])?` is used to order output of tests but don't show it. The docstring is used when test fail. The output of docstring can be enhanced and display what was used as argument, `{argument}`, to the students function, what the function returned, `{student}`, and what the correct answer is, `{correct}`. It is also possible to inject colors in the output.
 
-By default the line above `{correct}` is colored green and the line above `{student}` is colored red. Manual colors can be injected with `"|<color letter>|"` and reset value `"|/RE|"`. The reset color removes all color options up to that point. The module [colorama](https://pypi.org/project/colorama/) is used for coloring.
+# Writing a TestCase
+
+TestCase class name and test funktion names are used in the output and need to follow the following patterns.
+
+Class name, `Test[0-9]?([A-Z].+)\)`. Use a number after "test" if you want to have a fixed order in the output.
+
+Function name, `test(_[a-z])?_(\w+)`. Use a letter after "test" if you want to have a fixed order in the output.
+
+### Example
+
+```python
+class Test3Assignment3(ExamTestCase):
+    def test_a_valid_isbn(self):
+```
+
+### Docstring
+
+The docstring is used as error message when a test fails. This is to get better explanation of the purpose of the test. We can use predefined words to output expected value, the real value and what was used as argument. Colors can also be injected, read below for more info.
+
+#### Available docstring values
+
+These must not be in the docstring but then the output won't have any information about the call or values.
+
+- `{arguments}`: This will be replaced with the arguments used to the function that is tested, if any.
+- `{correct}`: This will be replaced with the correct value in the assert call. The row above this will automatically be colored green. Can be overwritten with custom coloring.
+- `{student}`: This will be replaced with the value that was provided by the code in the assert call. The row above this will automatically be colored red. Can be overwritten with custom coloring.
+
+"correct" and "student" can differ, if its the students answer or correct, depending on what assert method is used.
+
+
+### Example
+
+```python
+class Test3Assignment3(ExamTestCase):
+    """
+    Each assignment has 3 testcase with multiple asserts.
+    """
+    def test_a_valid_isbn(self):
+        """
+        Tests different IBSN numbers.
+        The following is used as argument:
+        {arguments}
+        The following value was expected to be returned:
+        True
+        Instead the it returned the following value:
+        {student}
+        """
+```
+
+
+
+### Available settings in a test function
+
+`self.tags = []` - add string in list to add tags to test. If test is run with `--tags` the test will only run if they match.
+`self.norepr = True` - By default the `{student}` and `{correct}` value are run with the `repr()` function. However if you don't want that use this.
+`self._argument = []` - This and `_multi_arguments` is used to supply value to `{arguments}` in the docstring. Use this if only one value used as argument.
+`self._multi_arguments = []` - If multiple arguments was used to function that is tested, add them to the list.
+
+Don't use `self._argument` and `self._multi_arguments` in the same test function. Use one of them.
+
+### Example
+
+```python
+class Test3Assignment3(ExamTestCase):
+    """
+    Each assignment has 3 testcase with multiple asserts.
+    """
+    def test_a_valid_isbn(self):
+        """
+        Tests different IBSN numbers.
+        The following is used as argument:
+        {arguments}
+        |G|The following value was expected to be returned:|/RE|
+        True
+        Instead the it returned the following value:
+        {student}
+        """
+        self.tags = ["isbn", "assignment3"]
+        # self.norepr = True
+        self._argument = "9781861972712"
+        self.assertTrue(exam.validate_isbn(self._argument))
+        self._argument = "9781617294136"
+        self.assertTrue(exam.validate_isbn(self._argument))
+```
+
+Output:
+
+```
+Fails for Assignment3
+    |Tests different IBSN numbers.
+    |The following is used as argument:
+    |'9781861972712'
+    |The following value was expected to be returned:
+    |True
+    |Instead the it returned the following value:
+    |False
+    ----------------------------------------------------------------------
+```
+
+
+
+### Text coloring
+
+Manual colors can be injected with `"|<color letter>|"` and reset value `"|/RE|"`. The reset color removes all color options up to that point. The module [colorama](https://pypi.org/project/colorama/) is used for coloring.
 
 Available colors and letters are:
 
@@ -33,42 +152,58 @@ Available colors and letters are:
 ```
 
 Example:
-```
+
+```python
 """
-|Y|Testar med tom lista|/RE|
-Följande användes som argument till funktionen: {arguments}
-Testet förväntar sig att följande lista returneras:
-{correct}
-Följande lista returnerades istället:
+Tests different IBSN numbers.
+The following is used as argument:
+{arguments}
+|G|The following value was expected to be returned:|/RE|
+True
+Instead the it returned the following value:
 {student}
 """
 ```
 
-In test functions where functions that are tested need arguments, before asserting the function add the arguments as instance member. If there only is one argument add it to `self._argument` and if multiple arguments add them in a list to `self._mult_arguments`.
 
-Example of a TestCase for one assignment:
+
+# New asserts
+
+### assertModule
+
+Check if a module exist and can be imported (does not import it). Can check both standard import and import from path. If `module_path` is None, method will check standard import. Otherwise it will check for module in `module_path`.
+
+Run as `assertModule(module, module_path=None)`.
 
 ```
-class Test3Assignment3(ExamTestCase):
-    """
-    Each assignment has 3 testcase with multiple asserts.
-    """
-    def test_a_valid_isbn(self):
-        """
-        |M|Test Testar olika korrekta isbn nummer.|/RE|
-        Följande användes som argument till funktionen: {arguments}
-        Testet förväntar sig att följande returneras: True
-        Följande värde returnerades istället:  {student}
-        """
-        self._argument = "9781861972712"
-        self.assertTrue(exam.validate_isbn(self._argument))
-        self._argument = "9781617294136"
-        self.assertTrue(exam.validate_isbn(self._argument))
+module - str: Name of module to import.
+
+module_path - str: Realpath to directory where module should exist.
 ```
 
 
 
-It is possible to set member `norepr` to True on a testcase. If you don't want `repr()` to be run on the students respons before printing it when a test fail.
+### assertAttribute
+
+Check if an object has an attribute.
+
+Run as `assertAttribute(object, attr)`.
+
+```
+object - Object: Object to look for attribute in.
+
+attr - str: Name of attribute to look for.
+```
+
+
+
+# Common errors caught
+
+Some errors are caught and we add extra help text for them.
+
+### StopIteration
+
+Common error when the code contain too many `input()` calls than what the test expect. The default output is hard to understand.
 
 
 
@@ -78,6 +213,10 @@ We use [semantic versioning](https://semver.org/). Set version in `examiner/__in
 
 When a new release is create, CircleCi will push the new `examiner` build automatically to the repo `dbwebb-se/python`.
 
+### Flowchart of unittest execution
+
+[unittest execution order](https://app.lucidchart.com/invitations/accept/f9604303-3cf8-4cbf-ab22-be0e64b99f49)
+
 
 
 # TODO:
@@ -85,10 +224,3 @@ When a new release is create, CircleCi will push the new `examiner` build automa
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
     - Identify errors where this happens.
 - [ ] Remake flowchart as sequence diagram.
-
-
-
-
-# Flowchart of unittest execution
-
-[unittest execution order](https://app.lucidchart.com/invitations/accept/f9604303-3cf8-4cbf-ab22-be0e64b99f49)
