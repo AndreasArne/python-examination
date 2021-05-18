@@ -14,12 +14,16 @@ Available types:
 - `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+
+
+
+## [1.1.0] - 2021-05-18
 ### Changed
 - Increased max len for test name and result in output.
 - --trace flag now shows entire traceback
 
 ### Added
-- Support for AssertRaises
+- Support for assertRaises
 
 
 
