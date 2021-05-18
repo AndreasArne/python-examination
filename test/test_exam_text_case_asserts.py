@@ -148,6 +148,40 @@ class Test_ExamTestCase(unittest.TestCase):
         self.assertEqual(test.student_answer, "<class 'exam_test_case.ExamTestCase'>")
 
 
+
+    def test_assert_raises(self):
+        """
+        Test that assertEaises can catch exception
+        """
+        class TestAssertRaises(ExamTestCase):
+            def test_foo(self_):
+                with self_.assertRaises(ValueError):
+                    raise ValueError()
+
+        test = TestAssertRaises('test_foo')
+        test.test_foo()
+        self.assertEqual(test.correct_answer, "<class 'ValueError'>")
+        self.assertEqual(test.student_answer, "''")
+
+
+
+    def test_assert_raises_other_exception(self):
+        """
+        Test that assertRaises does not catch other exception
+        """
+        class TestAssertRaises(ExamTestCase):
+            def test_foo(self_):
+                with self_.assertRaises(ValueError):
+                    self.assertEqual(1, 2)
+
+        test = TestAssertRaises('test_foo')
+        with self.assertRaises(AssertionError):
+            test.test_foo()
+        self.assertEqual(test.correct_answer, "<class 'ValueError'>")
+        self.assertEqual(test.student_answer, "''")
+
+
+
 if __name__ == '__main__':
     # runner = unittest.TextTestRunner(resultclass=ExamTestResult, verbosity=2)
     unittest.main(verbosity=2)

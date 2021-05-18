@@ -16,6 +16,11 @@ Available types:
 ## [Unreleased]
 ### Changed
 - Increased max len for test name and result in output.
+- --trace flag now shows entire traceback
+
+### Added
+- Support for AssertRaises
+
 
 
 ## [1.0.4] - 2021-05-04
