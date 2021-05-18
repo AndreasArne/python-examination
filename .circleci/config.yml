@@ -75,7 +75,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-                - venv-{{ checksum "requirements.txt" }}
+                - venv-{{ checksum "requirements.txt" }}-2
         - run:
             name: install dependencies
             command: |
@@ -83,7 +83,7 @@ jobs:
                 . venv/bin/activate
                 make install
         - save_cache:
-            key: venv-{{ checksum "requirements.txt" }}
+            key: venv-{{ checksum "requirements.txt" }}-2
             paths:
                 - venv
         - run: echo "source ~/exam/venv/bin/activate" >> $BASH_ENV
