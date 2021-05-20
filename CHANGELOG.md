@@ -15,6 +15,12 @@ Available types:
 
 ## [Unreleased]
 
+## [1.3.0] - 2021-05-20
+### Added
+- New assert method assertOrder
+
+
+
 ## [1.2.0] - 2021-05-20
 ### Added
 - Support for assertCountEqual

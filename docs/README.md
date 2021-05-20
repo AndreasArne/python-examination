@@ -197,6 +197,20 @@ attr - str: Name of attribute to look for.
 
 
 
+### assertOrder
+
+Checks if the elements in a sequence appear in the same order in another sequence that support the `index()` method. Ex. that a number of string appear in correct order in a bigger string. `["Hej", "Haha"]` and `"Hej ho Haha"` would assert.
+
+Run as `assertOrder(order, container)`.
+
+```
+order - sequence: Sequence with elements in correct order.
+
+container - sequence: Sequence to check correct order in using `index()`.
+```
+
+
+
 # Common errors caught
 
 Some errors are caught and we add extra help text for them.
