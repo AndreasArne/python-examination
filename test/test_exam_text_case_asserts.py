@@ -135,7 +135,7 @@ class Test_ExamTestCase(unittest.TestCase):
 
     def test_assert_attribute_fail(self):
         """
-        Test that assertAttribute raise error when moidule is missing function
+        Test that assertAttribute raise error when module is missing function
         """
         class TestAssertAttribute(ExamTestCase):
             def test_foo(self_):
@@ -180,6 +180,51 @@ class Test_ExamTestCase(unittest.TestCase):
         self.assertEqual(test.correct_answer, "<class 'ValueError'>")
         self.assertEqual(test.student_answer, "''")
 
+
+
+    def test_assert_order_list(self):
+        """
+        Test that assertOrder for lists
+        """
+        class TestAssertOrder(ExamTestCase):
+            def test_foo(self_):
+                self_.assertOrder(["Hej", "haha"], ["Hej", "haha"])
+
+        test = TestAssertOrder('test_foo')
+        test.test_foo()
+        self.assertEqual(test.correct_answer, "['Hej', 'haha']")
+        self.assertEqual(test.student_answer, "['Hej', 'haha']")
+
+
+
+    def test_assert_order_list_str(self):
+        """
+        Test that assertOrder for string container
+        """
+        class TestAssertOrder(ExamTestCase):
+            def test_foo(self_):
+                self_.assertOrder(["Hej", "haha"], "Hej haha")
+
+        test = TestAssertOrder('test_foo')
+        test.test_foo()
+        self.assertEqual(test.correct_answer, "['Hej', 'haha']")
+        self.assertEqual(test.student_answer, "'Hej haha'")
+
+
+
+    def test_assert_order_fail(self):
+        """
+        Test that assertOrder raise AttributeError
+        """
+        class TestAssertOrder(ExamTestCase):
+            def test_foo(self_):
+                self_.assertOrder(["haha", "Hej"], "Hej haha")
+
+        test = TestAssertOrder('test_foo')
+        with self.assertRaises(AssertionError):
+            test.test_foo()
+        self.assertEqual(test.correct_answer, "['haha', 'Hej']")
+        self.assertEqual(test.student_answer, "'Hej haha'")
 
 
 if __name__ == '__main__':
