@@ -15,6 +15,10 @@ Available types:
 
 ## [Unreleased]
 
+## [1.2.0] - 2021-05-20
+### Added
+- Support for assertCountEqual
+
 
 
 ## [1.1.0] - 2021-05-18
