@@ -15,6 +15,13 @@ Available types:
 
 ## [Unreleased]
 
+## [1.4.0] - 2021-05-20
+### Changed
+- Script no longer output results if no tests are found.
+- --extra only runs extra assignments
+
+
+
 ## [1.3.0] - 2021-05-20
 ### Added
 - New assert method assertOrder
