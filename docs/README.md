@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/AndreasArne/python-examination/tree/master.svg?style=svg)](https://circleci.com/gh/AndreasArne/python-examination/tree/master)
+
 Examiner is a layer on top of pythons unittest framework, for more verbose and clear output when test fail. It is used in a university course to examine student in a introductionary python course.
 
 
