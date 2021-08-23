@@ -14,6 +14,8 @@ Available types:
 - `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+### Fixed
+- --tags will not properly skip tests if they don't match.
 
 ## [1.4.0] - 2021-05-20
 ### Changed

@@ -84,7 +84,7 @@ class Test3Assignment3(ExamTestCase):
 
 ### Available settings in a test function
 
-`self.tags = []` - add string in list to add tags to test. If test is run with `--tags` the test will only run if they match.
+`@tags()` - add string as argument list to add tags to test. If test is run with `--tags` the test will only run if they match. Can also add kwarg "msg" to set output text for skipped tests.
 `self.norepr = True` - By default the `{student}` and `{correct}` value are run with the `repr()` function. However if you don't want that use this.
 `self._argument = []` - This and `_multi_arguments` is used to supply value to `{arguments}` in the docstring. Use this if only one value used as argument.
 `self._multi_arguments = []` - If multiple arguments was used to function that is tested, add them to the list.
@@ -98,6 +98,7 @@ class Test3Assignment3(ExamTestCase):
     """
     Each assignment has 3 testcase with multiple asserts.
     """
+    @tags("isbn", "assignment3", msg="Skipping test without correct tag")
     def test_a_valid_isbn(self):
         """
         Tests different IBSN numbers.
@@ -108,7 +109,6 @@ class Test3Assignment3(ExamTestCase):
         Instead the it returned the following value:
         {student}
         """
-        self.tags = ["isbn", "assignment3"]
         # self.norepr = True
         self._argument = "9781861972712"
         self.assertTrue(exam.validate_isbn(self._argument))
