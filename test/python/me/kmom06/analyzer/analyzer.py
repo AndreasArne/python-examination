@@ -57,7 +57,8 @@ def word_count(text):
     words = text.split(" ")
     nr_words = len(words)
     js = json.loads('{"nr_of_words": %s }' % (nr_words))
-    print(json.dumps(js, indent=4))
+    # print(json.dumps(js, indent=4))
+    print(nr_words)
     
 def line_count(text):
     """
@@ -68,7 +69,8 @@ def line_count(text):
     nr_lines = len(lines)
     # print("\nTotal lines count: %d" % nr_lines)
     js = json.loads('{"nr_of_lines": %s }' % (nr_lines))
-    print(json.dumps(js, indent=4))
+    # print(json.dumps(js, indent=4))
+    print(nr_lines)
     
 def letter_count(text):
     """
@@ -77,7 +79,8 @@ def letter_count(text):
     nr_letters = len(strip_non_alpa(text))
     # print("\nTotal letter count: %d" % nr_letters)
     js = json.loads('{"nr_of_letters": %s }' % (nr_letters))
-    print(json.dumps(js, indent=4))
+    # print(json.dumps(js, indent=4))
+    print(nr_letters)
 
 
 def word_frequency(text):
@@ -102,7 +105,11 @@ def word_frequency(text):
     for key, val in lst[:7]:
         js["most_frequent_words"].update({val: str(key) + " | " + str("{:.1%}".format(key/len(words)))})
         # js += '"'+ val + '": ' + str(key)+ ','
-    print(json.dumps(js, indent=4))
+    # print(json.dumps(js, indent=4))
+    for key, value in js["most_frequent_words"].items():
+        print(f"{key}: {value}")
+    # print(js["most_frequent_words"])
+    
     # lst = list()
     # for key, value in  counts.items():
     #     lst.append((value, key.lower()))
@@ -174,7 +181,11 @@ def letter_frequency(text):
     for key, val in lst[:7]:
         js["most_frequent_letters"].update({val: str(key) + " | " + str("{:.1%}".format(key/tot_letters))})
         # js += '"'+ val + '": ' + str(key)+ ','
-    print(json.dumps(js, indent=4))
+    # print(json.dumps(js, indent=4))
+    for key, value in js["most_frequent_letters"].items():
+        print(f"{key}: {value}")
+    # print(js["most_frequent_letters"])
+    
 
 if __name__ == "__main__":
     analyzeFiles()

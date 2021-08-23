@@ -84,13 +84,16 @@ def main():
     It should check the choice done by the user and call a appropriate
     function.
     """
+    filen = "phil.txt"
     while True:
         menu()
-        read_file("phil.txt")
+        read_file(filen)
         command = input("--> ")
         if command == "lines":
             analyzer.line_count(TEXT)
-            
+        elif command == "change":
+            filen = input("Enter filename: ")
+
         elif command == "words":
             analyzer.word_count(TEXT)
 
