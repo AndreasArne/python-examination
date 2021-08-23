@@ -14,11 +14,17 @@ Available types:
 - `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+
+
+
+## [1.5.0]
+
 ### Added
 - Added som common functions/classes can be imported directly from examiner.
 
 ### Fixed
 - --tags will not properly skip tests if they don't match.
+
 
 
 ## [1.4.0] - 2021-05-20
