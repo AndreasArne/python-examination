@@ -7,13 +7,13 @@ import unittest
 from unittest.runner import _WritelnDecorator
 from unittest import SkipTest
 
-proj_path = os.path.dirname(os.path.realpath(__file__ + "/../"))
-path = proj_path + "/examiner"
-if path not in sys.path:
-    sys.path.insert(0, path)
+# proj_path = os.path.dirname(os.path.realpath(__file__ + "/../"))
+# path = proj_path + "/examiner"
+# if path not in sys.path:
+#     sys.path.insert(0, path)
 
-import examiner.exceptions as exce
-from examiner.exam_test_case import ExamTestCase
+from examiner import exceptions as exce
+from examiner import ExamTestCase
 from examiner import tags
 
 class Test_ExamTestCase(unittest.TestCase):

@@ -5,13 +5,7 @@ import sys
 import os
 import unittest
 from unittest.runner import _WritelnDecorator
-
-proj_path = os.path.dirname(os.path.realpath(__file__ + "/../"))
-path = proj_path + "/examiner"
-if path not in sys.path:
-    sys.path.insert(0, path)
-
-from exam_test_case import ExamTestCase
+from examiner import ExamTestCase
 
 class Test_ExamTestCase(unittest.TestCase):
 
@@ -123,7 +117,7 @@ class Test_ExamTestCase(unittest.TestCase):
         test = TestAssertAttribute('test_foo')
         test.test_foo()
         self.assertEqual(test.correct_answer, "'assertAttribute'")
-        self.assertEqual(test.student_answer, "<class 'exam_test_case.ExamTestCase'>")
+        self.assertEqual(test.student_answer, "<class 'examiner.exam_test_case.ExamTestCase'>")
 
 
 
@@ -139,7 +133,7 @@ class Test_ExamTestCase(unittest.TestCase):
         with self.assertRaises(AssertionError):
             test.test_foo()
         self.assertEqual(test.correct_answer, "'NotAFunction'")
-        self.assertEqual(test.student_answer, "<class 'exam_test_case.ExamTestCase'>")
+        self.assertEqual(test.student_answer, "<class 'examiner.exam_test_case.ExamTestCase'>")
 
 
 

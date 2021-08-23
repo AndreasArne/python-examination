@@ -5,12 +5,12 @@ import sys
 import os
 import unittest
 from unittest import mock
+from examiner import common_errors
 
-proj_path = os.path.dirname(os.path.realpath(__file__ + "/../"))
-path = proj_path + "/examiner"
-if path not in sys.path:
-    sys.path.insert(0, path)
-import common_errors
+# proj_path = os.path.dirname(os.path.realpath(__file__ + "/../"))
+# path = proj_path + "/examiner"
+# if path not in sys.path:
+#     sys.path.insert(0, path)
 
 class TestCheckIfCommonError(unittest.TestCase):
     def test_return_false_if_missing_exception(self):
@@ -18,12 +18,12 @@ class TestCheckIfCommonError(unittest.TestCase):
         self.assertFalse(res)
 
     def test_return_msg_for_found_error(self):
-        with mock.patch("common_errors.wrong_nr_of_input_calls", return_value="msg"):
+        with mock.patch("examiner.common_errors.wrong_nr_of_input_calls", return_value="msg"):
             res = common_errors.check_if_common_error("StopIteration", "", "")
         self.assertIn("msg", res)
 
     def test_return_false_for_not_common_error(self):
-        with mock.patch("common_errors.wrong_nr_of_input_calls", return_value=False):
+        with mock.patch("examiner.common_errors.wrong_nr_of_input_calls", return_value=False):
             res = common_errors.check_if_common_error("StopIteration", "", "")
         self.assertFalse(res)
 
@@ -40,7 +40,7 @@ class TestErrorFunctions(unittest.TestCase):
             'super().assertIn(member, container, msg)',
             'AssertionError: 1 != 2',
         ]
-        with mock.patch("common_errors.ARGS.trace_assertion_error", True):
+        with mock.patch("examiner.common_errors.ARGS.trace_assertion_error", True):
             res = common_errors.check_if_common_error("AssertionError", tb_mock, "")
         self.assertIn('AssertionError: 1 != 2', res)
         self.assertTrue(isinstance(res, str))
@@ -50,7 +50,7 @@ class TestErrorFunctions(unittest.TestCase):
     def test_assertion_traceback_trace_false(self):
         tb_mock = mock.MagicMock()
 
-        with mock.patch("common_errors.ARGS.trace_assertion_error", False):
+        with mock.patch("examiner.common_errors.ARGS.trace_assertion_error", False):
             res = common_errors.check_if_common_error("AssertionError", tb_mock, "")
             self.assertEqual("", res)
 
