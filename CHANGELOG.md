@@ -15,6 +15,9 @@ Available types:
 
 ## [Unreleased]
 
+## [1.5.1]
+### Fixed
+- Bug caused tags-wrapped functions to have incorrect metadata.
 
 
 ## [1.5.0]
