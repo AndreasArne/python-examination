@@ -257,6 +257,21 @@ class Test_ExamTestCase(unittest.TestCase):
         test = Test1Simpel('test_a_foo')
         self.assertEqual(test.USER_TAGS, [])
 
+
+    def test_wrapped_tags_correct_metadata(self):
+        """
+        Check that a tags-wrapped test has its own metadata and not wrapped functions
+        """
+        class Test1Simpel(ExamTestCase):
+
+            @tags("test")
+            def test_a_foo(self):
+                """a comment"""
+                self.assertEqual("hej", "hej")
+
+        test = Test1Simpel('test_a_foo')
+        self.assertEqual(test._testMethodDoc, "a comment")
+
 if __name__ == '__main__':
     # runner = unittest.TextTestRunner(resultclass=ExamTestResult, verbosity=2)
     unittest.main(verbosity=2)
