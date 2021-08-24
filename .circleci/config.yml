@@ -67,6 +67,13 @@ jobs:
     steps:
         - test_steps_python
 
+  python39:
+    docker:
+      - image: cimg/python:3.9
+    working_directory: ~/exam
+    steps:
+        - test_steps_python
+
   build:
     docker:
       - image: cimg/python:3.8
@@ -164,6 +171,9 @@ workflows:
             - python38:
                 filters:
                     <<: *always-run-filter
+            - python39:
+                filters:
+                    <<: *always-run-filter
             - build:
                 filters:
                     <<: *always-run-filter
@@ -171,6 +181,7 @@ workflows:
                     - python36
                     - python37
                     - python38
+                    - python39
             - push_to_python:
                 filters:
                     branches:
