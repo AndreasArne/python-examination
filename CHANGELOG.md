@@ -15,6 +15,14 @@ Available types:
 
 ## [Unreleased]
 
+
+
+## [1.5.2]
+### Fixed
+- Change in pythons unittest made it so tip for StopIteration wasnät showing on python38-9.
+
+
+
 ## [1.5.1]
 ### Fixed
 - Bug caused tags-wrapped functions to have incorrect metadata.
