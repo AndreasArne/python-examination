@@ -4,8 +4,11 @@ Use this to test our new and added functionality.
 import sys
 import os
 import unittest
+import traceback
+from io import StringIO
 from unittest import mock
-from examiner import common_errors
+from unittest.mock import patch
+from examiner import common_errors, exceptions as exce, ExamTestCase, tags
 
 # proj_path = os.path.dirname(os.path.realpath(__file__ + "/../"))
 # path = proj_path + "/examiner"
@@ -56,40 +59,19 @@ class TestErrorFunctions(unittest.TestCase):
 
 
 
-    def test_wrong_nr_of_input_calls_found(self):
-        tb_mock = mock.MagicMock()
-        stack_obj_mock2 = mock.MagicMock()
-        stack_obj_mock2.line = "temp = input('Enter current outside temperature')"
-        stack_obj_mock3 = mock.MagicMock()
-        stack_obj_mock3.line = "return _mock_self._mock_call(*args, **kwargs)"
-        stack_obj_mock4 = mock.MagicMock()
-        stack_obj_mock4.line = "result = next(effect)"
-
-        tb_mock.stack = [
-            "",
-            "",
-            stack_obj_mock2,
-            stack_obj_mock3,
-            stack_obj_mock4,
-        ]
-        res = common_errors.wrong_nr_of_input_calls(tb_mock)
-        self.assertIn("(Tips!", res)
-
-    def test_wrong_nr_of_input_calls_not_found(self):
-        tb_mock = mock.MagicMock()
-        stack_obj_mock2 = mock.MagicMock()
-        stack_obj_mock2.line = "temp = input('Enter current outside temperature')"
-        stack_obj_mock3 = mock.MagicMock()
-        stack_obj_mock3.line = "some some"
-        stack_obj_mock4 = mock.MagicMock()
-        stack_obj_mock4.line = "result = next(effect)"
-
-        tb_mock.stack = [
-            "",
-            "",
-            stack_obj_mock2,
-            stack_obj_mock3,
-            stack_obj_mock4,
-        ]
-        res = common_errors.wrong_nr_of_input_calls(tb_mock)
-        self.assertFalse(res)
+    def test_wrong_nr_of_input_calls_found_dynamic(self):
+        class Test1InputError(ExamTestCase):
+            def test_a(self):
+                inp = ["test"]
+                with patch('builtins.input', side_effect=inp):
+                    with patch('sys.stdout', new=StringIO()) as fake_out:
+                        _ = input("ok")
+                        _ = input("too  many")
+                        str_data = fake_out.getvalue()
+        test = Test1InputError('test_a')
+        try:
+            test.test_a()
+        except StopIteration as e:
+            tb = traceback.TracebackException(type(e), e, e.__traceback__, limit=None)
+            res = common_errors.wrong_nr_of_input_calls(tb)
+        self.assertIn("Tips!", res)
