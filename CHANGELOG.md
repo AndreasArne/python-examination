@@ -15,6 +15,7 @@ Available types:
 
 ## [Unreleased]
 
+## [1.6.0]
 ### Added
 - Can add website links to assignemnt in TestCase classes
 
