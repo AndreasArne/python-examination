@@ -98,12 +98,14 @@ class Test_ExamTestCase(unittest.TestCase):
         correct.
         """
         class Test1Assignment1(ExamTestCase):
+            link_to_assignment = "a link"
             def test_a_foo(self):
                 pass
 
         test = Test1Assignment1('test_a_foo')
         self.assertEqual(test.assignment, "Assignment1")
         self.assertEqual(test.test_name, "foo")
+        self.assertEqual(test.link_to_assignment, "a link")
 
 
 
@@ -118,6 +120,7 @@ class Test_ExamTestCase(unittest.TestCase):
         test = Test2Assignment1('test_a')
         self.assertEqual(test.assignment, "Assignment1")
         self.assertEqual(test.test_name, "a")
+        self.assertEqual(test.link_to_assignment, "")
 
 
     def test_set_assignment_rasie_exception_missing_letter(self):

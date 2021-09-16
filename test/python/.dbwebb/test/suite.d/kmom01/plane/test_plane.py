@@ -46,6 +46,8 @@ class Test2Plane(ExamTestCase):
     }
 
 
+    link_to_assignment = "https://dbwebb.se/uppgift/ditt-forsta-python-skript-v2"
+
     @classmethod
     def setUpClass(cls):
         """
