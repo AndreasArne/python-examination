@@ -8,6 +8,8 @@ SCRIPT_PATH=`realpath $0`
 DBWEBB_TEST_DIR=`dirname "$SCRIPT_PATH"`
 LOG_PATH="${DBWEBB_TEST_DIR}/.test-log"
 
+cp -r "$DBWEBB_TEST_DIR/../../../../build/examiner" "$DBWEBB_TEST_DIR/"
+
 # What kmom / assignment to test
 CURRENT_DIR=$(pwd | awk -F/ '{print $NF}')
 WHAT=${1:-$CURRENT_DIR}
@@ -19,7 +21,7 @@ then
     WHAT=$CURRENT_DIR
 fi
 
-PYTHON_TESTS_PATH=$(find "${DBWEBB_TEST_DIR}" -name ${WHAT} -and -type d)
+PYTHON_TESTS_PATH=$(find "${DBWEBB_TEST_DIR}" -name "${WHAT}" -and -type d)
 
 if [ -z ${PYTHON_TESTS_PATH} ]
 then

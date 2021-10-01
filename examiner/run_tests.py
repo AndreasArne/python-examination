@@ -8,7 +8,7 @@ from examiner.exceptions import ContanctError
 from examiner.exam_test_result import ExamTestResult
 from examiner.exam_test_case import ExamTestCase
 from examiner.cli_parser import parse
-from examiner.helper_functions import get_testfiles, import_module
+from examiner.helper_functions import get_testfiles, import_module, inject_regex_colors
 
 
 PASS = 1
@@ -30,6 +30,8 @@ def get_testcases(path_and_name):
         testClass = getattr(module, attrname)
         # Should use isinstance. But it return False, don't know why.
         if testClass.__base__ is ExamTestCase:
+            print(dir(testClass))
+            print(testClass)
             testcases.append(testClass)
     return testcases
 
@@ -69,11 +71,11 @@ def run_testcases(suite):
 
 
 
-def check_pass_fail(result):
+def mark_test_cases(result):
     """
     Mark assignments as Passed if they succeded.
     """
-    assignments = OrderedDict() # OrderedDict used for backwards compability
+    assignments = {}
     for assignment, outcome in result.items():
         if outcome["started"] == outcome["success"]:
             assignments[assignment] = PASS
@@ -82,14 +84,34 @@ def check_pass_fail(result):
     return assignments
 
 
+
+def calc_points_for_exam(assignments):
+    """
+    First assignment is worth 20 points. Rest 10 each.
+    """
+    points = list(assignments.values())[0] * 20
+    points += sum(list(assignments.values())[1:])
+    return points
+
+
+
 def format_output(output, assignments):
     """
     Print and format test run and which assignments pass/fail.
     """
     if not assignments:
         return
-    result = " ".join([str(res) for res in assignments.values()])
-    print(result)
+    if ARGS.exam:
+        POINTS_FOR_PASSING = 20
+        points = calc_points_for_exam(assignments)
+        print(f"Du har {points} poäng!")
+        if points >= POINTS_FOR_PASSING:
+            print(inject_regex_colors("Det betyder att du är |G|godkänd|/RE| på den individuella examinationen."))
+        else:
+            print(inject_regex_colors(
+                f"Detta är mindre än {POINTS_FOR_PASSING} och du är |R|inte godkänd|/RE| på individuella examinationen."
+            ))
+    print()
     print(output)
 
 
@@ -100,7 +122,7 @@ def main():
     """
     suite = build_testsuite()
     output, assignments_results = run_testcases(suite)
-    assignments_outcome = check_pass_fail(assignments_results)
+    assignments_outcome = mark_test_cases(assignments_results)
     format_output(output, assignments_outcome)
 
 
