@@ -129,3 +129,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+Ny subclass av case där vi sätter poäng och passed
+Ny subclass av suite/result för att kolla efter om de är klara eller inte.
+Kanske result är bättre då den anropar suit så utskrifterna görs i result. Kanske behöver någon extra funktion i suit klassen för att räkna poäng?
