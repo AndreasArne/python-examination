@@ -218,14 +218,11 @@ def get_testfiles(root=None, extra_assignments=False):
 
 
 
-def import_module(proj_path, module_name, expected_consts=None):
+def import_module(proj_path, module_name):
     """
     Loads a module from the given path and name.
     If obligatory_functions is missing Raise exception.
     """
-    if expected_consts:
-        return importit(proj_path, module_name, expected_consts)
-
     spec = importer.spec_from_file_location(
         module_name, f"{proj_path}/{module_name}.py"
     )
@@ -233,27 +230,6 @@ def import_module(proj_path, module_name, expected_consts=None):
 
     spec.loader.exec_module(module)
     return module
-
-
-
-def importit(proj_path, module_name, expected):
-    """
-
-    """
-    with open(f"{proj_path}/{module_name}.py") as fd:
-        code = compile(fd.read(), module_name, "exec")
-
-    for const in code.co_consts:
-        if isinstance(const, type(code)) and const.co_name in expected:
-            expected.remove(const.co_name)
-    if expected:
-        raise ImportError("missing expected function: {}".format(expected))
-
-    spec = importer.spec_from_loader(code.co_filename, loader=None)
-    
-    print(code.co_consts)
-    print(dir(code))
-    return importer.module_from_spec(spec)
 
 
 
