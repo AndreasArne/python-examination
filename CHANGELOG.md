@@ -15,14 +15,23 @@ Available types:
 
 ## [Unreleased]
 
+### Changed
+- No longer using std buffer for output of tests.
+- No longer prints 1 and 0 for passing or failing test suites.
+
+### Added
+- Exits program with exit code for passing or failing tests.
+
+
+
 ## [1.6.0]
 ### Added
-- Can add website links to assignemnt in TestCase classes
+- Can add website links to assignment in TestCase classes
 
 
 ## [1.5.2]
 ### Fixed
-- Change in pythons unittest made it so tip for StopIteration wasnät showing on python38-9.
+- Change in pythons unittest made it so tip for StopIteration wasn't showing on python38-9.
 
 
 
@@ -87,5 +96,5 @@ Available types:
 
 ## [1.0.1] - 2021-04-16
 ### Added
-- CHANELOG to track changes.
+- CHANGELOG to track changes.
 - CircleCI build to push releases to dbwebb-se/python repo
