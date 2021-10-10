@@ -15,6 +15,7 @@ Available types:
 
 ## [Unreleased]
 
+## [2.0.0]
 ### Changed
 - No longer using std buffer for output of tests.
 - No longer prints 1 and 0 for passing or failing test suites.
