@@ -27,8 +27,7 @@ def get_testcases(path_and_name):
         if not attrname.startswith(testMethodPrefix):
             continue
         testClass = getattr(module, attrname)
-        # Should use isinstance. But it return False, don't know why.
-        if testClass.__base__ is ExamTestCase:
+        if issubclass(testClass, ExamTestCase):
             testcases.append(testClass)
     return testcases
 
