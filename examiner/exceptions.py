@@ -14,14 +14,14 @@ class ExamException(Exception):
 
 
 
-class TestFuncNameError(Exception):
+class TestFuncNameError(ExamException):
     """
     Error for when test function name is wrong
     """
 
 
 
-class TestClassNameError(Exception):
+class TestClassNameError(ExamException):
     """
     Error for when test class name is wrong
     """
