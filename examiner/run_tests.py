@@ -3,7 +3,7 @@ Custom test collecter, builder and runner used for examining students.
 """
 import sys
 import unittest
-from examiner.exceptions import ContanctError
+from examiner.exceptions import ContactError
 from examiner.exam_test_result import ExamTestResult
 from examiner.exam_test_case import ExamTestCase
 from examiner.cli_parser import parse
@@ -57,7 +57,7 @@ def run_testcases(suite):
     try:
         results = runner.run(suite)
     except Exception as e:
-        raise ContanctError() from e
+        raise ContactError() from e
 
     return results
 

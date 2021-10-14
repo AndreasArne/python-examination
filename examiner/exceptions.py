@@ -28,7 +28,7 @@ class TestClassNameError(Exception):
 
 
 
-class ContanctError(ExamException):
+class ContactError(ExamException):
     """
     Custom error. Used when there is an error in the test code and the
     student should contact the person responsible for the exam.
