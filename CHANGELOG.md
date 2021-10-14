@@ -14,6 +14,8 @@ Available types:
 - `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+### Fixed
+- Correct base classes for custom exceptions
 
 ## [2.0.0]
 ### Changed
