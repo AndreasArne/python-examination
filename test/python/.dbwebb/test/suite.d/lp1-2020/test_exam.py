@@ -10,7 +10,7 @@ import os
 import sys
 from unittest.mock import patch
 from unittest import TextTestRunner
-from examiner import ExamTestCase, ExamTestResult, tags
+from examiner import ExamTestCaseExam, ExamTestResult, tags
 from examiner import import_module, find_path_to_assignment
 
 
@@ -25,11 +25,16 @@ exam = import_module(REPO_PATH, "exam")
 
 
 
-class Test1Assignment1(ExamTestCase):
+class Test1Assignment1(ExamTestCaseExam):
     """
     Each assignment has 1 testcase with multiple asserts.
     The different asserts https://docs.python.org/3.6/library/unittest.html#test-cases
     """
+
+    points_for_pass = 20
+    def __init__(self, *args, **kwargs):
+        super().__init__(20, *args, **kwargs)
+
 
     @classmethod
     def setUpClass(cls):
@@ -132,12 +137,15 @@ class Test1Assignment1(ExamTestCase):
 
 
 
-class Test2Assignment2(ExamTestCase):
+class Test2Assignment2(ExamTestCaseExam):
     """
     Each assignment has 1 testcase with multiple asserts.
 
     The different asserts https://docs.python.org/3.6/library/unittest.html#test-cases
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(10, *args, **kwargs)
+
     @tags("2")
     def test_a_addition(self):
         """
@@ -198,12 +206,16 @@ class Test2Assignment2(ExamTestCase):
         self._multi_arguments = [[25], "-"]
         self.assertEqual(exam.reversed_sum([25], "-"), 52)
 
-class Test3Assignment3(ExamTestCase):
+class Test3Assignment3(ExamTestCaseExam):
     """
     Each assignment has 1 testcase with multiple asserts.
 
     The different asserts https://docs.python.org/3.6/library/unittest.html#test-cases
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(10, *args, **kwargs)
+
+
     def test_a_repeating_letter(self):
         """
         Testar med sträng där det finns två av varje bokstav.
