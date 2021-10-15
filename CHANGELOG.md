@@ -14,10 +14,21 @@ Available types:
 - `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+
+
+
+## [2.1.0]
+
+### Added
+- New classes for examinations with points and limit for passing.
+
 ### Fixed
 - Correct base classes for custom exceptions
 
+
+
 ## [2.0.0]
+
 ### Changed
 - No longer using std buffer for output of tests.
 - No longer prints 1 and 0 for passing or failing test suites.
