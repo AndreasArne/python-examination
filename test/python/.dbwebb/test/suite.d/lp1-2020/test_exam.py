@@ -32,9 +32,7 @@ class Test1Assignment1(ExamTestCaseExam):
     """
 
     points_for_pass = 20
-    def __init__(self, *args, **kwargs):
-        super().__init__(20, *args, **kwargs)
-
+    points_worth = 20
 
     @classmethod
     def setUpClass(cls):
@@ -143,8 +141,7 @@ class Test2Assignment2(ExamTestCaseExam):
 
     The different asserts https://docs.python.org/3.6/library/unittest.html#test-cases
     """
-    def __init__(self, *args, **kwargs):
-        super().__init__(10, *args, **kwargs)
+    points_worth = 10
 
     @tags("2")
     def test_a_addition(self):
@@ -212,9 +209,7 @@ class Test3Assignment3(ExamTestCaseExam):
 
     The different asserts https://docs.python.org/3.6/library/unittest.html#test-cases
     """
-    def __init__(self, *args, **kwargs):
-        super().__init__(10, *args, **kwargs)
-
+    points_worth = 10
 
     def test_a_repeating_letter(self):
         """
