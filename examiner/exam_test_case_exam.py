@@ -1,7 +1,7 @@
 """
 Overriding TestCase for exam tool.
 """
-from examiner import ExamTestCase
+from examiner.exam_test_case import ExamTestCase
 
 class ExamTestCaseExam(ExamTestCase):
     """
@@ -9,8 +9,5 @@ class ExamTestCaseExam(ExamTestCase):
     Can set points for assignments and a threshold for passing.
     """
 
-    points_for_pass = 0
-
-    def __init__(self, points_worth, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.points_worth = points_worth
+    points_for_pass = -1
+    points_worth = 0
