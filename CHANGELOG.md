@@ -16,6 +16,9 @@ Available types:
 ## [Unreleased]
 
 
+## [2.1.1]
+### Fixed
+- Now ExamTestResultExam is part of imports at examiner level
 
 ## [2.1.0]
 
