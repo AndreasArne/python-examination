@@ -16,6 +16,12 @@ Available types:
 ## [Unreleased]
 
 
+## [2.1.2]
+### Changed
+- Changed from swedish to english in exam result text
+
+
+
 ## [2.1.1]
 ### Fixed
 - Now ExamTestResultExam is part of imports at examiner level
