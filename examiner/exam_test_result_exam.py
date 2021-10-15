@@ -22,6 +22,7 @@ class ExamTestResultExam(ExamTestResult):
         self.nr_of_points = 0
 
 
+
     def startTest(self, test):
         """
         Get points needed for passing and how many points each assignment is worth.
