@@ -15,6 +15,11 @@ Available types:
 
 ## [Unreleased]
 
+## [2.1.3]
+### Fixed
+- Corrected spelling in print
+
+
 
 ## [2.1.2]
 ### Changed
