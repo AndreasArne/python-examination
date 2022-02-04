@@ -15,6 +15,10 @@ Available types:
 
 ## [Unreleased]
 
+## [2.2.0]
+### Added
+- Finds test files in multiple directories instead of only one
+
 ## [2.1.3]
 ### Fixed
 - Corrected spelling in print
