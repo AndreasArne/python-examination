@@ -16,7 +16,7 @@ def parse():
     )
 
     parser.add_argument(
-        "-f", "--failfast", dest="failfast",default=False,
+        "-f", "--failfast", dest="failfast", default=False,
         action="store_true", help="Stop executing tests on the first error or failure."
     )
 
