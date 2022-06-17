@@ -15,6 +15,9 @@ Available types:
 
 ## [Unreleased]
 
+### Changed
+- Traceback when error occures in test is now printed with the docstring from the test.
+
 ## [2.2.0]
 ### Added
 - Finds test files in multiple directories instead of only one

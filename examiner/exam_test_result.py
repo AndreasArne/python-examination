@@ -47,16 +47,19 @@ class ExamTestResult(TextTestResult):
         tb_e = traceback.TracebackException(
             exctype, value, tb, limit=None, capture_locals=self.tb_locals)
         help_msg = common_errors.check_if_common_error(exctype.__name__, tb_e, value)
+        function_args = hf.get_function_args(test)
 
         if exctype is test.failureException:
-            function_args = hf.get_function_args(test)
-
             msgLines = hf.create_fail_msg(
                 function_args,
                 test
             )
         else:
-            msgLines = list(tb_e.format())
+            msgLines = hf.create_fail_msg(
+                function_args,
+                test,
+                ''.join(list(tb_e.format()))
+            )
 
         if help_msg:
             msgLines.append(help_msg)
@@ -108,16 +111,12 @@ class ExamTestResult(TextTestResult):
         already_printed_assignments = {}
 
         self.stream.writeln(self.separator1)
-        self.stream.writeln("{} section: {}".format(flavour.upper(), explenation))
+        self.stream.writeln(f"{flavour.upper()} section: {explenation}")
         self.stream.writeln(self.separator1)
         for test, err in errors:
             if not test.assignment in already_printed_assignments:
-                self.stream.writeln("{}{}s for {}{}".format(
-                    Back.MAGENTA +Style.BRIGHT+ Fore.WHITE,
-                    flavour,
-                    test.assignment,
-                    Style.RESET_ALL
-                ))
+                tmp = Back.MAGENTA +Style.BRIGHT+ Fore.WHITE
+                self.stream.writeln(f"{tmp}{flavour}s for {test.assignment}{Style.RESET_ALL}")
                 already_printed_assignments[test.assignment] = {}
 
             err_as_list = err.strip().split("\n")

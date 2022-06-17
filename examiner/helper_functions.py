@@ -93,13 +93,13 @@ def inject_regex_colors(msg):
     """
     color_start = re.findall(COLOR_REGEX_START, msg)
     for color in color_start:
-        msg = msg.replace("|{}|".format(color), COLORS[color]+ Style.BRIGHT)
+        msg = msg.replace(f"|{color}|", COLORS[color]+ Style.BRIGHT)
     msg = msg.replace("|/RE|", COLORS["RE"])
     return msg
 
 
 
-def create_fail_msg(function_args, test):
+def create_fail_msg(function_args, test, traceback=None):
     """
     Create formated fail msg using docstring from test function
     """
@@ -110,7 +110,6 @@ def create_fail_msg(function_args, test):
             " Docstring is needed to explainin the test when Something goes wrong."
         )
     docstring = re.sub("\n +", "\n", test._testMethodDoc)
-
     msg_list = docstring.split("\n")
     inject_answer_colors(msg_list)
     msg = "\n".join(msg_list)
@@ -119,7 +118,7 @@ def create_fail_msg(function_args, test):
     return [msg.format(
         arguments=function_args,
         correct=test.correct_answer,
-        student=test.student_answer
+        student=test.student_answer if traceback is None else traceback
     )]
     #pylint: enable=protected-access
 
