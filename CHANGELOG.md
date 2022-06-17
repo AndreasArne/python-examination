@@ -15,6 +15,9 @@ Available types:
 
 ## [Unreleased]
 
+### Added
+- CLI option "-f|--failfast", it stops execution of tests on first error or failure.
+
 ### Changed
 - Traceback when error occures in test is now printed with the docstring from the test.
 
