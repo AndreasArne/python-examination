@@ -155,12 +155,12 @@ def error_is_missing_assignment_function(error):
 
 
 
-def check_for_tags(*tag_args, msg="Inkluderar inte någon av de givna taggarna"):
+def check_for_tags(*tag_args, default_msg="Inkluderar inte någon av de givna taggarna"):
     """
     Compares the user tags and the test_case tags to see which tests
     should be be ran.
     """
-    def skip_function():
+    def skip_function(msg=default_msg):
         """
         replaces test_cases so they are skipped
         """
@@ -172,9 +172,13 @@ def check_for_tags(*tag_args, msg="Inkluderar inte någon av de givna taggarna")
         @wraps(f)
         def wrapper(self, *args, **kwargs):
             """Wrapper"""
+            test_case_tags = set(tag_args)
+
+            if self.SHOW_TAGS:
+                return skip_function(f"has the tags: {', '.join(sorted(test_case_tags))}")
+
             user_tags = set(self.USER_TAGS)
             if user_tags:
-                test_case_tags = set(tag_args)
                 if not user_tags.intersection(test_case_tags):
                     return skip_function()
             return f(self, *args, **kwargs)

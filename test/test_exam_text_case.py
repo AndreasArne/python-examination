@@ -213,6 +213,28 @@ class Test_ExamTestCase(unittest.TestCase):
         self.assertEqual(getattr(test.test_a_foo, "__wrapped__").__name__, "test_a_foo")
 
 
+    def test_show_tags_for_test(self):
+        """
+        Tests that SkipTest is raised and it prints tags when SHOW_TAGS is set.
+        """
+
+        class Test1Tags1(ExamTestCase):
+            SHOW_TAGS = True
+
+            @tags("skip", "no_skip")
+            def test_a_foo(self):
+                self.assertEqual('correct', 'incorrect')
+
+        test = Test1Tags1('test_a_foo')
+
+        with self.assertRaises(SkipTest) as e:
+            test.test_a_foo()
+
+        self.assertEqual("has the tags: no_skip, skip", str(e.exception))
+
+        # check that method was decorated for tags
+        self.assertEqual(getattr(test.test_a_foo, "__wrapped__").__name__, "test_a_foo")
+
 
     def test_run_test_by_tags(self):
         """

@@ -51,6 +51,7 @@ def build_testsuite():
 
         for case in testcases:
             case.USER_TAGS = ARGS.tags
+            case.SHOW_TAGS = ARGS.show_tags
             suite.addTest(unittest.makeSuite(case))
     return suite
 

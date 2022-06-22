@@ -15,6 +15,7 @@ class ExamTestCase(unittest.TestCase):
     ASSIGNMENT_REGEX = r"\.Test[0-9]?([A-Z].+)\)"
     TEST_NAME_REGEX = r"test(_[a-z])?_(\w+)"
     USER_TAGS = []
+    SHOW_TAGS = False
 
     link_to_assignment = ""
 
