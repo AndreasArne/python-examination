@@ -62,7 +62,8 @@ class FailMessage():
 
 
 
-    def get_color_indexes(self, msg_list):
+    @staticmethod
+    def get_color_indexes(msg_list):
         """
         Return index of lines with {correct} (green) and {student} (red).
         """
@@ -101,7 +102,8 @@ class FailMessage():
 
 
 
-    def inject_regex_colors(self, msg):
+    @staticmethod
+    def inject_regex_colors(msg):
         """
         Use regex to find |<color letter>| and replace with colors.
         """
