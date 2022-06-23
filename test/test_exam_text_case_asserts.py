@@ -15,13 +15,14 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class Test1AssertNotIn(ExamTestCase):
             def test_a_foo(self_):
+                "comment"
                 self_.assertNotIn('correct', ['incorrect'])
 
         test = Test1AssertNotIn('test_a_foo')
         test.test_a_foo()
 
-        self.assertEqual(test.correct_answer, "'correct'")
-        self.assertEqual(test.student_answer, "['incorrect']")
+        self.assertEqual(test.fail_msg.correct_answer, "'correct'")
+        self.assertEqual(test.fail_msg.student_answer, "['incorrect']")
 
 
 
@@ -32,14 +33,15 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class Test1AssertNotIn(ExamTestCase):
             def test_a_foo(self_):
+                "comment"
                 self_.assertNotIn('correct', ['correct', 'incorrect'])
 
         test = Test1AssertNotIn('test_a_foo')
         with self.assertRaises(AssertionError):
             test.test_a_foo()
 
-        self.assertEqual(test.correct_answer, "'correct'")
-        self.assertEqual(test.student_answer, "['correct', 'incorrect']")
+        self.assertEqual(test.fail_msg.correct_answer, "'correct'")
+        self.assertEqual(test.fail_msg.student_answer, "['correct', 'incorrect']")
 
 
 
@@ -49,12 +51,13 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class TestAssertModule(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 self_.assertModule('random')
 
         test = TestAssertModule('test_foo')
         test.test_foo()
-        self.assertEqual(test.correct_answer, "'random'")
-        self.assertEqual(test.student_answer, "None")
+        self.assertEqual(test.fail_msg.correct_answer, "'random'")
+        self.assertEqual(test.fail_msg.student_answer, "None")
 
 
     def test_assert_module_standard_import_fail(self):
@@ -63,13 +66,14 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class TestAssertModule(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 self_.assertModule('random_not_existing')
 
         test = TestAssertModule('test_foo')
         with self.assertRaises(AssertionError):
             test.test_foo()
-        self.assertEqual(test.correct_answer, "'random_not_existing'")
-        self.assertEqual(test.student_answer, "None")
+        self.assertEqual(test.fail_msg.correct_answer, "'random_not_existing'")
+        self.assertEqual(test.fail_msg.student_answer, "None")
 
 
 
@@ -80,12 +84,13 @@ class Test_ExamTestCase(unittest.TestCase):
         dir_path = os.path.dirname(os.path.realpath(__file__))
         class TestAssertModule(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 self_.assertModule('__init__', dir_path)
 
         test = TestAssertModule('test_foo')
         test.test_foo()
-        self.assertEqual(test.correct_answer, "'__init__'")
-        self.assertEqual(test.student_answer, repr(dir_path))
+        self.assertEqual(test.fail_msg.correct_answer, "'__init__'")
+        self.assertEqual(test.fail_msg.student_answer, repr(dir_path))
 
 
 
@@ -96,13 +101,14 @@ class Test_ExamTestCase(unittest.TestCase):
         dir_path = os.path.dirname(os.path.realpath(__file__))+"/crazy_path"
         class TestAssertModule(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 self_.assertModule('__init__', dir_path)
 
         test = TestAssertModule('test_foo')
         with self.assertRaises(AssertionError):
             test.test_foo()
-        self.assertEqual(test.correct_answer, "'__init__'")
-        self.assertEqual(test.student_answer, repr(dir_path))
+        self.assertEqual(test.fail_msg.correct_answer, "'__init__'")
+        self.assertEqual(test.fail_msg.student_answer, repr(dir_path))
 
 
 
@@ -112,12 +118,13 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class TestAssertAttribute(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 self_.assertAttribute(ExamTestCase, "assertAttribute")
 
         test = TestAssertAttribute('test_foo')
         test.test_foo()
-        self.assertEqual(test.correct_answer, "'assertAttribute'")
-        self.assertEqual(test.student_answer, "<class 'examiner.exam_test_case.ExamTestCase'>")
+        self.assertEqual(test.fail_msg.correct_answer, "'assertAttribute'")
+        self.assertEqual(test.fail_msg.student_answer, "<class 'examiner.exam_test_case.ExamTestCase'>")
 
 
 
@@ -127,13 +134,14 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class TestAssertAttribute(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 self_.assertAttribute(ExamTestCase, "NotAFunction")
 
         test = TestAssertAttribute('test_foo')
         with self.assertRaises(AssertionError):
             test.test_foo()
-        self.assertEqual(test.correct_answer, "'NotAFunction'")
-        self.assertEqual(test.student_answer, "<class 'examiner.exam_test_case.ExamTestCase'>")
+        self.assertEqual(test.fail_msg.correct_answer, "'NotAFunction'")
+        self.assertEqual(test.fail_msg.student_answer, "<class 'examiner.exam_test_case.ExamTestCase'>")
 
 
 
@@ -143,13 +151,14 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class TestAssertRaises(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 with self_.assertRaises(ValueError):
                     raise ValueError()
 
         test = TestAssertRaises('test_foo')
         test.test_foo()
-        self.assertEqual(test.correct_answer, "<class 'ValueError'>")
-        self.assertEqual(test.student_answer, "''")
+        self.assertEqual(test.fail_msg.correct_answer, "<class 'ValueError'>")
+        self.assertEqual(test.fail_msg.student_answer, "''")
 
 
 
@@ -159,14 +168,15 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class TestAssertRaises(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 with self_.assertRaises(ValueError):
                     self.assertEqual(1, 2)
 
         test = TestAssertRaises('test_foo')
         with self.assertRaises(AssertionError):
             test.test_foo()
-        self.assertEqual(test.correct_answer, "<class 'ValueError'>")
-        self.assertEqual(test.student_answer, "''")
+        self.assertEqual(test.fail_msg.correct_answer, "<class 'ValueError'>")
+        self.assertEqual(test.fail_msg.student_answer, "''")
 
 
 
@@ -176,12 +186,13 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class TestAssertOrder(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 self_.assertOrder(["Hej", "haha"], ["Hej", "haha"])
 
         test = TestAssertOrder('test_foo')
         test.test_foo()
-        self.assertEqual(test.correct_answer, "['Hej', 'haha']")
-        self.assertEqual(test.student_answer, "['Hej', 'haha']")
+        self.assertEqual(test.fail_msg.correct_answer, "['Hej', 'haha']")
+        self.assertEqual(test.fail_msg.student_answer, "['Hej', 'haha']")
 
 
 
@@ -191,12 +202,13 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class TestAssertOrder(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 self_.assertOrder(["Hej", "haha"], "Hej haha")
 
         test = TestAssertOrder('test_foo')
         test.test_foo()
-        self.assertEqual(test.correct_answer, "['Hej', 'haha']")
-        self.assertEqual(test.student_answer, "'Hej haha'")
+        self.assertEqual(test.fail_msg.correct_answer, "['Hej', 'haha']")
+        self.assertEqual(test.fail_msg.student_answer, "'Hej haha'")
 
 
 
@@ -206,13 +218,14 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class TestAssertOrder(ExamTestCase):
             def test_foo(self_):
+                "comment"
                 self_.assertOrder(["haha", "Hej"], "Hej haha")
 
         test = TestAssertOrder('test_foo')
         with self.assertRaises(AssertionError):
             test.test_foo()
-        self.assertEqual(test.correct_answer, "['haha', 'Hej']")
-        self.assertEqual(test.student_answer, "'Hej haha'")
+        self.assertEqual(test.fail_msg.correct_answer, "['haha', 'Hej']")
+        self.assertEqual(test.fail_msg.student_answer, "'Hej haha'")
 
 
 if __name__ == '__main__':

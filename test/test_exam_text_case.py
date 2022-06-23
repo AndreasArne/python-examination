@@ -7,11 +7,6 @@ import unittest
 from unittest.runner import _WritelnDecorator
 from unittest import SkipTest
 
-# proj_path = os.path.dirname(os.path.realpath(__file__ + "/../"))
-# path = proj_path + "/examiner"
-# if path not in sys.path:
-#     sys.path.insert(0, path)
-
 from examiner import exceptions as exce
 from examiner import ExamTestCase
 from examiner import tags
@@ -21,75 +16,9 @@ class Test_ExamTestCase(unittest.TestCase):
     def setup_empty_examtextcase(self):
         class Test1Assignment1(ExamTestCase):
             def test_a_foo(self):
+                "comment"
                 pass
         return Test1Assignment1("test_a_foo")
-
-
-
-    def test_set_answer_strings(self):
-        """
-        Answers are strings and called with no options
-        Test that special chars in string are excaped
-        """
-        test = self.setup_empty_examtextcase()
-        test.set_answers("\[ 32 m a string\n", "another string")
-        self.assertEqual(test.student_answer, "'\\\\[ 32 m a string\\n'")
-        self.assertEqual(test.correct_answer, "'another string'")
-
-
-
-    def test_set_answer_list(self):
-        """
-        Answers are lists and with no options
-        """
-        test = self.setup_empty_examtextcase()
-        test.set_answers(["a string", 1], ["another string", 3.2, True])
-        self.assertEqual(test.student_answer, "['a string', 1]")
-        self.assertEqual(test.correct_answer, "['another string', 3.2, True]")
-
-
-
-    def test_set_answer_strings_norepr(self):
-        """
-        Called with option norepr
-        Test that special chars are not escaped
-        """
-        test = self.setup_empty_examtextcase()
-        test.norepr = True
-        test.set_answers("\[ 32 m a string\n", "another string")
-        self.assertEqual(test.student_answer, "\\[ 32 m a string\n")
-        self.assertEqual(test.correct_answer, "'another string'")
-
-
-
-    def test_set_answer_list_two(self):
-        """
-        Answers are lists and with no options
-        """
-        test = self.setup_empty_examtextcase()
-        test.norepr = True
-        test.set_answers(
-            ["a string", 1],
-            ["another string", 3.2, True],
-        )
-        self.assertEqual(test.student_answer, "['a string', 1]")
-        self.assertEqual(test.correct_answer, "['another string', 3.2, True]")
-
-
-
-    def test_set_answer_norepr_clean(self):
-        """
-        Called with option norepr and that clean works
-        """
-        test = self.setup_empty_examtextcase()
-        test.norepr = True
-        test.set_answers(
-            chr(27) + "[2J" + chr(27) + "[;H" + "a string",
-            "another string"
-        )
-        self.assertEqual(test.student_answer, "a string")
-        self.assertEqual(test.correct_answer, "'another string'")
-
 
 
     def test_set_test_name_and_assignment(self):
@@ -100,6 +29,7 @@ class Test_ExamTestCase(unittest.TestCase):
         class Test1Assignment1(ExamTestCase):
             link_to_assignment = "a link"
             def test_a_foo(self):
+                "comment"
                 pass
 
         test = Test1Assignment1('test_a_foo')
@@ -115,6 +45,7 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class Test2Assignment1(ExamTestCase):
             def test_a(self):
+                "comment"
                 pass
 
         test = Test2Assignment1('test_a')
@@ -130,6 +61,7 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class Test1Assignment1(ExamTestCase):
             def test_foo(self):
+                "comment"
                 pass
 
         test = Test1Assignment1('test_foo')
@@ -145,6 +77,7 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class Test1assignment(ExamTestCase):
             def test_a_foo(self):
+                "comment"
                 pass
 
         with self.assertRaises(exce.TestClassNameError) as cxt:
@@ -159,6 +92,7 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class TestAssignment1(ExamTestCase):
             def test_a_foo(self):
+                "comment"
                 pass
 
         test = TestAssignment1('test_a_foo')
@@ -172,6 +106,7 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class Test1Assignment(ExamTestCase):
             def test_a_foo(self):
+                "comment"
                 pass
 
         test = Test1Assignment('test_a_foo')
@@ -186,6 +121,7 @@ class Test_ExamTestCase(unittest.TestCase):
         """
         class Test4ModulesExist(ExamTestCase):
             def test_a_foo(self):
+                "comment"
                 pass
 
         test = Test4ModulesExist('test_a_foo')
@@ -203,6 +139,7 @@ class Test_ExamTestCase(unittest.TestCase):
 
             @tags("skip")
             def test_a_foo(self):
+                "comment"
                 self.assertEqual('correct', 'incorrect')
 
         test = Test1Tags1('test_a_foo')
@@ -223,6 +160,7 @@ class Test_ExamTestCase(unittest.TestCase):
 
             @tags("skip", "no_skip")
             def test_a_foo(self):
+                "comment"
                 self.assertEqual('correct', 'incorrect')
 
         test = Test1Tags1('test_a_foo')
@@ -245,6 +183,7 @@ class Test_ExamTestCase(unittest.TestCase):
 
             @tags("dont_skip")
             def test_a_foo(self):
+                "comment"
                 return "Not Skipped"
 
         test = Test1Tags1('test_a_foo')
@@ -263,6 +202,7 @@ class Test_ExamTestCase(unittest.TestCase):
 
             @tags("skip")
             def test_a_foo(self):
+                "comment"
                 raise KeyError()
 
         test = Test1Tags1('test_a_foo')
@@ -277,6 +217,7 @@ class Test_ExamTestCase(unittest.TestCase):
         class Test1Simpel(ExamTestCase):
 
             def test_a_foo(self):
+                "comment"
                 self.assertEqual("hej", "hej")
 
         test = Test1Simpel('test_a_foo')
@@ -292,6 +233,7 @@ class Test_ExamTestCase(unittest.TestCase):
             @tags("test")
             def test_a_foo(self):
                 """a comment"""
+                "comment"
                 self.assertEqual("hej", "hej")
 
         test = Test1Simpel('test_a_foo')

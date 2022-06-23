@@ -5,6 +5,7 @@ import re
 import unittest
 import importlib
 from examiner.exceptions import TestFuncNameError, TestClassNameError
+from examiner.fail_message import FailMessage
 import examiner.helper_functions as hf
 
 class ExamTestCase(unittest.TestCase):
@@ -23,10 +24,24 @@ class ExamTestCase(unittest.TestCase):
         super().__init__(*args, **kwargs)
         self.assignment = ""
         self.test_name = ""
-        self.student_answer = ""
-        self.correct_answer = ""
-        self.norepr = False
         self._set_test_name_and_assignment()
+        self.fail_msg = FailMessage(self._testMethodDoc)
+
+
+    def __setattr__(self, name, value):
+        """
+        This is done so that we can send values to fail_msg and set in this instance.
+        Mostly done for arguments and muli_arguments. Also work for norepr but there we return
+        becaus it's value is only used in fail_msg.
+        """
+        if name == 'norepr':
+            self.fail_msg.norepr = value
+            return
+        if name == '_argument':
+            self.fail_msg.aruments = repr(value)
+        if name == '_multi_arguments':
+            self.fail_msg.arguments =  ", ".join([repr(arg) for arg in value])
+        super().__setattr__(name, value)
 
 
 
@@ -52,26 +67,13 @@ class ExamTestCase(unittest.TestCase):
             ) from e
 
 
-    def set_answers(self, student_answer, correct_answer):
-        """
-        Set students answer and correct answer as members.
-        """
-        self.student_answer = repr(student_answer)
-        self.correct_answer = repr(correct_answer)
-        if self.norepr:
-            if isinstance(student_answer, str):
-                self.student_answer = hf.clean_str(student_answer)
-            else:
-                self.student_answer = str(student_answer)
-
-
 
     def assertEqual(self, first, second, msg=None):
         """
         Check if first is equal to second. Save correct and student answer as to variables.
         First comes from student
         """
-        self.set_answers(first, second)
+        self.fail_msg.set_answers(first, second)
         super().assertEqual(first, second, msg)
 
 
@@ -81,7 +83,7 @@ class ExamTestCase(unittest.TestCase):
         Check if value in container.  Save correct and student answer as to variables.
         Container comes from student
         """
-        self.set_answers(container, member)
+        self.fail_msg.set_answers(container, member)
         super().assertIn(member, container, msg)
 
 
@@ -91,7 +93,7 @@ class ExamTestCase(unittest.TestCase):
         Check that the expression is False.
         Save correct and student answer as to variables.
         """
-        self.set_answers(expr, False)
+        self.fail_msg.set_answers(expr, False)
         super().assertFalse(expr, msg)
 
 
@@ -101,7 +103,7 @@ class ExamTestCase(unittest.TestCase):
         Check that the expression is true.
         Save correct and student answer as to variables.
         """
-        self.set_answers(expr, True)
+        self.fail_msg.set_answers(expr, True)
         super().assertTrue(expr, msg)
 
 
@@ -111,7 +113,7 @@ class ExamTestCase(unittest.TestCase):
         Check that the expression is true.
         Save correct and student answer as to variables.
         """
-        self.set_answers(container, member)
+        self.fail_msg.set_answers(container, member)
         super().assertNotIn(member, container, msg)
 
     def assertModule(self, module, module_path=None, msg=None):
@@ -119,7 +121,7 @@ class ExamTestCase(unittest.TestCase):
         Check that module can be imported.
         Save correct and student answer as to variables.
         """
-        self.set_answers(module_path, module)
+        self.fail_msg.set_answers(module_path, module)
         if module_path is None:
             if importlib.util.find_spec(module) is None:
                 msg = self._formatMessage(msg, f"{module} not as standard import")
@@ -138,7 +140,7 @@ class ExamTestCase(unittest.TestCase):
         Check that object has attribute.
         Save correct and student answer as to variables.
         """
-        self.set_answers(obj, attr)
+        self.fail_msg.set_answers(obj, attr)
         try:
             getattr(obj, attr)
         except AttributeError as e:
@@ -151,7 +153,7 @@ class ExamTestCase(unittest.TestCase):
         """
         assertRaises is a context and therefore we need to return it
         """
-        self.set_answers("", expected_exception)
+        self.fail_msg.set_answers("", expected_exception)
         return super().assertRaises(expected_exception, *args, **kwargs)
 
 
@@ -165,7 +167,7 @@ class ExamTestCase(unittest.TestCase):
             - [0, 1, 1] and [1, 0, 1] compare equal.
             - [0, 0, 1] and [0, 1] compare unequal.
         """
-        self.set_answers(first, second)
+        self.fail_msg.set_answers(first, second)
         super().assertCountEqual(first, second, msg)
 
 
@@ -175,7 +177,7 @@ class ExamTestCase(unittest.TestCase):
         Check that in index of elements in order are lowest to highest in container.
         Save correct and student answer as to variables.
         """
-        self.set_answers(container, order)
+        self.fail_msg.set_answers(container, order)
 
         try:
             for i in range(len(order)-1):

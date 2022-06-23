@@ -62,6 +62,7 @@ class TestErrorFunctions(unittest.TestCase):
     def test_wrong_nr_of_input_calls_found_dynamic(self):
         class Test1InputError(ExamTestCase):
             def test_a(self):
+                "comment"
                 inp = ["test"]
                 with patch('builtins.input', side_effect=inp):
                     with patch('sys.stdout', new=StringIO()) as fake_out:

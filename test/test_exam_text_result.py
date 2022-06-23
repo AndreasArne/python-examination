@@ -21,6 +21,7 @@ class Test_TestResult(unittest.TestCase):
         """
         class Test1Assignment1(ExamTestCase):
             def test_a_foo(self):
+                "comment"
                 pass
 
         test = Test1Assignment1('test_a_foo')
