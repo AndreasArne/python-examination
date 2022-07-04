@@ -164,7 +164,7 @@ class ExamTestCase(unittest.TestCase):
 
 
 
-    def assertRaises(self, expected_exception, msg=None, *args, **kwargs):
+    def assertRaises(self, expected_exception, *args, msg=None, **kwargs): # pylint: disable=arguments-differ
         """
         assertRaises is a context and therefore we need to return it
         """

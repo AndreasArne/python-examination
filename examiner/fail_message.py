@@ -67,6 +67,9 @@ class FailMessage():
 
 
     def swap_what_msgs_in_docstring(self, msg_list, indexes):
+        """
+        change what is excepted for correct and student explanation
+        """
         CORRECT_ANSWER_INDEX = 0
         STUDENT_ANSWER_INDEX = 1
         msg_list[indexes["green"]] = self.what_msgs_from_assert[CORRECT_ANSWER_INDEX]
@@ -89,7 +92,8 @@ class FailMessage():
 
 
 
-    def inject_answer_colors(self, msg_list, indexes):
+    @staticmethod
+    def inject_answer_colors(msg_list, indexes):
         """
         Insert red and green color if "correct" and "student" is present in doscring.
         """
