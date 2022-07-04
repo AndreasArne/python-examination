@@ -68,12 +68,27 @@ class ExamTestCase(unittest.TestCase):
 
 
 
+    def assert_setup(self, first, second, what_msgs):
+        """
+        Things to be done in each assert method
+        """
+        self.fail_msg.set_answers(first, second)
+        if what_msgs:
+            self.fail_msg.what_msgs_from_assert = what_msgs
+        else:
+            # if previous assert changed and didn't fail, we need this to reset
+            # otherwise the previous change will be used
+            self.fail_msg.what_msgs_from_assert = []
+
+
+
+
     def assertEqual(self, first, second, msg=None):
         """
         Check if first is equal to second. Save correct and student answer as to variables.
         First comes from student
         """
-        self.fail_msg.set_answers(first, second)
+        self.assert_setup(first, second, msg)
         super().assertEqual(first, second, msg)
 
 
@@ -83,7 +98,7 @@ class ExamTestCase(unittest.TestCase):
         Check if value in container.  Save correct and student answer as to variables.
         Container comes from student
         """
-        self.fail_msg.set_answers(container, member)
+        self.assert_setup(container, member, msg)
         super().assertIn(member, container, msg)
 
 
@@ -93,7 +108,7 @@ class ExamTestCase(unittest.TestCase):
         Check that the expression is False.
         Save correct and student answer as to variables.
         """
-        self.fail_msg.set_answers(expr, False)
+        self.assert_setup(expr, False, msg)
         super().assertFalse(expr, msg)
 
 
@@ -103,7 +118,7 @@ class ExamTestCase(unittest.TestCase):
         Check that the expression is true.
         Save correct and student answer as to variables.
         """
-        self.fail_msg.set_answers(expr, True)
+        self.assert_setup(expr, True, msg)
         super().assertTrue(expr, msg)
 
 
@@ -113,7 +128,7 @@ class ExamTestCase(unittest.TestCase):
         Check that the expression is true.
         Save correct and student answer as to variables.
         """
-        self.fail_msg.set_answers(container, member)
+        self.assert_setup(container, member, msg)
         super().assertNotIn(member, container, msg)
 
     def assertModule(self, module, module_path=None, msg=None):
@@ -121,7 +136,7 @@ class ExamTestCase(unittest.TestCase):
         Check that module can be imported.
         Save correct and student answer as to variables.
         """
-        self.fail_msg.set_answers(module_path, module)
+        self.assert_setup(module_path, module, msg)
         if module_path is None:
             if importlib.util.find_spec(module) is None:
                 msg = self._formatMessage(msg, f"{module} not as standard import")
@@ -140,7 +155,7 @@ class ExamTestCase(unittest.TestCase):
         Check that object has attribute.
         Save correct and student answer as to variables.
         """
-        self.fail_msg.set_answers(obj, attr)
+        self.assert_setup(obj, attr, msg)
         try:
             getattr(obj, attr)
         except AttributeError as e:
@@ -149,11 +164,11 @@ class ExamTestCase(unittest.TestCase):
 
 
 
-    def assertRaises(self, expected_exception, *args, **kwargs):
+    def assertRaises(self, expected_exception, msg=None, *args, **kwargs):
         """
         assertRaises is a context and therefore we need to return it
         """
-        self.fail_msg.set_answers("", expected_exception)
+        self.assert_setup("", expected_exception, msg)
         return super().assertRaises(expected_exception, *args, **kwargs)
 
 
@@ -167,7 +182,7 @@ class ExamTestCase(unittest.TestCase):
             - [0, 1, 1] and [1, 0, 1] compare equal.
             - [0, 0, 1] and [0, 1] compare unequal.
         """
-        self.fail_msg.set_answers(first, second)
+        self.assert_setup(first, second, msg)
         super().assertCountEqual(first, second, msg)
 
 
@@ -177,7 +192,7 @@ class ExamTestCase(unittest.TestCase):
         Check that in index of elements in order are lowest to highest in container.
         Save correct and student answer as to variables.
         """
-        self.fail_msg.set_answers(container, order)
+        self.assert_setup(container, order, msg)
 
         try:
             for i in range(len(order)-1):

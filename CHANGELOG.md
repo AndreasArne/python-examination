@@ -18,6 +18,7 @@ Available types:
 ### Added
 - CLI option "-f|--failfast", it stops execution of tests on first error or failure.
 - CLI option "-s| --showtags", shows the tags for all tests, does not run the tests.
+- Support for individual "what is excpected as correct" for assert calls. Docstring version is used as default which can be overriden in assert calls.
 
 ### Changed
 - Traceback when error occures in test is now printed with the docstring from the test.

@@ -83,7 +83,40 @@ class Test_FailMessage_set_answer(unittest.TestCase):
         self.assertEqual(fail_msg.correct_answer, "'another string'")
 
 
+    def test_create_fail_msg_no_overrite_what(self):
+        fail_msg = FailMessage(
+            """
+            Testar att funktionen find_all_indexes innehåller try och except konstruktionen.
+            Förväntar att följande rad finns i din funktion:
+            {correct}
+            Din funktion innehåller följande:
+            {student}
+            """
+        )
+        fail_msg.student_answer = "a"
+        fail_msg.correct_answer = "b"
+        correct = ["\nTestar att funktionen find_all_indexes innehåller try och except konstruktionen.\n\x1b[40m\x1b[32m\x1b[1mFörväntar att följande rad finns i din funktion:\x1b[0m\nb\n\x1b[40m\x1b[31m\x1b[1mDin funktion innehåller följande:\x1b[0m\na\n"]
+        self.assertEqual(fail_msg.create_fail_msg(), correct)
 
 
+    def test_create_fail_msg_overrite_what(self):
+        fail_msg = FailMessage(
+            """
+            Testar att funktionen find_all_indexes innehåller try och except konstruktionen.
+            Förväntar att följande rad finns i din funktion:
+            {correct}
+            Din funktion innehåller följande:
+            {student}
+            """
+        )
+        fail_msg.student_answer = "a"
+        fail_msg.correct_answer = "b"
+        correct = ['\nTestar att funktionen find_all_indexes innehåller try och except konstruktionen.\n\x1b[40m\x1b[32m\x1b[1mChanged correct\x1b[0m\nb\n\x1b[40m\x1b[31m\x1b[1mChanged student\x1b[0m\na\n']
+        fail_msg.what_msgs_from_assert = [
+            "Changed correct",
+            "Changed student"
+        ]
+        print(fail_msg.create_fail_msg())
+        self.assertEqual(fail_msg.create_fail_msg(), correct)
 if __name__ == '__main__':
     unitmain(verbosity=2)

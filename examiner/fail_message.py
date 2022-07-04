@@ -29,6 +29,7 @@ class FailMessage():
         self.student_answer = ""
         self.correct_answer = ""
         self.norepr = False
+        self.what_msgs_from_assert = []
 
 
     def set_answers(self, student_answer, correct_answer):
@@ -50,7 +51,11 @@ class FailMessage():
         Create formated fail msg using docstring from test function
         """
         msg_list = self.docstring.split("\n")
-        self.inject_answer_colors(msg_list)
+        indexes = self.get_color_indexes(msg_list)
+        if self.what_msgs_from_assert:
+            self.swap_what_msgs_in_docstring(msg_list, indexes)
+
+        self.inject_answer_colors(msg_list, indexes)
         msg = "\n".join(msg_list)
         msg = self.inject_regex_colors(msg)
 
@@ -60,6 +65,12 @@ class FailMessage():
             student=self.student_answer if traceback is None else traceback
         )]
 
+
+    def swap_what_msgs_in_docstring(self, msg_list, indexes):
+        CORRECT_ANSWER_INDEX = 0
+        STUDENT_ANSWER_INDEX = 1
+        msg_list[indexes["green"]] = self.what_msgs_from_assert[CORRECT_ANSWER_INDEX]
+        msg_list[indexes["red"]] = self.what_msgs_from_assert[STUDENT_ANSWER_INDEX]
 
 
     @staticmethod
@@ -78,11 +89,10 @@ class FailMessage():
 
 
 
-    def inject_answer_colors(self, msg_list):
+    def inject_answer_colors(self, msg_list, indexes):
         """
         Insert red and green color if "correct" and "student" is present in doscring.
         """
-        indexes = self.get_color_indexes(msg_list)
         if "green" in indexes:
             i = indexes["green"]
             msg_list[i] = (
