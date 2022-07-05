@@ -209,7 +209,23 @@ class Test_ExamTestCase(unittest.TestCase):
         test.test_foo()
         self.assertEqual(test.fail_msg.correct_answer, "['Hej', 'haha']")
         self.assertEqual(test.fail_msg.student_answer, "'Hej haha'")
+        self.assertEqual(test.fail_msg.what_msgs_from_assert, [])
 
+
+    def test_assert_setup_is_called(self):
+        """
+        Test that assertsetup i called in assert
+        """
+        class TestAssertOrder(ExamTestCase):
+            def test_foo(self_):
+                "comment"
+                self_.assertOrder(["Hej", "haha"], "Hej haha", ["correct", "student"])
+
+        test = TestAssertOrder('test_foo')
+        test.test_foo()
+        self.assertEqual(test.fail_msg.correct_answer, "['Hej', 'haha']")
+        self.assertEqual(test.fail_msg.student_answer, "'Hej haha'")
+        self.assertEqual(test.fail_msg.what_msgs_from_assert, ["correct", "student"])
 
 
     def test_assert_order_fail(self):
