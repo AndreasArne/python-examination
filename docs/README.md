@@ -7,6 +7,8 @@ Examiner is a layer on top of pythons unittest framework, for more verbose and c
 
 - Custom fail output based on docstring in test function.
 
+    - Ability to override parts of it in assert calls.
+
 - Color in text output.
 
 - New Assert methods.
@@ -26,6 +28,9 @@ Examiner uses the `argparse` module and has the following available arguments:
  * `-e, --extra` optional - Adds the pattern `"extra_test_(\w)*.py"` so the students can test their extra assignments.
  * `-t, --tags` optional - Takes a list of tags (separated by a comma). This filters what tests should be ran. If given it only runs cases that matches the tags.
  * `--trace` optional - Gives traceback output to assertion errors when they occur.
+ * `-f, --failfast` - Stop executing tests on the first error or failure.
+ * `-s, --showtags` - Show what tags are available for the tests. Won't run any tests!
+ * `--exam` - Use when running test for an exam
 
 Examiner utilize function docstrings for testcases to modify and specialize error outputs for each test.
 
@@ -86,10 +91,11 @@ class Test3Assignment3(ExamTestCase):
 
 ### Available settings in a test function
 
-`@tags()` - add string as argument list to add tags to test. If test is run with `--tags` the test will only run if they match. Can also add kwarg "msg" to set output text for skipped tests.
-`self.norepr = True` - By default the `{student}` and `{correct}` value are run with the `repr()` function. However if you don't want that use this.
-`self._argument = []` - This and `_multi_arguments` is used to supply value to `{arguments}` in the docstring. Use this if only one value used as argument.
-`self._multi_arguments = []` - If multiple arguments was used to function that is tested, add them to the list.
+- `@tags()` - add string as argument list to add tags to test. If test is run with `--tags` the test will only run if they match. Can also add kwarg "msg" to set output text for skipped tests.
+- `self.norepr = True` - By default the `{student}` and `{correct}` value are run with the `repr()` function. However if you don't want that use this.
+- In supported assert methods, you can override `The following value was expected to be returned:` and `Instead the it returned the following value:`. This is so we can tests different things in the same test and stil have relevant text. In assert method, send a list with two elements as the third argument. First element should be the text for the correct value and the second elemnt is the text for the wrong result.
+- `self._argument = []` - This and `_multi_arguments` is used to supply value to `{arguments}` in the docstring. Use this if only one value used as argument.
+- `self._multi_arguments = []` - If multiple arguments was used to function that is tested, add them to the list.
 
 Don't use `self._argument` and `self._multi_arguments` in the same test function. Use one of them.
 
@@ -115,7 +121,7 @@ class Test3Assignment3(ExamTestCase):
         self._argument = "9781861972712"
         self.assertTrue(exam.validate_isbn(self._argument))
         self._argument = "9781617294136"
-        self.assertTrue(exam.validate_isbn(self._argument))
+        self.assertTrue(exam.validate_isbn(self._argument), ["The following value is supposed to be printed", "The following was printed instead"])
 ```
 
 Output:
