@@ -28,7 +28,7 @@ commands:
                 filename: combined-requirements.txt
             - restore_cache:
                 keys:
-                    - venv-{{ .Environment.CIRCLE_STAGE }}-{{ .Branch }}-{{ checksum "combined-requirements.txt" }}-3 # increase to clear cache
+                    - venv-{{ .Environment.CIRCLE_STAGE }}-{{ .Branch }}-{{ checksum "combined-requirements.txt" }}-4 # increase to clear cache
             - run:
                 name: install dependencies
                 command: |
@@ -36,7 +36,7 @@ commands:
                     . venv/bin/activate
                     make install-dev
             - save_cache:
-                key: venv-{{ .Environment.CIRCLE_STAGE }}-{{ .Branch }}-{{ checksum "combined-requirements.txt" }}-3
+                key: venv-{{ .Environment.CIRCLE_STAGE }}-{{ .Branch }}-{{ checksum "combined-requirements.txt" }}-4
                 paths:
                     - venv
             - run: echo "source ~/exam/venv/bin/activate" >> $BASH_ENV
@@ -82,7 +82,7 @@ jobs:
         - checkout
         - restore_cache:
             keys:
-                - venv-{{ checksum "requirements.txt" }}-3
+                - venv-{{ checksum "requirements.txt" }}-4
         - run:
             name: install dependencies
             command: |
@@ -90,7 +90,7 @@ jobs:
                 . venv/bin/activate
                 make install
         - save_cache:
-            key: venv-{{ checksum "requirements.txt" }}-3
+            key: venv-{{ checksum "requirements.txt" }}-4
             paths:
                 - venv
         - run: echo "source ~/exam/venv/bin/activate" >> $BASH_ENV
