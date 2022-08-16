@@ -15,7 +15,9 @@ Available types:
 
 ## [Unreleased]
 
-
+## [2.3.1]
+### Fixed
+- Had misspelled arguments as aruments
 
 ## [2.3.0]
 ### Added
