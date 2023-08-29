@@ -13,7 +13,7 @@ class ExamTestCase(unittest.TestCase):
     Override methods to help customize outputs of testcases.
     """
 
-    ASSIGNMENT_REGEX = r"\.Test[0-9]?([A-Z].+)\)"
+    ASSIGNMENT_REGEX = r"\.Test[0-9]?([A-Z]\w+)"
     TEST_NAME_REGEX = r"test(_[a-z])?_(\w+)"
     USER_TAGS = []
     SHOW_TAGS = False
@@ -52,6 +52,7 @@ class ExamTestCase(unittest.TestCase):
         Format testname and assignment text and assign to test object.
         """
         test_string = str(self)
+
         try:
             self.assignment = re.search(self.ASSIGNMENT_REGEX, test_string).group(1)
         except AttributeError as e:
@@ -176,6 +177,7 @@ class ExamTestCase(unittest.TestCase):
             raise self.failureException(msg)
         except AttributeError as _:
             pass
+
 
 
 
