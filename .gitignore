@@ -1,6 +1,7 @@
 **/.dbwebb/test/examiner/
 **/.dbwebb/test/colorama/
 **/.dbwebb/test/.test-log
+unittest_*
 
 .vscode
 
