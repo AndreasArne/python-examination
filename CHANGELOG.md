@@ -18,6 +18,7 @@ Available types:
 - Assert method assertNotAttribute. Check that object does not have an attribute, ex a module.
 ### Fixed
 - Changed how the TestSuite is created because how we did it is deprecated in python3.11.
+- Printing test summary to be compatible with 3.11.
 
 ## [2.3.1]
 ### Fixed
