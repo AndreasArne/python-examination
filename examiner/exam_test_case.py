@@ -164,6 +164,21 @@ class ExamTestCase(unittest.TestCase):
 
 
 
+    def assertNotAttribute(self, obj, attr, msg=None):
+        """
+        Check that object does not have attribute.
+        Save correct and student answer as to variables.
+        """
+        self.assert_setup(obj, attr, msg)
+        try:
+            getattr(obj, attr)
+            msg = self._formatMessage(msg, f"attribute {attr} was found in object {obj}")
+            raise self.failureException(msg)
+        except AttributeError as _:
+            pass
+
+
+
     def assertRaises(self, expected_exception, *args, msg=None, **kwargs): # pylint: disable=arguments-differ
         """
         assertRaises is a context and therefore we need to return it

@@ -205,6 +205,20 @@ attr - str: Name of attribute to look for.
 
 
 
+### assertNotAttribute
+
+Check if that object does not have an attribute. Can be used to check that student does not import a specific module.
+
+Run as `assertNotAttribute(object, attr)`.
+
+```
+object - Object: Object to look for attribute in.
+
+attr - str: Name of attribute to look for.
+```
+
+
+
 ### assertOrder
 
 Checks if the elements in a sequence appear in the same order in another sequence that support the `index()` method. Ex. that a number of string appear in correct order in a bigger string. `["Hej", "Haha"]` and `"Hej ho Haha"` would assert.

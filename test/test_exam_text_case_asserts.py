@@ -145,6 +145,39 @@ class Test_ExamTestCase(unittest.TestCase):
 
 
 
+    def test_assert_not_attribute(self):
+        """
+        Test that assertAttribute finds function in module
+        """
+        class TestAssertNotAttribute(ExamTestCase):
+            def test_foo(self_):
+                "comment"
+                self_.assertNotAttribute(ExamTestCase, "assertDoesNotExist")
+
+        test = TestAssertNotAttribute('test_foo')
+        test.test_foo()
+        self.assertEqual(test.fail_msg.correct_answer, "'assertDoesNotExist'")
+        self.assertEqual(test.fail_msg.student_answer, "<class 'examiner.exam_test_case.ExamTestCase'>")
+
+
+
+    def test_assert_not_attribute_fail(self):
+        """
+        Test that assertAttribute finds function in module
+        """
+        class TestAssertNotAttribute(ExamTestCase):
+            def test_foo(self_):
+                "comment"
+                self_.assertNotAttribute(ExamTestCase, "assertNotAttribute")
+
+        test = TestAssertNotAttribute('test_foo')
+        with self.assertRaises(AssertionError):
+            test.test_foo()
+        self.assertEqual(test.fail_msg.correct_answer, "'assertNotAttribute'")
+        self.assertEqual(test.fail_msg.student_answer, "<class 'examiner.exam_test_case.ExamTestCase'>")
+
+
+
     def test_assert_raises(self):
         """
         Test that assertEaises can catch exception
