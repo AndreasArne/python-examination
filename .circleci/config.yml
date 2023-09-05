@@ -156,7 +156,7 @@ jobs:
             name: Push python
             command: |
                 cd python
-                git push -q https://${GITHUB_TOKEN}@github.com/dbwebb-se/python.git master > /dev/null 2>&1
+                git push -q https://${GITHUB_TOKEN}@github.com/dbwebb-se/python.git master
 
 
 
@@ -239,10 +239,11 @@ workflows:
                     - python311
             - push_to_python:
                 filters:
-                    branches:
-                        ignore: /.*/ # ignore all branch builds. If we dont have this, push_to_python will run anyways because the required job is run. Some kind of "or" logic
-                    tags:
-                        only: /^v\d+\.\d+\.\d+/
+                    <<: *always-run-filter
+                    # branches:
+                    #     ignore: /.*/ # ignore all branch builds. If we dont have this, push_to_python will run anyways because the required job is run. Some kind of "or" logic
+                    # tags:
+                    #     only: /^v\d+\.\d+\.\d+/
                 requires:
                     - build
             - push_to_oopython:
