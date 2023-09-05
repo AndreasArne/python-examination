@@ -156,7 +156,7 @@ jobs:
             name: Push python
             command: |
                 cd python
-                git push -q https://github.com/dbwebb-se/python.git master > /dev/null 2>&1
+                git push -q https://${GITHUB_TOKEN}@github.com/dbwebb-se/python.git master > /dev/null 2>&1
 
 
 
@@ -208,7 +208,7 @@ jobs:
             name: Push oopython
             command: |
                 cd oopython
-                git push -q https://github.com/dbwebb-se/oopython.git master > /dev/null 2>&1
+                git push -q https://${GITHUB_TOKEN}@github.com/dbwebb-se/oopython.git master > /dev/null 2>&1
 
 
 
