@@ -26,19 +26,19 @@ commands:
                     make info
             - create_concatenated_requirements:
                 filename: combined-requirements.txt
-            - restore_cache:
-                keys:
-                    - venv-test-{{ checksum "combined-requirements.txt" }}-8 # increase to clear cache
+            # - restore_cache:
+            #     keys:
+            #         - venv-test-{{ checksum "combined-requirements.txt" }}-8 # increase to clear cache
             - run:
                 name: install dependencies
                 command: |
                     python3 -m venv venv
                     . venv/bin/activate
                     make install-dev
-            - save_cache:
-                key: venv-test-{{ checksum "combined-requirements.txt" }}-8
-                paths:
-                    - venv
+            # - save_cache:
+            #     key: venv-test-{{ checksum "combined-requirements.txt" }}-8
+            #     paths:
+            #         - venv
             - run: echo "source ~/exam/venv/bin/activate" >> $BASH_ENV
             - run:
                 name: run tests
@@ -80,19 +80,19 @@ jobs:
     working_directory: ~/exam
     steps:
         - checkout
-        - restore_cache:
-            keys:
-                - venv-build-{{ checksum "requirements.txt" }}-8
+        # - restore_cache:
+        #     keys:
+        #         - venv-build-{{ checksum "requirements.txt" }}-8
         - run:
             name: install dependencies
             command: |
                 python3 -m venv venv
                 . venv/bin/activate
                 make install
-        - save_cache:
-            key: venv-build-{{ checksum "requirements.txt" }}-8
-            paths:
-                - venv
+        # - save_cache:
+        #     key: venv-build-{{ checksum "requirements.txt" }}-8
+        #     paths:
+        #         - venv
         - run: echo "source ~/exam/venv/bin/activate" >> $BASH_ENV
         - run:
             name: run build
