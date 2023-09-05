@@ -118,7 +118,7 @@ jobs:
               - "e0:01:ec:80:09:8d:34:dd:e0:c0:65:2f:3f:6e:f7:42"
         - run:
             name: Clone python repo
-            command: git clone https://github.com/dbwebb-se/python.git
+            command: git clone git@github.com:dbwebb-se/python.git
         - restore_cache:
             keys:
                 - build-
@@ -156,7 +156,7 @@ jobs:
             name: Push python
             command: |
                 cd python
-                git push -q https://${GITHUB_TOKEN}@github.com/dbwebb-se/python.git master
+                git push -q https://${GITHUB_TOKEN}@github.com/dbwebb-se/python.git master > /dev/null 2>&1
 
 
 
