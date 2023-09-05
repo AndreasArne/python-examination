@@ -26,19 +26,19 @@ commands:
                     make info
             - create_concatenated_requirements:
                 filename: combined-requirements.txt
-            - restore_cache:
-                keys:
-                    - venv-{{ .Environment.CIRCLE_STAGE }}-{{ .Branch }}-{{ checksum "combined-requirements.txt" }}-5 # increase to clear cache
+            # - restore_cache:
+            #     keys:
+            #         - venv-{{ .Environment.CIRCLE_STAGE }}-{{ .Branch }}-{{ checksum "combined-requirements.txt" }}-7 # increase to clear cache
             - run:
                 name: install dependencies
                 command: |
                     python3 -m venv venv
                     . venv/bin/activate
                     make install-dev
-            - save_cache:
-                key: venv-{{ .Environment.CIRCLE_STAGE }}-{{ .Branch }}-{{ checksum "combined-requirements.txt" }}-5
-                paths:
-                    - venv
+            # - save_cache:
+            #     key: venv-{{ .Environment.CIRCLE_STAGE }}-{{ .Branch }}-{{ checksum "combined-requirements.txt" }}-7
+            #     paths:
+            #         - venv
             - run: echo "source ~/exam/venv/bin/activate" >> $BASH_ENV
             - run:
                 name: run tests
@@ -46,20 +46,6 @@ commands:
                   make test
 
 jobs:
-  python36:
-    docker:
-      - image: cimg/python:3.6
-    working_directory: ~/exam
-    steps:
-        - test_steps_python
-
-  python37:
-    docker:
-      - image: cimg/python:3.7
-    working_directory: ~/exam
-    steps:
-        - test_steps_python
-
   python38:
     docker:
       - image: cimg/python:3.8
@@ -74,15 +60,29 @@ jobs:
     steps:
         - test_steps_python
 
+  python310:
+    docker:
+      - image: cimg/python:3.10
+    working_directory: ~/exam
+    steps:
+        - test_steps_python
+
+  python311:
+    docker:
+      - image: cimg/python:3.11
+    working_directory: ~/exam
+    steps:
+        - test_steps_python
+
   build:
     docker:
-      - image: cimg/python:3.8
+      - image: cimg/python:3.10
     working_directory: ~/exam
     steps:
         - checkout
         - restore_cache:
             keys:
-                - venv-{{ checksum "requirements.txt" }}-5
+                - venv-{{ checksum "requirements.txt" }}-7
         - run:
             name: install dependencies
             command: |
@@ -90,7 +90,7 @@ jobs:
                 . venv/bin/activate
                 make install
         - save_cache:
-            key: venv-{{ checksum "requirements.txt" }}-5
+            key: venv-{{ checksum "requirements.txt" }}-7
             paths:
                 - venv
         - run: echo "source ~/exam/venv/bin/activate" >> $BASH_ENV
@@ -110,9 +110,12 @@ jobs:
 
   push_to_python:
     docker:
-      - image: cimg/python:3.8
+      - image: cimg/python:3.10
     working_directory: ~/python
     steps:
+        - add_ssh_keys:
+            fingerprints:
+              - "e0:01:ec:80:09:8d:34:dd:e0:c0:65:2f:3f:6e:f7:42"
         - run:
             name: Clone python repo
             command: git clone https://github.com/dbwebb-se/python.git
@@ -153,15 +156,18 @@ jobs:
             name: Push python
             command: |
                 cd python
-                git push -q https://${GITHUB_TOKEN}@github.com/dbwebb-se/python.git master > /dev/null 2>&1
+                git push -q https://github.com/dbwebb-se/python.git master > /dev/null 2>&1
 
 
 
   push_to_oopython:
     docker:
-      - image: cimg/python:3.8
+      - image: cimg/python:3.10
     working_directory: ~/oopython
     steps:
+        - add_ssh_keys:
+            fingerprints:
+              - ""
         - run:
             name: Clone oopython repo
             command: git clone https://github.com/dbwebb-se/oopython.git
@@ -202,7 +208,7 @@ jobs:
             name: Push oopython
             command: |
                 cd oopython
-                git push -q https://${GITHUB_TOKEN}@github.com/dbwebb-se/oopython.git master > /dev/null 2>&1
+                git push -q https://github.com/dbwebb-se/oopython.git master > /dev/null 2>&1
 
 
 
@@ -210,27 +216,27 @@ workflows:
     version: 2
     test-build:
         jobs: # Every job needs a tag if on job has a tag. Aka becuase push_to_python has a tag to releases we need a always run tag on the others
-            - python36:
+            - python38:
                 filters: &always-run-filter
                     tags:
                         only: /.*/
-            - python37:
-                filters:
-                    <<: *always-run-filter
-            - python38:
-                filters:
-                    <<: *always-run-filter
             - python39:
+                filters:
+                    <<: *always-run-filter
+            - python310:
+                filters:
+                    <<: *always-run-filter
+            - python311:
                 filters:
                     <<: *always-run-filter
             - build:
                 filters:
                     <<: *always-run-filter
                 requires:
-                    - python36
-                    - python37
                     - python38
                     - python39
+                    - python310
+                    - python311
             - push_to_python:
                 filters:
                     branches:
