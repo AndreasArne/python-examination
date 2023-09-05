@@ -1,0 +1,66 @@
+name: Push changes to repos
+
+on:
+  push:
+    branches: [ "master" ]
+  # push:
+  #   tags:
+  #     - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yaml
+
+  push:
+    name: push
+    needs: [build]
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build files
+        uses:  actions/download-artifact@v3
+        with:
+          name: build
+          path: examiner
+
+      - name: Download commit message
+        uses:  actions/download-artifact@v3
+        with:
+          name: commit_msg
+          path: ~/commit
+
+      - name: Set commit msg as env
+        run: |
+          cat ~/commit/commit.env >> "$GITHUB_ENV"
+
+      - name: Display structure of downloaded files
+        run: ls examiner/
+
+      - name: print commit
+        run: cat "$GITHUB_ENV"
+
+      - name: print commit
+        run: printf '%s\n' "$GIT_COMMIT_DESC"
+
+      - name: Deploy to external repository
+        uses: cpina/github-action-push-to-another-repository@main
+        env:
+          # 🏗️ <internal repository>, run GitHub Action.
+          # 🎁 <external repository>, receiving Artifacts.
+          # Way 2: using SSH deploy keys
+          # @see https://cpina.github.io/push-to-another-repository-docs/setup-using-ssh-deploy-keys.html#setup-ssh-deploy-keys
+          # 2.1 Generate an SSH key in terminal (Leave the passphrase empty)
+          # 2.2 Add public key in the external repository: <external repository>/Settings/Deploy keys/Add deploy key
+          #     Name: DEPLOY_PUBLIC_KEY, Value Paste the public key. Enable "✅️ Allow write access"
+          # 2.3 Add private key in the source repository: <external repository>/Settings/Secrets/Actions/New repository secret
+          #     Name: DEPLOY_PRIVATE_KEY, Value Paste the private key.
+          SSH_DEPLOY_KEY: ${{ secrets.PYTHON_EXAMINATION_ACTIONS_SSH }}
+
+        with:
+          source-directory: examiner
+          destination-github-username: dbwebb-se
+          destination-repository-name: python
+          user-name: python-examination-actions
+          target-directory: .dbwebb/test/examiner
+          target-branch: "master"
+          commit-message: "$GIT_COMMIT_DESC"
