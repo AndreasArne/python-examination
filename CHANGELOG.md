@@ -14,6 +14,9 @@ Available types:
 - `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+
+
+## [2.4.0]
 ### Added
 - Assert method assertNotAttribute. Check that object does not have an attribute, ex a module.
 ### Fixed
