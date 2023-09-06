@@ -9,3 +9,6 @@ from examiner.helper_functions import check_for_tags as tags, find_path_to_assig
 
 # Version structure major.minor[.patch][sub]
 __version__ = '2.4.0'
+
+
+
