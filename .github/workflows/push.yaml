@@ -2,7 +2,7 @@ name: Push changes to repos
 
 on:
   push:
-    branches: [ "master" ]
+    # branches: [ "master" ] # uncomment if want to run on every push
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 
@@ -14,6 +14,9 @@ jobs:
     name: push
     needs: [build]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        repo: ["python", "oopython"]
 
     steps:
       - name: Download build files
@@ -40,7 +43,7 @@ jobs:
         with:
           source-directory: examiner
           destination-github-username: dbwebb-se
-          destination-repository-name: python
+          destination-repository-name: ${{ matrix.repo }}
           user-name: python-examination-actions
           target-directory: .dbwebb/test/examiner
           target-branch: "master"
