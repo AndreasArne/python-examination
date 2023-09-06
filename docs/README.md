@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/AndreasArne/python-examination/tree/master.svg?style=svg)](https://circleci.com/gh/AndreasArne/python-examination/tree/master)
+![Tests and validation](https://github.com/andreasarne/python-examination/actions/workflows/test.yaml/badge.svg)
 
 Examiner is a layer on top of pythons unittest framework, for more verbose and clear output when test fail. It is used in a university course to examine student in a introductionary python course.
 
@@ -261,7 +261,7 @@ Common error when the code contain too many `input()` calls than what the test e
 
 We use [semantic versioning](https://semver.org/). Set version in `examiner/__init__.py` and update `CHANGELOG.md` with changes before creating a new tag. Only create new releases when code changes in `examiner`, changes that should be sent to the students.
 
-When a new release is create, CircleCi will push the new `examiner` build automatically to the repo `dbwebb-se/python`.
+When a new release is create, Actions will push the new `examiner` build automatically to the repo `dbwebb-se/python` and `dbwebb-se/oopython`.
 
 ### Flowchart of unittest execution
 
