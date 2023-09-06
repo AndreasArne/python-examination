@@ -207,6 +207,20 @@ attr - str: Name of attribute to look for.
 
 ### assertNotAttribute
 
+Check if an object does not have an attribute.
+
+Run as `assertNotAttribute(object, attr)`.
+
+```
+object - Object: Object to look for attribute in.
+
+attr - str: Name of attribute to look for.
+```
+
+
+
+### assertNotAttribute
+
 Check if that object does not have an attribute. Can be used to check that student does not import a specific module.
 
 Run as `assertNotAttribute(object, attr)`.
