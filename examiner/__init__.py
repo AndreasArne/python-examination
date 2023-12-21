@@ -11,6 +11,13 @@ from examiner.helper_functions import check_for_tags as tags, find_path_to_assig
 __version__ = '2.4.0'
 
 
+# Hur gör vi för att release ska vara kursspecifik?
+# Stoppa in via Github Actions när koden pushas till repon?
+# Lägga det i en fil i kursrepot?
+# Samma sak med dsn url:en, vill vi hårdkoda den här?
+# Lägg det i en funktion som vi anropar från test filerna, då blir det mer opt in än default igång?
+# 
+
 import sentry_sdk
 # config https://docs.sentry.io/platforms/python/configuration/options/
 sentry_sdk.init(
