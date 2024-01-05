@@ -47,4 +47,4 @@ jobs:
           user-name: python-examination-actions
           target-directory: .dbwebb/test/examiner
           target-branch: "master"
-          commit-message: ${{ GIT_COMMIT_DESC }}
+          commit-message: ${{ github.event.head_commit.message }}
