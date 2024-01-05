@@ -15,6 +15,9 @@ Available types:
 
 ## [Unreleased]
 
+## [2.5.0]
+### Added
+- Integration with Sentry.
 
 ## [2.4.0]
 ### Added

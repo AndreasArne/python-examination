@@ -155,7 +155,7 @@ install:
 
 
 
-# target: install                      - Install all Python packages specified in devrequirement.txt
+# target: install-dev                      - Install all Python packages specified in devrequirement.txt
 .PHONY: install-dev
 install-dev:
 	${pip} install -r devrequirements.txt

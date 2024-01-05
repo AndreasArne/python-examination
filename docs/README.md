@@ -17,6 +17,8 @@ Examiner is a layer on top of pythons unittest framework, for more verbose and c
 
 - Tips in output for common errors.
 
+- Integration with [Sentry](https://sentry.io).
+
 You can see working examples of it in `test/python` folder. To run it you first need to build it, run `make build`, it will copy external modules into the package into the `build` and `.dbwebb/test` folder which holds all the unittests. Execute `bash test.bash {KMOM/ASSIGNMENT}` (script located in `.dbwebb/test`) and include an argument of what folder inside `.dbwebb/test/suite.d` it should run the unittests from. The code that is tested are found inside `me`. If no argument is given it defaults to the current directory.
 
 
@@ -254,6 +256,13 @@ Some errors are caught and we add extra help text for them.
 ### StopIteration
 
 Common error when the code contain too many `input()` calls than what the test expect. The default output is hard to understand.
+
+
+# Sentry integration
+
+Integration to [Sentry](https://sentry.io) is on by default. To disable Sentry add the flag `--sentry`. 
+
+To send data to Sentry you need to add the flags `--sentry_url`, `--sentry_release` and `--sentry_sample_rate`.
 
 
 
