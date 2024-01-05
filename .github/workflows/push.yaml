@@ -39,7 +39,7 @@ jobs:
         uses: cpina/github-action-push-to-another-repository@main
         env:
           # @see https://cpina.github.io/push-to-another-repository-docs/setup-using-ssh-deploy-keys.html#setup-ssh-deploy-keys
-          SSH_DEPLOY_KEY: ${{ secrets.PYTHON_EXAMINATION_ACTIONS_SSH }}
+          SSH_DEPLOY_KEY: ${{ secrets[format('{0}_deploy_key', matrix.repo)] }}
         with:
           source-directory: examiner
           destination-github-username: dbwebb-se
@@ -47,4 +47,4 @@ jobs:
           user-name: python-examination-actions
           target-directory: .dbwebb/test/examiner
           target-branch: "master"
-          commit-message: $GIT_COMMIT_DESC
+          commit-message: ${{ GIT_COMMIT_DESC }}
