@@ -15,6 +15,10 @@ Available types:
 
 ## [Unreleased]
 
+## [2.6.0]
+### Added
+- Support for adding an identifying user for Sentry.
+
 ## [2.5.0]
 ### Added
 - Integration with Sentry.
