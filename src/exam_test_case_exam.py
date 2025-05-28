@@ -1,7 +1,9 @@
 """
 Overriding TestCase for exam tool.
 """
-from examiner.exam_test_case import ExamTestCase
+
+from src.exam_test_case import ExamTestCase
+
 
 class ExamTestCaseExam(ExamTestCase):
     """

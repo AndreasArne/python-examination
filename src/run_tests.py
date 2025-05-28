@@ -1,21 +1,22 @@
 """
 Custom test collecter, builder and runner used for examining students.
 """
-import unittest
-import re
-from examiner.exceptions import ContactError
-from examiner.exam_test_result import ExamTestResult
-from examiner.exam_test_result_exam import ExamTestResultExam
-from examiner import ExamTestCaseExam
-from examiner.cli_parser import parse
-from examiner.helper_functions import get_testfiles, import_module
-from examiner import sentry
 
+import re
+import unittest
+
+from src import ExamTestCaseExam, sentry
+from src.cli_parser import parse
+from src.exam_test_result import ExamTestResult
+from src.exam_test_result_exam import ExamTestResultExam
+from src.exceptions import ContactError
+from src.helper_functions import get_testfiles, import_module
 
 PASS = 1
 NOT_PASS = 0
 ARGS = parse()
 RESULT_CLASS = ExamTestResult
+
 
 def get_testsuites_from_file(path_and_name):
     """
@@ -51,12 +52,16 @@ def build_testsuite():
     return all_suites
 
 
-
 def run_testcases(suite):
     """
     Run testsuit.
     """
-    runner = unittest.TextTestRunner(resultclass=RESULT_CLASS, verbosity=2, failfast=ARGS.failfast, descriptions=False)
+    runner = unittest.TextTestRunner(
+        resultclass=RESULT_CLASS,
+        verbosity=2,
+        failfast=ARGS.failfast,
+        descriptions=False,
+    )
 
     try:
         results = runner.run(suite)
@@ -64,7 +69,6 @@ def run_testcases(suite):
         raise ContactError() from e
 
     return results
-
 
 
 def main():
@@ -76,12 +80,11 @@ def main():
         ARGS.sentry_release,
         ARGS.sentry_sample_rate,
         ARGS.sentry_user,
-        re.findall(r"kmom\d\d", ARGS.what)[0]
+        re.findall(r"kmom\d\d", ARGS.what)[0],
     )
     suite = build_testsuite()
     results = run_testcases(suite)
     results.exit_with_result()
-
 
 
 if __name__ == "__main__":

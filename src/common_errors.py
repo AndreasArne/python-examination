@@ -2,10 +2,12 @@
 Create a method for each type of common error.
 Use common_errors to connect the method to an exception type.
 """
-from examiner.cli_parser import parse
-from examiner.helper_functions import COLORS
+
+from src.cli_parser import parse
+from src.helper_functions import COLORS
 
 ARGS = parse()
+
 
 def check_if_common_error(exc_name, tb_exc, _):
     """
@@ -28,9 +30,8 @@ def check_if_common_error(exc_name, tb_exc, _):
     for method in methods:
         res = method(tb_exc)
         if res:
-            return COLORS["BL"]+COLORS["BR"]+res+COLORS["RE"]
+            return COLORS["BL"] + COLORS["BR"] + res + COLORS["RE"]
     return ""
-
 
 
 def wrong_nr_of_input_calls(tb_exc):
@@ -47,7 +48,6 @@ def wrong_nr_of_input_calls(tb_exc):
             if "result = next(effect)" in tb_str:
                 return help_msg
     return ""
-
 
 
 def assertion_traceback(tb_exc):

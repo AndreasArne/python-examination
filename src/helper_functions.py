@@ -1,16 +1,18 @@
 """
 pass
 """
-import re
+
 import hashlib
+import importlib.util as importer
 import os
+import re
 from functools import wraps
 from unittest import SkipTest
-import importlib.util as importer
+
 try:
-    from examiner.colorama import init, Fore, Style
+    from src.colorama import Fore, Style, init
 except ImportError:
-    from colorama import init, Fore, Style
+    from colorama import Fore, Style, init
 
 init(strip=False)
 
@@ -31,7 +33,6 @@ COLORS = {
 }
 
 
-
 def list_to_hash(error):
     """
     hash a list
@@ -40,13 +41,11 @@ def list_to_hash(error):
     return hash_obj.hexdigest()
 
 
-
 def clean_str(string):
     """
     Remove cluther form students answer string.
     """
     return string.replace(chr(27) + "[2J" + chr(27) + "[;H", "")
-
 
 
 def error_is_missing_assignment_function(error):
@@ -64,12 +63,12 @@ def error_is_missing_assignment_function(error):
     return False
 
 
-
 def check_for_tags(*tag_args, default_msg="Does not include any of the given tags"):
     """
     Compares the user tags and the test_case tags to see which tests
     should be be ran.
     """
+
     def skip_function(msg=default_msg):
         """
         replaces test_cases so they are skipped
@@ -85,17 +84,20 @@ def check_for_tags(*tag_args, default_msg="Does not include any of the given tag
             test_case_tags = set(tag_args)
 
             if self.SHOW_TAGS:
-                return skip_function(f"has the tags: {', '.join(sorted(test_case_tags))}")
+                return skip_function(
+                    f"has the tags: {', '.join(sorted(test_case_tags))}"
+                )
 
             user_tags = set(self.USER_TAGS)
             if user_tags:
                 if not user_tags.intersection(test_case_tags):
                     return skip_function()
             return f(self, *args, **kwargs)
-        wrapper.__wrapped__ = f # used to assert that method has been decorated
-        return wrapper
-    return decorator
 
+        wrapper.__wrapped__ = f  # used to assert that method has been decorated
+        return wrapper
+
+    return decorator
 
 
 def find_test_folders(root):
@@ -112,7 +114,6 @@ def find_test_folders(root):
     return test_dirs
 
 
-
 def get_testfiles(root=None, extra_assignments=False):
     """
     Gets a list of tuples (path and the testfiles basename) for all
@@ -125,10 +126,11 @@ def get_testfiles(root=None, extra_assignments=False):
     tests = []
     for dir_ in test_folders:
         pattern = extra_test_pattern if extra_assignments else base_test_pattern
-        tests.extend([(dir_, file[:-3]) for file in os.listdir(dir_) if re.match(pattern, file)])
+        tests.extend(
+            [(dir_, file[:-3]) for file in os.listdir(dir_) if re.match(pattern, file)]
+        )
 
     return tests
-
 
 
 def import_module(proj_path, module_name):
@@ -145,7 +147,6 @@ def import_module(proj_path, module_name):
     return module
 
 
-
 def find_path_to_assignment(test_file_location):
     """
     Takes a testfiles location and calculates the path to the assignment,
@@ -153,7 +154,7 @@ def find_path_to_assignment(test_file_location):
     """
     FILE_DIR_LIST = test_file_location.split("/")
     FILE_DIR_LEN = len(FILE_DIR_LIST) - 1
-    FOLDERS_TO_BACK = FILE_DIR_LEN - FILE_DIR_LIST.index('suite.d')
-    COURSE_REPO_ROOT = '../' * (FOLDERS_TO_BACK + 3)
+    FOLDERS_TO_BACK = FILE_DIR_LEN - FILE_DIR_LIST.index("suite.d")
+    COURSE_REPO_ROOT = "../" * (FOLDERS_TO_BACK + 3)
     KMOM_AND_ASSIGNENT = "/".join(FILE_DIR_LIST[-(FOLDERS_TO_BACK):])
     return f"{test_file_location}/{COURSE_REPO_ROOT}me/{KMOM_AND_ASSIGNENT}"

@@ -1,4 +1,0 @@
--r requirements.txt
-pylint == 2.15.4
-coverage==7.3.0
-tox==4.10
