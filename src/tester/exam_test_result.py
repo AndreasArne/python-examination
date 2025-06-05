@@ -7,13 +7,10 @@ import traceback
 from unittest.result import failfast
 from unittest.runner import TextTestResult
 
-from src import common_errors, sentry
-from src import helper_functions as hf
+from colorama import Back, Fore, Style, init
 
-try:
-    from src.colorama import Back, Fore, Style, init
-except ImportError:
-    from colorama import Back, Fore, Style, init
+from . import common_errors, sentry
+from . import helper_functions as hf
 
 init(strip=False)
 

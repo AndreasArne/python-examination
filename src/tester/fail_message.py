@@ -4,12 +4,9 @@ Contains class for creating the fail message list when a test fails och crash
 
 import re
 
-import src.helper_functions as hf
+from colorama import Back, Fore, Style, init
 
-try:
-    from src.colorama import Back, Fore, Style, init
-except ImportError:
-    from colorama import Back, Fore, Style, init
+from . import helper_functions as hf
 
 init(strip=False)
 

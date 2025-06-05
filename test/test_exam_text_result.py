@@ -6,7 +6,7 @@ import sys
 import unittest
 from unittest.runner import _WritelnDecorator
 
-from src import ExamTestCase, ExamTestResult
+from tester import ExamTestCase, ExamTestResult
 
 
 class Test_TestResult(unittest.TestCase):

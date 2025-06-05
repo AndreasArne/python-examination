@@ -4,8 +4,8 @@ Use this to test our new and added functionality.
 
 import unittest
 
-from src import ExamTestCase
-from src.fail_message import FailMessage
+from tester import ExamTestCase
+from tester.fail_message import FailMessage
 
 
 class Test_FailMessage_set_answer(unittest.TestCase):

@@ -2,16 +2,16 @@
 Handles integration to Sentry
 """
 
+import re
 from functools import wraps
+
+from .cli_parser import parse
 
 try:
     import sentry_sdk
     from sentry_sdk.integrations import atexit
 except ImportError:
     pass
-from src.cli_parser import parse
-
-ARGS = parse()
 
 
 def if_enabled():
@@ -22,6 +22,7 @@ def if_enabled():
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
+            ARGS = parse()
             if ARGS.sentry:
                 return f(*args, **kwargs)
             return None
@@ -39,6 +40,7 @@ def activate_sentry(url, release, sample_rate, user, kmom):
     https://docs.sentry.io/platforms/python/configuration/options/
     https://getsentry.github.io/sentry-python/apidocs.html
     """
+    kmom = re.findall(r"kmom\d\d", kmom)[0]
 
     def null(*args, **kwargs):  # pylint: disable=unused-argument
         """

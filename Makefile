@@ -13,7 +13,7 @@
 
 # Decide if use python3 or python
 ifeq (, $(@shell which python3))
-	py = python3
+	py = "uv run python3"
 else
 	py = python
 endif
@@ -76,15 +76,15 @@ help:
 # target: build                     - Build and package code. Result in build/ folder.
 .PHONY: build
 build:
-	@${py} package.py
+	uv build
 
 
 
 # target: info                         - Displays versions.
 .PHONY: info
 info:
-	@${py} --version
-	@${py} -m pip --version
+	uv run python3 --version
+	uv run python3 -m pip --version
 #@virtualenv --version
 
 
@@ -92,7 +92,7 @@ info:
 # target: validate                     - Validate code with pylint
 .PHONY: validate
 validate:
-	@pylint --rcfile=.pylintrc examiner
+	@pylint --rcfile=.pylintrc src
 
 
 
@@ -100,9 +100,7 @@ validate:
 .PHONY: test-unit
 test-unit: clean
 	@$(ECHO) "$(ACTION)---> Running all tests in tests/" "$(NO_COLOR)"
-	@${py} \
-		-m coverage run --rcfile=.coveragerc \
-		-m unittest discover -b test
+	uv run python3 -m coverage run --rcfile=.coveragerc -m unittest discover -b test
 
 	$(MAKE) clean-py
 
@@ -111,7 +109,7 @@ test-unit: clean
 # target: test                         - Run code validation, tests and display code coverage
 .PHONY: test
 test: validate test-unit
-	${py} -m coverage report  --rcfile=.coveragerc
+	uv run python3 -m coverage report  --rcfile=.coveragerc
 	$(MAKE) clean-cov
 
 
@@ -119,8 +117,12 @@ test: validate test-unit
 # target: tox                         - Run "test" command for python version >=3.5
 .PHONY: tox
 tox:
-	tox
+	uv run tox
 
+# target: publish                     - Run "uv publish" with .env file
+.PHONY: publish
+publish: clean
+	uvx --env-file .env uv publish
 
 ## target: clean-py                     - Remove generated python files
 .PHONY: clean-py
@@ -129,6 +131,8 @@ clean-py:
 	find . -name '*.pyo' -exec rm -f {} +
 	find . -name '__pycache__' -exec rm -fr {} +
 	find . -name '.pytest_cache' -exec rm -fr {} +
+	find dist/ -name '*.whl' -exec rm -fr {} +
+	find dist/ -name '*.tar.gz' -exec rm -fr {} +
 
 
 

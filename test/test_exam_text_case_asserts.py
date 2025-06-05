@@ -1,11 +1,11 @@
 """
-Tests assertmethods in examiner.exam_test_case.py.
+Tests assertmethods in tester.exam_test_case.py.
 """
 
 import os
 import unittest
 
-from src import ExamTestCase
+from tester import ExamTestCase
 
 
 class Test_ExamTestCase(unittest.TestCase):
@@ -121,7 +121,7 @@ class Test_ExamTestCase(unittest.TestCase):
         self.assertEqual(test.fail_msg.correct_answer, "'assertAttribute'")
         self.assertEqual(
             test.fail_msg.student_answer,
-            "<class 'examiner.exam_test_case.ExamTestCase'>",
+            "<class 'tester.exam_test_case.ExamTestCase'>",
         )
 
     def test_assert_attribute_fail(self):
@@ -140,7 +140,7 @@ class Test_ExamTestCase(unittest.TestCase):
         self.assertEqual(test.fail_msg.correct_answer, "'NotAFunction'")
         self.assertEqual(
             test.fail_msg.student_answer,
-            "<class 'examiner.exam_test_case.ExamTestCase'>",
+            "<class 'tester.exam_test_case.ExamTestCase'>",
         )
 
     def test_assert_not_attribute(self):
@@ -158,7 +158,7 @@ class Test_ExamTestCase(unittest.TestCase):
         self.assertEqual(test.fail_msg.correct_answer, "'assertDoesNotExist'")
         self.assertEqual(
             test.fail_msg.student_answer,
-            "<class 'examiner.exam_test_case.ExamTestCase'>",
+            "<class 'tester.exam_test_case.ExamTestCase'>",
         )
 
     def test_assert_not_attribute_fail(self):
@@ -177,7 +177,7 @@ class Test_ExamTestCase(unittest.TestCase):
         self.assertEqual(test.fail_msg.correct_answer, "'assertNotAttribute'")
         self.assertEqual(
             test.fail_msg.student_answer,
-            "<class 'examiner.exam_test_case.ExamTestCase'>",
+            "<class 'tester.exam_test_case.ExamTestCase'>",
         )
 
     def test_assert_raises(self):

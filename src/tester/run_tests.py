@@ -2,19 +2,18 @@
 Custom test collecter, builder and runner used for examining students.
 """
 
-import re
 import unittest
 
-from src import ExamTestCaseExam, sentry
-from src.cli_parser import parse
-from src.exam_test_result import ExamTestResult
-from src.exam_test_result_exam import ExamTestResultExam
-from src.exceptions import ContactError
-from src.helper_functions import get_testfiles, import_module
+from . import sentry
+from .cli_parser import parse
+from .exam_test_case_exam import ExamTestCaseExam
+from .exam_test_result import ExamTestResult
+from .exam_test_result_exam import ExamTestResultExam
+from .exceptions import ContactError
+from .helper_functions import get_testfiles, import_module
 
 PASS = 1
 NOT_PASS = 0
-ARGS = parse()
 RESULT_CLASS = ExamTestResult
 
 
@@ -31,16 +30,15 @@ def get_testsuites_from_file(path_and_name):
     return testsuite
 
 
-def build_testsuite():
+def build_testsuite(ARGS):
     """
     Create TestSuit with testcases.
     """
     global RESULT_CLASS
     all_suites = unittest.TestSuite()
 
-    for path_and_name in get_testfiles(ARGS.what, ARGS.extra_assignments):
+    for path_and_name in sorted(get_testfiles(ARGS.tests, ARGS.extra_assignments)):
         filesuites = get_testsuites_from_file(path_and_name)
-
         for suite in filesuites:
             for case in suite:
                 case.USER_TAGS = ARGS.tags
@@ -52,14 +50,14 @@ def build_testsuite():
     return all_suites
 
 
-def run_testcases(suite):
+def run_testcases(suite, ARGS):
     """
     Run testsuit.
     """
     runner = unittest.TextTestRunner(
         resultclass=RESULT_CLASS,
         verbosity=2,
-        failfast=ARGS.failfast,
+        failfast=not ARGS.failslow,
         descriptions=False,
     )
 
@@ -75,15 +73,17 @@ def main():
     """
     Start point of program.
     """
+    ARGS = parse()
+
     sentry.activate_sentry(
         ARGS.sentry_url,
         ARGS.sentry_release,
         ARGS.sentry_sample_rate,
         ARGS.sentry_user,
-        re.findall(r"kmom\d\d", ARGS.what)[0],
+        ARGS.tests,
     )
-    suite = build_testsuite()
-    results = run_testcases(suite)
+    suite = build_testsuite(ARGS)
+    results = run_testcases(suite, ARGS)
     results.exit_with_result()
 
 

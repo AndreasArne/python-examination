@@ -6,9 +6,9 @@ import importlib
 import re
 import unittest
 
-import src.helper_functions as hf
-from src.exceptions import TestClassNameError, TestFuncNameError
-from src.fail_message import FailMessage
+from . import helper_functions as hf
+from .exceptions import TestClassNameError, TestFuncNameError
+from .fail_message import FailMessage
 
 
 class ExamTestCase(unittest.TestCase):

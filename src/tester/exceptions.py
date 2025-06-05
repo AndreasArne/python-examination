@@ -2,10 +2,8 @@
 Custom exceptions
 """
 
-try:
-    from src.colorama import Back, Fore, Style, init
-except ImportError:
-    from colorama import Back, Fore, Style, init
+from colorama import Back, Fore, Style, init
+
 init(strip=False)
 
 

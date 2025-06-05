@@ -5,8 +5,8 @@ Use this to test our new and added functionality.
 import unittest
 from unittest import SkipTest
 
-from src import ExamTestCase, tags
-from src import exceptions as exce
+from tester import ExamTestCase, tags
+from tester import exceptions as exce
 
 
 class Test_ExamTestCase(unittest.TestCase):

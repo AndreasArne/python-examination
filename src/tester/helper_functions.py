@@ -4,15 +4,12 @@ pass
 
 import hashlib
 import importlib.util as importer
-import os
 import re
 from functools import wraps
+from pathlib import Path
 from unittest import SkipTest
 
-try:
-    from src.colorama import Fore, Style, init
-except ImportError:
-    from colorama import Fore, Style, init
+from colorama import Fore, Style, init
 
 init(strip=False)
 
@@ -100,20 +97,6 @@ def check_for_tags(*tag_args, default_msg="Does not include any of the given tag
     return decorator
 
 
-def find_test_folders(root):
-    """
-    Recursively looks for folder names matching test_folder
-    starting from where the script is called and returns the paths.
-    """
-    test_dirs = [root]
-
-    for path, dirs, _files in os.walk(root):
-        for dir_ in dirs:
-            if dir_ != "__pycache__":
-                test_dirs.append(os.path.join(path, dir_))
-    return test_dirs
-
-
 def get_testfiles(root=None, extra_assignments=False):
     """
     Gets a list of tuples (path and the testfiles basename) for all
@@ -121,15 +104,15 @@ def get_testfiles(root=None, extra_assignments=False):
     """
     base_test_pattern = r"test_(\w)*.py"
     extra_test_pattern = r"extra_test_(\w)*.py"
+    pattern = extra_test_pattern if extra_assignments else base_test_pattern
 
-    test_folders = find_test_folders(root)
+    root_path = Path(root).resolve()
+    paths_to_search = [root_path, *root_path.rglob("*")]
     tests = []
-    for dir_ in test_folders:
-        pattern = extra_test_pattern if extra_assignments else base_test_pattern
-        tests.extend(
-            [(dir_, file[:-3]) for file in os.listdir(dir_) if re.match(pattern, file)]
-        )
 
+    for path in paths_to_search:
+        if path.is_file() and re.match(pattern, path.name):
+            tests.append((str(path.parent), path.stem))
     return tests
 
 
@@ -147,14 +130,14 @@ def import_module(proj_path, module_name):
     return module
 
 
-def find_path_to_assignment(test_file_location):
+def find_path_to_assignment(test_file_dir):
     """
     Takes a testfiles location and calculates the path to the assignment,
     given that it has .dbwebb has the same structure as the me folder.
     """
-    FILE_DIR_LIST = test_file_location.split("/")
-    FILE_DIR_LEN = len(FILE_DIR_LIST) - 1
-    FOLDERS_TO_BACK = FILE_DIR_LEN - FILE_DIR_LIST.index("suite.d")
-    COURSE_REPO_ROOT = "../" * (FOLDERS_TO_BACK + 3)
-    KMOM_AND_ASSIGNENT = "/".join(FILE_DIR_LIST[-(FOLDERS_TO_BACK):])
-    return f"{test_file_location}/{COURSE_REPO_ROOT}me/{KMOM_AND_ASSIGNENT}"
+    dir_list = test_file_dir.split("/")
+    kmom_index = [i for i, dir in enumerate(dir_list) if dir.startswith("kmom")][0]
+    tests_index = kmom_index - 1
+    dir_list[tests_index:kmom_index] = ["src"]
+    KMOM_AND_ASSIGNENT = "/".join(dir_list)
+    return KMOM_AND_ASSIGNENT

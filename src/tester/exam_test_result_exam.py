@@ -4,12 +4,9 @@ Custom unittest.TextTestResult class. Is used to customize the output from unitt
 
 import sys
 
-from src.exam_test_result import ExamTestResult
+from colorama import Back, Fore, Style, init
 
-try:
-    from src.colorama import Back, Fore, Style, init
-except ImportError:
-    from colorama import Back, Fore, Style, init
+from .exam_test_result import ExamTestResult
 
 init(strip=False)
 
