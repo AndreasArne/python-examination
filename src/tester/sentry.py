@@ -1,29 +1,35 @@
 """
 Handles integration to Sentry
 """
+
+import re
 from functools import wraps
+
+from .cli_parser import parse
+
 try:
     import sentry_sdk
     from sentry_sdk.integrations import atexit
 except ImportError:
     pass
-from examiner.cli_parser import parse
 
-ARGS = parse()
 
 def if_enabled():
     """
     wrapper for sentry functions to block them if sentry is not available
     """
+
     def decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
+            ARGS = parse()
             if ARGS.sentry:
                 return f(*args, **kwargs)
             return None
 
-        wrapper.__wrapped__ = f # used to assert that method has been decorated
+        wrapper.__wrapped__ = f  # used to assert that method has been decorated
         return wrapper
+
     return decorator
 
 
@@ -34,10 +40,13 @@ def activate_sentry(url, release, sample_rate, user, kmom):
     https://docs.sentry.io/platforms/python/configuration/options/
     https://getsentry.github.io/sentry-python/apidocs.html
     """
-    def null(*args, **kwargs): # pylint: disable=unused-argument
+    kmom = re.findall(r"kmom\d\d", kmom)[0]
+
+    def null(*args, **kwargs):  # pylint: disable=unused-argument
         """
         Use to silence sentry from printing
         """
+
     atexit.default_callback = null
     sentry_sdk.init(
         dsn=url,
@@ -51,7 +60,6 @@ def activate_sentry(url, release, sample_rate, user, kmom):
 
     sentry_sdk.set_user({"id": user})
     sentry_sdk.set_tag("kmom", kmom)
-
 
 
 @if_enabled()

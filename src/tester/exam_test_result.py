@@ -1,22 +1,21 @@
 """
 Custom unittest.TextTestResult class. Is used to customize the output from unittests.
 """
+
 import sys
 import traceback
 from unittest.result import failfast
 from unittest.runner import TextTestResult
-from examiner import common_errors, sentry
-from examiner import helper_functions as hf
-try:
-    from examiner.colorama import init, Fore, Back, Style
-except ImportError:
-    from colorama import init, Fore, Back, Style
+
+from colorama import Back, Fore, Style, init
+
+from . import common_errors, sentry
+from . import helper_functions as hf
 
 init(strip=False)
 
-STDOUT_LINE = '\nStdout:\n%s'
-STDERR_LINE = '\nStderr:\n%s'
-
+STDOUT_LINE = "\nStdout:\n%s"
+STDERR_LINE = "\nStderr:\n%s"
 
 
 class ExamTestResult(TextTestResult):
@@ -27,8 +26,6 @@ class ExamTestResult(TextTestResult):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.assignments_results = {}
-
-
 
     def _exc_info_to_string(self, err, test):
         """
@@ -44,40 +41,37 @@ class ExamTestResult(TextTestResult):
 
         sentry.add_exception(value, err)
 
-        #----------------------
+        # ----------------------
         # here starts the interesting code, which we changed. If test failed
         # because of wrong answer from student
         tb_e = traceback.TracebackException(
-            exctype, value, tb, limit=None, capture_locals=self.tb_locals)
+            exctype, value, tb, limit=None, capture_locals=self.tb_locals
+        )
 
         if exctype is test.failureException:
             msgLines = test.fail_msg.create_fail_msg()
         else:
-            msgLines = test.fail_msg.create_fail_msg(
-                ''.join(list(tb_e.format()))
-            )
+            msgLines = test.fail_msg.create_fail_msg("".join(list(tb_e.format())))
 
         help_msg = common_errors.check_if_common_error(exctype.__name__, tb_e, value)
 
         if help_msg:
             msgLines.append(help_msg)
-        #---------------------
+        # ---------------------
 
         if self.buffer:
             # Dont care about this code
             output = sys.stdout.getvalue()
             error = sys.stderr.getvalue()
             if output:
-                if not output.endswith('\n'):
-                    output += '\n'
+                if not output.endswith("\n"):
+                    output += "\n"
                 msgLines.append(STDOUT_LINE % output)
             if error:
-                if not error.endswith('\n'):
-                    error += '\n'
+                if not error.endswith("\n"):
+                    error += "\n"
                 msgLines.append(STDERR_LINE % error)
-        return ''.join(msgLines)
-
-
+        return "".join(msgLines)
 
     def printErrors(self):
         """
@@ -86,11 +80,13 @@ class ExamTestResult(TextTestResult):
         if self.dots or self.showAll:
             self.stream.writeln()
         if self.errors:
-            self.printErrorListWithExplenation("Error", self.errors, "Your code crasched!", True)
+            self.printErrorListWithExplenation(
+                "Error", self.errors, "Your code crasched!", True
+            )
         if self.failures:
-            self.printErrorListWithExplenation("Fail", self.failures, "Your code produced wrong result!")
-
-
+            self.printErrorListWithExplenation(
+                "Fail", self.failures, "Your code produced wrong result!"
+            )
 
     def printErrorLines(self, error):
         """
@@ -98,11 +94,11 @@ class ExamTestResult(TextTestResult):
         """
         for line in error:
             self.stream.writeln("    |" + line)
-        self.stream.writeln("    "  + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
+        self.stream.writeln("    " + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
 
-
-
-    def printErrorListWithExplenation(self, flavour, errors, explenation, is_errors=False):
+    def printErrorListWithExplenation(
+        self, flavour, errors, explenation, is_errors=False
+    ):
         """
         Print errors grouped by assignment (TestCase object)
         """
@@ -112,9 +108,11 @@ class ExamTestResult(TextTestResult):
         self.stream.writeln(f"{flavour.upper()} section: {explenation}")
         self.stream.writeln(self.separator1)
         for test, err in errors:
-            if not test.assignment in already_printed_assignments:
-                tmp = Back.MAGENTA +Style.BRIGHT+ Fore.WHITE
-                self.stream.writeln(f"{tmp}{flavour}s for {test.assignment}{Style.RESET_ALL}")
+            if test.assignment not in already_printed_assignments:
+                tmp = Back.MAGENTA + Style.BRIGHT + Fore.WHITE
+                self.stream.writeln(
+                    f"{tmp}{flavour}s for {test.assignment}{Style.RESET_ALL}"
+                )
                 already_printed_assignments[test.assignment] = {}
 
             err_as_list = err.strip().split("\n")
@@ -128,8 +126,6 @@ class ExamTestResult(TextTestResult):
             else:
                 self.printErrorLines(err_as_list)
 
-
-
     def startTestBase(self):
         """
         Base version of startTest, from unittest.TestResult.
@@ -139,15 +135,13 @@ class ExamTestResult(TextTestResult):
         self._mirrorOutput = False
         self._setupStdout()
 
-
-
     def startTest(self, test):
         """
         Summary print at beginning of output.
         Group output by Assignment.
         Counts number of tests run for each assignment.
         """
-        if not test.assignment in self.assignments_results:
+        if test.assignment not in self.assignments_results:
             self.assignments_results[test.assignment] = {
                 "started": 0,
                 "success": 0,
@@ -158,7 +152,7 @@ class ExamTestResult(TextTestResult):
 
         self.startTestBase()
 
-        # for cleaner code, the code below should be moved to method _write_status. 
+        # for cleaner code, the code below should be moved to method _write_status.
         # But tha method is only used i from 3.11
         # When 3.11 is our minimum version, move this code there.
         MAX_TEST_FUNCNAME_LEN = 40
@@ -169,7 +163,6 @@ class ExamTestResult(TextTestResult):
         self.stream.write(indent + test.test_name + whitespace)
         self.stream.write("... ")
         self.stream.flush()
-
 
     def _write_status(self, _, status):
         """
@@ -182,8 +175,7 @@ class ExamTestResult(TextTestResult):
         """
         self.stream.writeln(status)
         self.stream.flush()
-        self._newline = True # pylint: disable=attribute-defined-outside-init
-
+        self._newline = True  # pylint: disable=attribute-defined-outside-init
 
     @failfast
     def addError(self, test, err):
@@ -197,16 +189,12 @@ class ExamTestResult(TextTestResult):
         self._mirrorOutput = True
         self.stream.writeln("ERROR")
 
-
-
     def addSuccess(self, test):
         """
         Counts number of successfull run test for each assignment
         """
         super().addSuccess(test)
         self.assignments_results[test.assignment]["success"] += 1
-
-
 
     def exit_with_result(self):
         """

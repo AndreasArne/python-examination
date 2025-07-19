@@ -1,3 +1,4 @@
+.env
 **/.dbwebb/test/examiner/
 **/.dbwebb/test/colorama/
 **/.dbwebb/test/.test-log

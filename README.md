@@ -2,12 +2,11 @@
 
 Examiner is a layer on top of pythons unittest framework, for more verbose and clear output when test fail. It is used in a university course to examine student in a introductionary python course.
 
-
 # Added functionality
 
 - Custom fail output based on docstring in test function.
 
-    - Ability to override parts of it in assert calls.
+  - Ability to override parts of it in assert calls.
 
 - Color in text output.
 
@@ -21,24 +20,21 @@ Examiner is a layer on top of pythons unittest framework, for more verbose and c
 
 You can see working examples of it in `test/python` folder. To run it you first need to build it, run `make build`, it will copy external modules into the package into the `build` and `.dbwebb/test` folder which holds all the unittests. Execute `bash test.bash {KMOM/ASSIGNMENT}` (script located in `.dbwebb/test`) and include an argument of what folder inside `.dbwebb/test/suite.d` it should run the unittests from. The code that is tested are found inside `me`. If no argument is given it defaults to the current directory.
 
-
-
 # Available arguments
 
 Examiner uses the `argparse` module and has the following available arguments:
- * `-w, --what`, **required** - The absolute path to the desired folder containing the tests. It recursively looks in all folders for files matching the pattern `"test_(\w)*.py"`.
- * `-e, --extra` optional - Adds the pattern `"extra_test_(\w)*.py"` so the students can test their extra assignments.
- * `-t, --tags` optional - Takes a list of tags (separated by a comma). This filters what tests should be ran. If given it only runs cases that matches the tags.
- * `--trace` optional - Gives traceback output to assertion errors when they occur.
- * `-f, --failfast` - Stop executing tests on the first error or failure.
- * `-s, --showtags` - Show what tags are available for the tests. Won't run any tests!
- * `--exam` - Use when running test for an exam
+
+- `-w, --what`, **required** - The absolute path to the desired folder containing the tests. It recursively looks in all folders for files matching the pattern `"test_(\w)*.py"`.
+- `-e, --extra` optional - Adds the pattern `"extra_test_(\w)*.py"` so the students can test their extra assignments.
+- `-t, --tags` optional - Takes a list of tags (separated by a comma). This filters what tests should be ran. If given it only runs cases that matches the tags.
+- `--trace` optional - Gives traceback output to assertion errors when they occur.
+- `-f, --failfast` - Stop executing tests on the first error or failure.
+- `-s, --showtags` - Show what tags are available for the tests. Won't run any tests!
+- `--exam` - Use when running test for an exam
 
 Examiner utilize function docstrings for testcases to modify and specialize error outputs for each test.
 
 TestCase classes need to inherit from `ExamTestCase` and naming should follow the regex `.*Test[0-9]?([A-Z].+)`. The number is used to sort execution order and the output.
-
-
 
 # Writing a TestCase
 
@@ -69,7 +65,6 @@ These must not be in the docstring but then the output won't have any informatio
 
 "correct" and "student" can differ, if its the students answer or correct, depending on what assert method is used.
 
-
 ### Example
 
 ```python
@@ -88,8 +83,6 @@ class Test3Assignment3(ExamTestCase):
         {student}
         """
 ```
-
-
 
 ### Available settings in a test function
 
@@ -140,8 +133,6 @@ Fails for Assignment3
     ----------------------------------------------------------------------
 ```
 
-
-
 ### Text coloring
 
 Manual colors can be injected with `"|<color letter>|"` and reset value `"|/RE|"`. The reset color removes all color options up to that point. The module [colorama](https://pypi.org/project/colorama/) is used for coloring.
@@ -175,8 +166,6 @@ Instead the it returned the following value:
 """
 ```
 
-
-
 # New asserts
 
 ### assertModule
@@ -191,8 +180,6 @@ module - str: Name of module to import.
 module_path - str: Realpath to directory where module should exist.
 ```
 
-
-
 ### assertAttribute
 
 Check if an object has an attribute.
@@ -204,8 +191,6 @@ object - Object: Object to look for attribute in.
 
 attr - str: Name of attribute to look for.
 ```
-
-
 
 ### assertNotAttribute
 
@@ -219,8 +204,6 @@ object - Object: Object to look for attribute in.
 attr - str: Name of attribute to look for.
 ```
 
-
-
 ### assertNotAttribute
 
 Check if that object does not have an attribute. Can be used to check that student does not import a specific module.
@@ -232,8 +215,6 @@ object - Object: Object to look for attribute in.
 
 attr - str: Name of attribute to look for.
 ```
-
-
 
 ### assertOrder
 
@@ -247,8 +228,6 @@ order - sequence: Sequence with elements in correct order.
 container - sequence: Sequence to check correct order in using `index()`.
 ```
 
-
-
 # Common errors caught
 
 Some errors are caught and we add extra help text for them.
@@ -257,14 +236,11 @@ Some errors are caught and we add extra help text for them.
 
 Common error when the code contain too many `input()` calls than what the test expect. The default output is hard to understand.
 
-
 # Sentry integration
 
-Integration to [Sentry](https://sentry.io) is on by default. To disable Sentry add the flag `--sentry`. 
+Integration to [Sentry](https://sentry.io) is on by default. To disable Sentry add the flag `--sentry`.
 
 To send data to Sentry you need to add the flags `--sentry_url`, `--sentry_release` and `--sentry_sample_rate`.
-
-
 
 # Development
 
@@ -276,10 +252,9 @@ When a new release is create, Actions will push the new `examiner` build automat
 
 [unittest execution order](https://app.lucidchart.com/invitations/accept/f9604303-3cf8-4cbf-ab22-be0e64b99f49)
 
+# TODO
 
-
-# TODO:
 - [ ] Write more tests
 - [ ] Try removing escaped newlines from output so CONTACT_ERROR_MSG is displayed correctly for all errors.
-    - Identify errors where this happens.
+  - Identify errors where this happens.
 - [ ] Remake flowchart as sequence diagram.

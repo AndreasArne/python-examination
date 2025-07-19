@@ -1,16 +1,15 @@
 #! /usr/bin/env python3
-import shutil
 import os
-import examiner
-from pathlib import Path
+import shutil
 from importlib.util import find_spec
+from pathlib import Path
 
+import src
 
 
 def read_requirements(filename):
     with open(filename) as f:
         return f.readlines()
-
 
 
 def find_modules_files(dir, ext):
@@ -27,7 +26,6 @@ def find_modules_files(dir, ext):
                 yield f.path
 
 
-
 def create_build_file_path(file_path, module, dir_):
     path_as_list = file_path.split("/")
     module_dir_index = path_as_list.index(module)
@@ -35,13 +33,11 @@ def create_build_file_path(file_path, module, dir_):
     return build_file_path
 
 
-
 def find_modules_paths(modules):
     for module in modules:
         module_path = find_spec(module).origin
         module_path = os.path.dirname(module_path)
         yield (module, module_path)
-
 
 
 def copy_and_insert_pylint_disable(modules, dir_):
@@ -64,11 +60,10 @@ def copy_and_insert_pylint_disable(modules, dir_):
                     paste.write(content)
 
 
-
 def build(dir_, make_archive=False):
-    module_name = 'examiner'
+    module_name = "examiner"
     try:
-        shutil.rmtree(f'{dir_}/{module_name}')
+        shutil.rmtree(f"{dir_}/{module_name}")
     except FileNotFoundError:
         pass
     try:
@@ -76,24 +71,26 @@ def build(dir_, make_archive=False):
     except FileExistsError:
         pass
 
-    shutil.copytree('examiner', f'{dir_}/examiner', ignore=shutil.ignore_patterns("*pycache*"))
+    shutil.copytree(
+        "examiner", f"{dir_}/examiner", ignore=shutil.ignore_patterns("*pycache*")
+    )
     copy_and_insert_pylint_disable(read_requirements("requirements.txt"), dir_)
 
     # Can be used when pylint bug is fixed
     # for module in modules:
-        # module_path = "build/examiner/" + module[1]
-        # shutil.copytree(
-        #     module[0],
-        #     module_path,
-        #     ignore=shutil.ignore_patterns("*pycache*")
-        # )
-
+    # module_path = "build/examiner/" + module[1]
+    # shutil.copytree(
+    #     module[0],
+    #     module_path,
+    #     ignore=shutil.ignore_patterns("*pycache*")
+    # )
 
     if make_archive:
-        shutil.make_archive(f"{dir_}/examiner-"+examiner.__version__, 'zip', "build/examiner")
-
+        shutil.make_archive(
+            f"{dir_}/examiner-" + src.__version__, "zip", "build/examiner"
+        )
 
 
 if __name__ == "__main__":
-    build('build', True)
-    build('test/python/.dbwebb/test')
+    build("build", True)
+    build("test/python/.dbwebb/test")

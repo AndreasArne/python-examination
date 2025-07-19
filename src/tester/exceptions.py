@@ -1,17 +1,16 @@
 """
 Custom exceptions
 """
-try:
-    from examiner.colorama import init, Fore, Back, Style
-except ImportError:
-    from colorama import init, Fore, Back, Style
+
+from colorama import Back, Fore, Style, init
+
 init(strip=False)
+
 
 class ExamException(Exception):
     """
     Base exception for custom exception
     """
-
 
 
 class TestFuncNameError(ExamException):
@@ -20,12 +19,10 @@ class TestFuncNameError(ExamException):
     """
 
 
-
 class TestClassNameError(ExamException):
     """
     Error for when test class name is wrong
     """
-
 
 
 class ContactError(ExamException):
@@ -33,6 +30,7 @@ class ContactError(ExamException):
     Custom error. Used when there is an error in the test code and the
     student should contact the person responsible for the exam.
     """
+
     DEFAULT_MSG = (
         Style.BRIGHT + Back.BLACK + Fore.RED + "\n*********\n"
         "Något gick fel i rättningsprogrammet. "
