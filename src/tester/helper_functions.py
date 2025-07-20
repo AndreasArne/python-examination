@@ -4,12 +4,16 @@ pass
 
 import hashlib
 import importlib.util as importer
+import os
 import re
+import sys
 from functools import wraps
 from pathlib import Path
 from unittest import SkipTest
 
 from colorama import Fore, Style, init
+
+from .exceptions import MissingSrcDir
 
 init(strip=False)
 
@@ -141,3 +145,23 @@ def find_path_to_assignment(test_file_dir):
     dir_list[tests_index:kmom_index] = ["src"]
     KMOM_AND_ASSIGNENT = "/".join(dir_list)
     return KMOM_AND_ASSIGNENT
+
+
+def setup_and_get_repo_path(file):
+    """
+    Change the current working directory to the dir of assignment.
+    Returns the path.
+    """
+    file_dir = os.path.dirname(os.path.realpath(file))
+    assignment_dir = find_path_to_assignment(file_dir)
+
+    if assignment_dir not in sys.path:
+        sys.path.insert(0, assignment_dir)
+    try:
+        os.chdir(assignment_dir)
+    except FileNotFoundError:
+        raise MissingSrcDir(
+            f"Could not change directory to {assignment_dir}. "
+            "Please check that the path is correct."
+        )
+    return assignment_dir

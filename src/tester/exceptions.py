@@ -25,6 +25,23 @@ class TestClassNameError(ExamException):
     """
 
 
+class MissingSrcDir(ExamException):
+    """
+    Error for when src dir is missing and can't change working dir.
+    """
+
+    DEFAULT_MSG = (
+        Style.BRIGHT + Back.BLACK + Fore.RED + "\n*********\n"
+        "Något gick fel i rättningsprogrammet. "
+        "Kontakta Ansvarig med ovanstående felmeddelandet!"
+        "\n*********" + Style.RESET_ALL
+    )
+
+    def __init__(self, message=DEFAULT_MSG):
+        self.message = message
+        super().__init__(self.message)
+
+
 class ContactError(ExamException):
     """
     Custom error. Used when there is an error in the test code and the
