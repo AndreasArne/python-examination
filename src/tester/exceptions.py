@@ -25,20 +25,21 @@ class TestClassNameError(ExamException):
     """
 
 
-class MissingSrcDir(ExamException):
+class MissingDir(ExamException):
     """
     Error for when src dir is missing and can't change working dir.
     """
 
     DEFAULT_MSG = (
         Style.BRIGHT + Back.BLACK + Fore.RED + "\n*********\n"
-        "Något gick fel i rättningsprogrammet. "
-        "Kontakta Ansvarig med ovanstående felmeddelandet!"
+        "Katalogen som ska innehålla din kod saknas.\n"
+        "Kontrollera att du har katalogen {missing_path}.\n"
+        "Om du har den och felet kvarstår, kontakta kursansvarig med ovanstående felmeddelande!"
         "\n*********" + Style.RESET_ALL
     )
 
-    def __init__(self, message=DEFAULT_MSG):
-        self.message = message
+    def __init__(self, missing_path):
+        self.message = self.DEFAULT_MSG.format(missing_path=missing_path)
         super().__init__(self.message)
 
 
@@ -51,7 +52,7 @@ class ContactError(ExamException):
     DEFAULT_MSG = (
         Style.BRIGHT + Back.BLACK + Fore.RED + "\n*********\n"
         "Något gick fel i rättningsprogrammet. "
-        "Kontakta Ansvarig med ovanstående felmeddelandet!"
+        "Kontakta Ansvarig med ovanstående felmeddelande!"
         "\n*********" + Style.RESET_ALL
     )
 

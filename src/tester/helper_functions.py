@@ -13,7 +13,7 @@ from unittest import SkipTest
 
 from colorama import Fore, Style, init
 
-from .exceptions import MissingSrcDir
+from .exceptions import MissingDir
 
 init(strip=False)
 
@@ -147,21 +147,16 @@ def find_path_to_assignment(test_file_dir):
     return KMOM_AND_ASSIGNENT
 
 
-def setup_and_get_repo_path(file):
+def setup_and_get_repo_path(file_dir):
     """
     Change the current working directory to the dir of assignment.
     Returns the path.
     """
-    file_dir = os.path.dirname(os.path.realpath(file))
     assignment_dir = find_path_to_assignment(file_dir)
-
     if assignment_dir not in sys.path:
         sys.path.insert(0, assignment_dir)
     try:
         os.chdir(assignment_dir)
     except FileNotFoundError:
-        raise MissingSrcDir(
-            f"Could not change directory to {assignment_dir}. "
-            "Please check that the path is correct."
-        )
+        raise MissingDir(assignment_dir)
     return assignment_dir

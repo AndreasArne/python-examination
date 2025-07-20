@@ -16,6 +16,12 @@ Available types:
 
 ## [Unreleased]
 
+## [3.1.0]
+
+### Added
+
+- Function for changing working dir to assignment dir. It raise custom error if dir is missing.
+
 ## [3.0.2]
 
 ### Changed
