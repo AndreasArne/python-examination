@@ -3,6 +3,7 @@ Parses all custom options and arguments
 """
 
 import argparse
+import sys
 
 
 def parse():
@@ -54,54 +55,57 @@ def parse():
         help="Includes tests for extra assignments",
     )
 
-    parser.add_argument(
-        "--trace",
-        dest="trace_assertion_error",
-        default=False,
-        action="store_true",
-        help="Adds a traceback option for assertion errors",
-    )
+    # Used to hide below options when students run tool
+    # They are only showed/added when adding --teacher
+    if "--teacher" in sys.argv:
+        parser.add_argument(
+            "--trace",
+            dest="trace_assertion_error",
+            default=False,
+            action="store_true",
+            help="Adds a traceback option for assertion errors",
+        )
 
-    parser.add_argument(
-        "--exam",
-        dest="exam",
-        default=False,
-        action="store_true",
-        help="Use when running test for an exam",
-    )
+        parser.add_argument(
+            "--exam",
+            dest="exam",
+            default=False,
+            action="store_true",
+            help="Use when running test for an exam",
+        )
 
-    parser.add_argument(
-        "--sentry",
-        dest="sentry",
-        default=False,
-        action="store_false",
-        help="Use to to enable sending anonymous metrics to Sentry",
-    )
+        parser.add_argument(
+            "--sentry",
+            dest="sentry",
+            default=False,
+            action="store_false",
+            help="Use to to enable sending anonymous metrics to Sentry",
+        )
 
-    parser.add_argument(
-        "--sentry_url",
-        dest="sentry_url",
-        help="REQUIRED unless using --sentry. - URL for sending sentry metrics",
-    )
+        parser.add_argument(
+            "--sentry_url",
+            dest="sentry_url",
+            help="REQUIRED unless using --sentry. - URL for sending sentry metrics",
+        )
 
-    parser.add_argument(
-        "--sentry_release",
-        dest="sentry_release",
-        help="REQUIRED unless using --sentry. - Release to use in sentry",
-    )
+        parser.add_argument(
+            "--sentry_release",
+            dest="sentry_release",
+            help="REQUIRED unless using --sentry. - Release to use in sentry",
+        )
 
-    parser.add_argument(
-        "--sentry_sample_rate",
-        dest="sentry_sample_rate",
-        help="REQUIRED unless using --sentry. - sample_rate to use in sentry",
-    )
+        parser.add_argument(
+            "--sentry_sample_rate",
+            dest="sentry_sample_rate",
+            help="REQUIRED unless using --sentry. - sample_rate to use in sentry",
+        )
 
-    parser.add_argument(
-        "--sentry_user",
-        dest="sentry_user",
-        default="Jane Doe",
-        help="String to identify user in Sentry logs.",
-    )
+        parser.add_argument(
+            "--sentry_user",
+            dest="sentry_user",
+            default="Jane Doe",
+            help="String to identify user in Sentry logs.",
+        )
 
     args, _empty = parser.parse_known_args()
     if args.tags:
