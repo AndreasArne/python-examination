@@ -2,10 +2,15 @@
 name = "python-tester"
 version = "3.1.0"
 description = "Add your description here"
-readme = "README.md"
+readme = {file = "README.txt", content-type = "text/markdown"}
 requires-python = ">=3.10"
 dependencies = ["colorama>=0.4.6"]
+authors = [
+  {name = "Andreas Arnesson", email = "aar@bth.se"},
+]
 
+[project.urls]
+Repository = "https://github.com/AndreasArne/python-examination.git"
 
 [tool.uv]
 package = true
