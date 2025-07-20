@@ -1,6 +1,8 @@
 ![Tests and validation](https://github.com/andreasarne/python-examination/actions/workflows/test.yaml/badge.svg)
 
-Examiner is a layer on top of pythons unittest framework, for more verbose and clear output when test fail. It is used in a university course to examine student in a introductionary python course.
+python-tester is a layer on top of pythons unittest framework, for more verbose and clear output when test fail. It is used in a university course to examine student in a introductionary python course.
+
+Install using `uv` and run with `uv run tester <path to tests>`.
 
 # Added functionality
 
@@ -16,21 +18,62 @@ Examiner is a layer on top of pythons unittest framework, for more verbose and c
 
 - Tips in output for common errors.
 
+- Fail fast by default
+
 - Integration with [Sentry](https://sentry.io).
 
-You can see working examples of it in `test/python` folder. To run it you first need to build it, run `make build`, it will copy external modules into the package into the `build` and `.dbwebb/test` folder which holds all the unittests. Execute `bash test.bash {KMOM/ASSIGNMENT}` (script located in `.dbwebb/test`) and include an argument of what folder inside `.dbwebb/test/suite.d` it should run the unittests from. The code that is tested are found inside `me`. If no argument is given it defaults to the current directory.
+You can see working examples of it in `test/python` folder.
 
 # Available arguments
 
 Examiner uses the `argparse` module and has the following available arguments:
 
-- `-w, --what`, **required** - The absolute path to the desired folder containing the tests. It recursively looks in all folders for files matching the pattern `"test_(\w)*.py"`.
-- `-e, --extra` optional - Adds the pattern `"extra_test_(\w)*.py"` so the students can test their extra assignments.
-- `-t, --tags` optional - Takes a list of tags (separated by a comma). This filters what tests should be ran. If given it only runs cases that matches the tags.
-- `--trace` optional - Gives traceback output to assertion errors when they occur.
-- `-f, --failfast` - Stop executing tests on the first error or failure.
-- `-s, --showtags` - Show what tags are available for the tests. Won't run any tests!
-- `--exam` - Use when running test for an exam
+```
+usage: tester [-h] [-f] [-t TAGS] [-s] [-e] tests
+
+positional arguments:
+  tests REQUIRED - relative path to the test file or directory containing tests
+USAGE: <test_file> || <directory>
+
+options:
+  -h, --help show this help message and exit
+  -f, --failslow Don't stop executing tests on the first error or failure. Execute all tests.
+  -t, --tags TAGS Run only tests with specific tags
+  USAGE: -t=tag1 || -t=tag1,tag2
+  -s, --showtags Show what tags are available for the tests. Won't run any tests!
+  -e, --extra Includes tests for extra assignments
+```
+
+If you add option `--teacher` you also get the following option.
+
+```
+usage: tester [-h] [-f] [-t TAGS] [-s] [-e] [--trace] [--exam] [--sentry] [--sentry_url SENTRY_URL] [--sentry_release SENTRY_RELEASE]
+              [--sentry_sample_rate SENTRY_SAMPLE_RATE] [--sentry_user SENTRY_USER]
+              tests
+
+positional arguments:
+  tests                 REQUIRED - relative path to the test file or directory containing tests
+                        USAGE: <test_file> || <directory>
+
+options:
+  -h, --help            show this help message and exit
+  -f, --failslow        Don't stop executing tests on the first error or failure. Execute all tests.
+  -t, --tags TAGS       Run only tests with specific tags
+                        USAGE: -t=tag1 || -t=tag1,tag2
+  -s, --showtags        Show what tags are available for the tests. Won't run any tests!
+  -e, --extra           Includes tests for extra assignments
+  --trace               Adds a traceback option for assertion errors
+  --exam                Use when running test for an exam
+  --sentry              Use to to enable sending anonymous metrics to Sentry
+  --sentry_url SENTRY_URL
+                        REQUIRED unless using --sentry. - URL for sending sentry metrics
+  --sentry_release SENTRY_RELEASE
+                        REQUIRED unless using --sentry. - Release to use in sentry
+  --sentry_sample_rate SENTRY_SAMPLE_RATE
+                        REQUIRED unless using --sentry. - sample_rate to use in sentry
+  --sentry_user SENTRY_USER
+                        String to identify user in Sentry logs.
+```
 
 Examiner utilize function docstrings for testcases to modify and specialize error outputs for each test.
 
@@ -236,6 +279,10 @@ Some errors are caught and we add extra help text for them.
 
 Common error when the code contain too many `input()` calls than what the test expect. The default output is hard to understand.
 
+### Using exit()
+
+If the code that is tested run exit() the tests crash. This will catch that and warn the user not to.
+
 # Sentry integration
 
 Integration to [Sentry](https://sentry.io) is on by default. To disable Sentry add the flag `--sentry`.
@@ -244,9 +291,7 @@ To send data to Sentry you need to add the flags `--sentry_url`, `--sentry_relea
 
 # Development
 
-We use [semantic versioning](https://semver.org/). Set version in `examiner/__init__.py` and update `CHANGELOG.md` with changes before creating a new tag. Only create new releases when code changes in `examiner`, changes that should be sent to the students.
-
-When a new release is create, Actions will push the new `examiner` build automatically to the repo `dbwebb-se/python` and `dbwebb-se/oopython`.
+We use [semantic versioning](https://semver.org/). Set version in `pyproject.toml` and update `CHANGELOG.md` with changes before creating a new tag. Only create new releases when code changes in `python-tester`, changes that should be sent to the students.
 
 ### Flowchart of unittest execution
 
