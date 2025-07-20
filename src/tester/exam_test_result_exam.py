@@ -28,9 +28,9 @@ class ExamTestResultExam(ExamTestResult):
         super().startTest(test)
         self.assignments_results[test.assignment]["points"] = test.points_worth
         if (
-            self.points_for_pass != -1
-            and self.points_for_pass != test.points_for_pass
-            and test.points_for_pass > -1
+                self.points_for_pass != -1
+                and self.points_for_pass != test.points_for_pass
+                and test.points_for_pass > -1
         ):
             raise ValueError(
                 "There are multiple values for 'points_for_pass' in the test cases."

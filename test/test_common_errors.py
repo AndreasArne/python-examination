@@ -47,7 +47,11 @@ class TestErrorFunctions(unittest.TestCase):
             "super().assertIn(member, container, msg)",
             "AssertionError: 1 != 2",
         ]
-        with mock.patch("tester.common_errors.ARGS.trace_assertion_error", True):
+
+        # parse = mock.MagicMock()
+        # parse.trace_assertion_error.return_value = True
+        with mock.patch("tester.common_errors.parse") as patched_parse:
+            patched_parse.return_value.trace_assertion_error = True
             res = common_errors.check_if_common_error("AssertionError", tb_mock, "")
         self.assertIn("AssertionError: 1 != 2", res)
         self.assertTrue(isinstance(res, str))
@@ -55,7 +59,8 @@ class TestErrorFunctions(unittest.TestCase):
     def test_assertion_traceback_trace_false(self):
         tb_mock = mock.MagicMock()
 
-        with mock.patch("tester.common_errors.ARGS.trace_assertion_error", False):
+        with mock.patch("tester.common_errors.parse") as patched_parse:
+            patched_parse.return_value.trace_assertion_error = False
             res = common_errors.check_if_common_error("AssertionError", tb_mock, "")
             self.assertEqual("", res)
 

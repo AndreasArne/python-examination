@@ -92,7 +92,7 @@ info:
 # target: validate                     - Validate code with pylint
 .PHONY: validate
 validate:
-	@pylint --rcfile=.pylintrc src
+	@pylint --rcfile=.pylintrc src/tester
 
 
 

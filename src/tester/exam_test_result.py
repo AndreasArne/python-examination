@@ -97,7 +97,7 @@ class ExamTestResult(TextTestResult):
         self.stream.writeln("    " + Style.BRIGHT + self.separator2 + Style.RESET_ALL)
 
     def printErrorListWithExplenation(
-        self, flavour, errors, explenation, is_errors=False
+            self, flavour, errors, explenation, is_errors=False
     ):
         """
         Print errors grouped by assignment (TestCase object)
