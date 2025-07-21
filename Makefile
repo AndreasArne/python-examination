@@ -121,8 +121,8 @@ tox:
 
 # target: publish                     - Run "uv publish" with .env file
 .PHONY: publish
-publish: clean
-	uvx --env-file .env uv publish
+publish:
+	uvx --env-file .env uv publish dist/*
 
 ## target: clean-py                     - Remove generated python files
 .PHONY: clean-py
