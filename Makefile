@@ -75,7 +75,7 @@ help:
 
 # target: build                     - Build and package code. Result in build/ folder.
 .PHONY: build
-build:
+build: clean
 	uv build
 
 
