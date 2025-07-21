@@ -110,5 +110,6 @@ def parse():
     args, _empty = parser.parse_known_args()
     if args.tags:
         args.tags = args.tags.split(",")
-
+    if "--teacher" not in sys.argv:
+        args.sentry = False
     return args

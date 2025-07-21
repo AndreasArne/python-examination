@@ -75,13 +75,15 @@ def main():
     """
     ARGS = parse()
 
-    sentry.activate_sentry(
-        ARGS.sentry_url,
-        ARGS.sentry_release,
-        ARGS.sentry_sample_rate,
-        ARGS.sentry_user,
-        ARGS.tests,
-    )
+    if ARGS.sentry:
+        sentry.activate_sentry(
+            ARGS.sentry_url,
+            ARGS.sentry_release,
+            ARGS.sentry_sample_rate,
+            ARGS.sentry_user,
+            ARGS.tests,
+        )
+
     suite = build_testsuite(ARGS)
     results = run_testcases(suite, ARGS)
     results.exit_with_result()
