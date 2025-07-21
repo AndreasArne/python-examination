@@ -157,6 +157,6 @@ def setup_and_get_repo_path(file_dir):
         sys.path.insert(0, assignment_dir)
     try:
         os.chdir(assignment_dir)
-    except FileNotFoundError:
-        raise MissingDir(assignment_dir)
+    except FileNotFoundError as exc:
+        raise MissingDir(assignment_dir) from exc
     return assignment_dir
