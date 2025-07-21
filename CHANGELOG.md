@@ -16,6 +16,12 @@ Available types:
 
 ## [Unreleased]
 
+## [3.1.1]
+
+### Fixed
+
+- Crashed when --teacher was not added because then sentry info was missing.
+
 ## [3.1.0]
 
 ### Added
