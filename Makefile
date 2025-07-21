@@ -127,12 +127,12 @@ publish:
 ## target: clean-py                     - Remove generated python files
 .PHONY: clean-py
 clean-py:
-	find . -name '*.pyc' -exec rm -f {} +
-	find . -name '*.pyo' -exec rm -f {} +
-	find . -name '__pycache__' -exec rm -fr {} +
-	find . -name '.pytest_cache' -exec rm -fr {} +
-	find dist/ -name '*.whl' -exec rm -fr {} +
-	find dist/ -name '*.tar.gz' -exec rm -fr {} +
+	-find . -name '*.pyc' -exec rm -f {} +
+	-find . -name '*.pyo' -exec rm -f {} +
+	-find . -name '__pycache__' -exec rm -fr {} +
+	-find . -name '.pytest_cache' -exec rm -fr {} +
+	-find dist/ -name '*.whl' -exec rm -fr {} + 2>/dev/null
+	-find dist/ -name '*.tar.gz' -exec rm -fr {} + 2>/dev/null
 
 
 
