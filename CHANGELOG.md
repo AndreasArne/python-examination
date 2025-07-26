@@ -16,6 +16,12 @@ Available types:
 
 ## [Unreleased]
 
+## [3.1.2]
+
+### Fixed
+
+- Adds missing defualt values for options not shows without --teacher
+
 ## [3.1.1]
 
 ### Fixed
