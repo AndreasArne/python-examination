@@ -111,5 +111,8 @@ def parse():
     if args.tags:
         args.tags = args.tags.split(",")
     if "--teacher" not in sys.argv:
+        # Need to add default values for options that are not shown/added
         args.sentry = False
+        args.trace_assertion_error = False
+        args.exam = False
     return args
